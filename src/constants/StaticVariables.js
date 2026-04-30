@@ -24,5 +24,5 @@ export const TESTIMONIALS = [
 ];
 
 export const BADGE_STYLES = { Sale:"bg-rose-500 text-white", New:"bg-emerald-500 text-white", Popular:"bg-violet-500 text-white", Premium:"bg-amber-500 text-white" };
-export const TABS = ["All","Bouquets","Arrangements","Wreaths","Dried","Plants"];
+export const TABS = ["All","Bouquets","Arrangements","Wreaths","Dried"];
 export const fmt = n => "₹" + n.toLocaleString("en-IN");

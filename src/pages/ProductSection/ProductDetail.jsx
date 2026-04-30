@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowLeft, Heart, ShoppingCart, Star, Truck, RefreshCw,
-  ShieldCheck, Share2, Minus, Plus, ChevronDown, ChevronUp, Check
+  ShieldCheck, Minus, Plus, ChevronDown, ChevronUp, Check
 } from "lucide-react";
+import Breadcrumb from "../../components/Breadcrumb";
+import { useParams } from "react-router-dom";
+import ProductDetailSkeleton from "./ProductSkeletons/ProductDetailSkeleton";
 
 
 const PRODUCT = {
@@ -59,14 +62,21 @@ function Stars({ n, size = 14 }) {
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 
 export default function ProductDetail() {
+   const [product, setProduct] = useState(null);
   const [activeImg, setActiveImg]   = useState(0);
   const [qty, setQty]               = useState(1);
   const [wished, setWished]         = useState(false);
-  const [selectedSize, setSize]     = useState(PRODUCT.sizes[1]);
-  const [selectedColor, setColor]   = useState(PRODUCT.colors[0]);
+  const [selectedSize, setSize]     = useState('');
+  const [selectedColor, setColor]   = useState('');
   const [added, setAdded]           = useState(false);
   const [faqOpen, setFaqOpen]       = useState(null);
-  const disc = Math.round((1 - PRODUCT.price / PRODUCT.original) * 100);
+  const {productId} = useParams();
+ 
+  const disc = product?.originalPrice ? Math.round((1 - product?.price / product?.originalPrice) * 100) : 0;
+
+  const paths = [{id:1,name:'Category',path:'/category'},
+    {id:2,name:'Bouquets',path:'/bouquets'},
+    {id:3,name:'Rose Bliss Bouquet',path:'/rose-bliss-bouquet'}]
 
   function handleAddToCart() {
     setAdded(true);
@@ -79,21 +89,25 @@ export default function ProductDetail() {
     { q:"Is gift wrapping included?",          a:"All bouquets come beautifully wrapped. You can also add a premium gift box at checkout." },
   ];
 
+  const getProductData = () =>{
+    fetch(`http://localhost:3001/api/products/${productId}`)
+     .then(res => res.json())
+     .then(data => {
+      setProduct(data?.data);
+      setColor(data?.data?.colors?.[0]);
+      setSize(data?.data?.sizes?.[1]);
+     })
+  };
+  useEffect(()=>{
+    getProductData();
+  },[productId])
+
   return (
+    !product || Object.keys(product).length === 0 ? <ProductDetailSkeleton /> :
     <div style={{ fontFamily: "system-ui, sans-serif", background: "#fdf8f3", minHeight: "100vh" }}>
 
       {/* Breadcrumb */}
-      <div style={{ background: "#f5ede5", borderBottom: "1px solid #e8d5c4" }} className="py-3">
-        <div className="max-w-7xl mx-auto px-4 flex items-center gap-2 text-sm" style={{ color: "#9c7a62" }}>
-          <a href="/" className="hover:underline">Home</a>
-          <span>/</span>
-          <a href="/shop" className="hover:underline">Shop</a>
-          <span>/</span>
-          <a href="/bouquets" className="hover:underline">Bouquets</a>
-          <span>/</span>
-          <span style={{ color: "#4a3728" }} className="font-medium truncate">{PRODUCT.name}</span>
-        </div>
-      </div>
+      <Breadcrumb paths={paths} />
 
       <div className="max-w-7xl mx-auto px-4 py-10">
 
@@ -111,11 +125,11 @@ export default function ProductDetail() {
           <div className="flex flex-col gap-4">
             {/* Main Image */}
             <div className="relative rounded-3xl overflow-hidden aspect-square" style={{ background: "#f5ede5" }}>
-              <img src={PRODUCT.images[activeImg]} alt={PRODUCT.name}
+              <img src={product.images[activeImg]} alt={product.name}
                 className="w-full h-full object-cover transition-opacity duration-300" />
               <span style={{ background: "#c97d5b" }}
                 className="absolute top-4 left-4 text-white text-xs font-bold px-3 py-1 rounded-full">
-                {PRODUCT.badge}
+                {product.badge}
               </span>
               <button onClick={() => setWished(w => !w)}
                 className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform">
@@ -124,7 +138,7 @@ export default function ProductDetail() {
             </div>
             {/* Thumbnails */}
             <div className="grid grid-cols-4 gap-3">
-              {PRODUCT.images.map((img, i) => (
+              {product.images.map((img, i) => (
                 <button key={i} onClick={() => setActiveImg(i)}
                   className="rounded-2xl overflow-hidden aspect-square border-2 transition-all"
                   style={{ borderColor: activeImg === i ? "#c97d5b" : "transparent" }}>
@@ -136,30 +150,31 @@ export default function ProductDetail() {
 
           {/* ── RIGHT: Info ── */}
           <div className="flex flex-col">
-            <p style={{ color: "#c97d5b" }} className="text-sm font-semibold uppercase tracking-widest mb-2">{PRODUCT.category}</p>
-            <h1 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-4xl font-bold mb-4">{PRODUCT.name}</h1>
+            <p style={{ color: "#c97d5b" }} className="text-sm font-semibold uppercase tracking-widest mb-2">{product.category}</p>
+            <h1 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-4xl font-bold mb-4">{product.name}</h1>
+
 
             {/* Rating */}
             <div className="flex items-center gap-3 mb-5">
-              <Stars n={PRODUCT.rating} size={18} />
-              <span style={{ color: "#4a3728" }} className="font-semibold">{PRODUCT.rating}</span>
-              <span style={{ color: "#9c7a62" }} className="text-sm">({PRODUCT.reviews} reviews)</span>
+              <Stars n={product?.rating?.average} size={18} />
+              <span style={{ color: "#4a3728" }} className="font-semibold">{product?.rating?.average}</span>
+              <span style={{ color: "#9c7a62" }} className="text-sm">({product?.rating?.total} reviews)</span>
             </div>
 
             {/* Price */}
             <div className="flex items-baseline gap-3 mb-6">
-              <span style={{ color: "#c97d5b", fontFamily: "Georgia, serif" }} className="text-4xl font-bold">{fmt(PRODUCT.price)}</span>
-              <span className="text-lg text-stone-400 line-through">{fmt(PRODUCT.original)}</span>
-              <span style={{ background: "#fde8e8", color: "#e53e3e" }} className="text-sm font-bold px-2 py-0.5 rounded-full">-{disc}%</span>
+              <span style={{ color: "#c97d5b", fontFamily: "Georgia, serif" }} className="text-4xl font-bold">{product.price && fmt(product.price)}</span>
+              {product.originalPrice && <span className="text-lg text-stone-400 line-through">{ fmt(product.originalPrice)}</span>}
+              {product.originalPrice && <span style={{ background: "#fde8e8", color: "#e53e3e" }} className="text-sm font-bold px-2 py-0.5 rounded-full">-{disc}%</span>}
             </div>
 
-            <p style={{ color: "#7a5c4a" }} className="leading-relaxed mb-6">{PRODUCT.description}</p>
+            <p style={{ color: "#7a5c4a" }} className="leading-relaxed mb-6">{product.description}</p>
 
             {/* Size */}
-            <div className="mb-5">
+            {product?.sizes && <div className="mb-5">
               <p style={{ color: "#4a3728" }} className="text-sm font-bold mb-2">Size</p>
               <div className="flex flex-wrap gap-2">
-                {PRODUCT.sizes.map(s => (
+                {product.sizes.map(s => (
                   <button key={s} onClick={() => setSize(s)}
                     className="px-4 py-2 rounded-full text-sm font-medium border-2 transition-all"
                     style={selectedSize === s
@@ -169,7 +184,7 @@ export default function ProductDetail() {
                   </button>
                 ))}
               </div>
-            </div>
+            </div>}
 
             {/* Color */}
             <div className="mb-6">
@@ -202,7 +217,7 @@ export default function ProductDetail() {
               <button onClick={handleAddToCart}
                 className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full font-bold text-white transition-all hover:opacity-90 hover:-translate-y-0.5"
                 style={{ background: added ? "#22c55e" : "#c97d5b" }}>
-                {added ? <><Check size={18} /> Added!</> : <><ShoppingCart size={18} /> Add to Cart — {fmt(PRODUCT.price * qty)}</>}
+                {added ? <><Check size={18} /> Added!</> : <><ShoppingCart size={18} /> Add to Cart — {fmt(product.price * qty)}</>}
               </button>
             </div>
 
@@ -233,7 +248,7 @@ export default function ProductDetail() {
           <div>
             <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold mb-5">What's Included</h2>
             <ul className="space-y-3">
-              {PRODUCT.highlights.map(h => (
+              {product.what_included.map(h => (
                 <li key={h} className="flex items-start gap-3">
                   <div style={{ background: "#c97d5b" }} className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5">
                     <Check size={11} className="text-white" />
@@ -246,7 +261,7 @@ export default function ProductDetail() {
           <div>
             <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold mb-5">Care Instructions</h2>
             <ul className="space-y-3 text-sm" style={{ color: "#5c4033" }}>
-              {["Change water every 2 days","Keep away from direct sunlight","Trim stems at an angle every 3 days","Remove wilted petals promptly","Keep in a cool room for longer life"].map(tip => (
+              {product?.care_instructions?.map(tip => (
                 <li key={tip} className="flex items-start gap-3">
                   <span style={{ color: "#c97d5b" }}>🌸</span> {tip}
                 </li>
@@ -261,9 +276,9 @@ export default function ProductDetail() {
             <div>
               <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-3xl font-bold">Customer Reviews</h2>
               <div className="flex items-center gap-3 mt-2">
-                <Stars n={PRODUCT.rating} size={20} />
-                <span style={{ color: "#4a3728" }} className="font-bold text-lg">{PRODUCT.rating} / 5</span>
-                <span style={{ color: "#9c7a62" }}>({PRODUCT.reviews} reviews)</span>
+                <Stars n={product?.rating?.average} size={20} />
+                <span style={{ color: "#4a3728" }} className="font-bold text-lg">{product?.rating?.average} / 5</span>
+                <span style={{ color: "#9c7a62" }}>({product?.rating?.total} reviews)</span>
               </div>
             </div>
             <button style={{ background: "#c97d5b" }} className="text-white px-5 py-2 rounded-full text-sm font-semibold hover:opacity-90">

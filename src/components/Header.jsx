@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ShoppingCart, Heart, Search, Menu, X,User  } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import FloralLogo from "../assets/floral-logo.png";
 
 export default function Header({ cartCount, wishCount, onCartOpen }) {
   const [open,setOpen]=useState(false);
@@ -8,14 +9,17 @@ export default function Header({ cartCount, wishCount, onCartOpen }) {
   const navigate = useNavigate();
   const links=[{title:"Home",path:"/",public:true},
     {title:"Category",path:"/category",public:true},
+    {title:"Admin",path:"/admin",public:false},
     {title:"About",path:"/about",public:true},
     {title:"Contact",path:"/contact",public:true}];
   return (
     <header style={{background:"#fdf8f3"}} className="sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-2">
-            <div style={{background:"#c97d5b"}} className="w-9 h-9 rounded-full flex items-center justify-center text-lg">🌸</div>
+          <div className="flex items-center gap-2 cursor-pointer" onClick={()=>navigate('/')}>
+            <img src={FloralLogo} alt="Floral Studio" style={{
+              width:"3rem",borderRadius:"50%",border:"2px solid #3a2416"
+            }} />
             <div><p style={{fontFamily:"Georgia,serif",color:"#4a3728"}} className="font-bold text-lg leading-none">Floral</p><p style={{color:"#9c7a62"}} className="text-xs uppercase tracking-widest">Studio</p></div>
           </div>
           <nav className="hidden lg:flex items-center gap-6">

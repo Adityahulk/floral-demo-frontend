@@ -1,13 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   LayoutDashboard, Users, BarChart2, Package, Settings,
   TrendingUp, TrendingDown, ShoppingBag, IndianRupee,
   Bell, Search, Menu, X, ChevronRight, Eye, Star,
   ArrowUpRight, ArrowDownRight, Filter, Download,
-  Truck, Check, Clock, AlertCircle, MoreVertical,
   ChevronUp, ChevronDown, LogOut, Home
 } from "lucide-react";
-
+ import FloralLogo from "../../assets/floral-logo.png";
+import { Plus } from "react-feather";
+import AddProductForm from "./AddProductForm";
 // ─── MOCK DATA ────────────────────────────────────────────────────────────────
 
 const REVENUE = {
@@ -661,7 +662,7 @@ const NAV = [
   { id:"customers",  icon:<Users size={18}/>,           label:"Customers"  },
   { id:"analytics",  icon:<BarChart2 size={18}/>,       label:"Analytics"  },
   { id:"orders",     icon:<Package size={18}/>,         label:"Orders"     },
-  { id:"settings",   icon:<Settings size={18}/>,        label:"Settings"   },
+  { id:"add-product",   icon:<Plus size={18}/>,        label:"Add Product"   },
 ];
 
 export default function AdminPanel() {
@@ -673,7 +674,7 @@ export default function AdminPanel() {
     customers: <CustomersTab />,
     analytics: <AnalyticsTab />,
     orders:    <div className="flex flex-col items-center justify-center h-64 text-center"><span className="text-5xl mb-4">📦</span><p style={{ color:"#9c7a62" }}>Full Orders page coming soon!</p></div>,
-    settings:  <div className="flex flex-col items-center justify-center h-64 text-center"><span className="text-5xl mb-4">⚙️</span><p style={{ color:"#9c7a62" }}>Settings page coming soon!</p></div>,
+    "add-product":  <AddProductForm />,
   };
 
   return (
@@ -693,9 +694,12 @@ export default function AdminPanel() {
       >
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-5 py-5 border-b" style={{ borderColor:"#4a3728" }}>
-          <div style={{ background:"#c97d5b" }} className="w-8 h-8 rounded-full flex items-center justify-center text-lg shrink-0">🌸</div>
+         
+      <img src={FloralLogo} alt="Floral Studio" style={{
+              width:"3rem",borderRadius:"50%",border:"2px solid #3a2416"
+            }} />
           <div>
-            <p style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="font-bold leading-none">Floral</p>
+            <p style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="font-bold leading-none">Floral Studio</p>
             <p style={{ color:"#9c7a62" }} className="text-xs">Admin Panel</p>
           </div>
         </div>

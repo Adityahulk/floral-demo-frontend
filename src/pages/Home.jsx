@@ -9,6 +9,7 @@ import Testimonials from "../components/Testimonials";
 import { PRODUCTS, TABS } from "../constants/StaticVariables";
 import ProductCard from "../components/ProductCard";
 import Categories from "../components/Categories";
+import { useNavigate } from "react-router-dom";
 
 
 function FeaturesBar() {
@@ -28,6 +29,7 @@ function FeaturesBar() {
 }
 
 function Products({ wished, onWish, onCart }) {
+  const navigate = useNavigate();
   const [tab,setTab]=useState("All");
   const filtered = tab==="All" ? PRODUCTS : PRODUCTS.filter(p=>p.category===tab);
   return (
@@ -38,7 +40,7 @@ function Products({ wished, onWish, onCart }) {
             <p style={{color:"#c97d5b"}} className="text-xs uppercase tracking-widest font-semibold mb-2">Hand-Picked For You</p>
             <h2 style={{fontFamily:"Georgia,serif",color:"#3a2416"}} className="text-3xl sm:text-4xl font-bold">Featured Flowers</h2>
           </div>
-          <a href="#" style={{color:"#c97d5b"}} className="text-sm font-semibold flex items-center gap-1">View All <ArrowRight size={14}/></a>
+          <a onClick={()=>navigate("/products")} style={{color:"#c97d5b"}} className="text-sm font-semibold flex items-center gap-1 cursor-pointer">View All <ArrowRight size={14}/></a>
         </div>
         <div className="flex gap-2 flex-wrap mb-8">
           {TABS.map(t=>(
@@ -111,7 +113,7 @@ export default function Home() {
 
   function handleWish(id){setWished(prev=>{const s=new Set(prev);s.has(id)?s.delete(id):s.add(id);return s;});}
   function handleCart(p){setCart(prev=>{const ex=prev.find(i=>i.id===p.id);return ex?prev.map(i=>i.id===p.id?{...i,qty:i.qty+1}:i):[...prev,{...p,qty:1}];});setCartOpen(true);}
-function handleRemove(id){setCart(prev=>prev.filter(i=>i.id!==id));}
+  function handleRemove(id){setCart(prev=>prev.filter(i=>i.id!==id));}
   return (
     <div style={{fontFamily:"system-ui,sans-serif",background:"#fdf8f3"}}>
       <Hero/>

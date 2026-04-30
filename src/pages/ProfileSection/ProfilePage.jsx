@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   User, Mail, Phone, MapPin, Edit2, Save, X,
   Package, Heart, LogOut, Camera, Shield,
-  ChevronRight, Star, Bell, Lock
+  ChevronRight, Bell, Lock
 } from "lucide-react";
 
 // ─── MOCK DATA ────────────────────────────────────────────────────────────────
@@ -398,7 +398,7 @@ export default function ProfilePage() {
 
             {/* Menu */}
             <div className="bg-white rounded-3xl overflow-hidden border" style={{ borderColor: "#e8d5c4" }}>
-              {MENU.map(({ id, icon, label }, i) => (
+              {MENU.map(({ id, icon, label }) => (
                 <button key={id} onClick={() => setActive(id)}
                   className="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-medium text-left transition-all border-b last:border-0"
                   style={{

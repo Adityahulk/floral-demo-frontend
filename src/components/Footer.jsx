@@ -2,6 +2,7 @@
 import {  Phone, Mail, MapPin  } from "lucide-react";
 import {Facebook,Instagram,Twitter,Youtube} from  "react-feather";
 import { useNavigate } from "react-router-dom";
+import FloralLogo from "../assets/floral-logo.png";
 export default function Footer() {
   const navigate = useNavigate();
   return (
@@ -9,8 +10,10 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 py-14">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div style={{background:"#c97d5b"}} className="w-8 h-8 rounded-full flex items-center justify-center">🌸</div>
+            <div className="flex items-center gap-2 mb-4 cursor-pointer" onClick={()=>navigate('/')}>
+              <img src={FloralLogo} alt="Floral Studio" style={{
+                            width:"2rem",borderRadius:"50%"
+                          }} />
               <span style={{fontFamily:"Georgia,serif"}} className="font-bold text-lg">Floral Studio</span>
             </div>
             <p style={{color:"#b89c8a"}} className="text-sm leading-relaxed mb-5">Bringing nature's beauty to your doorstep, one bloom at a time.</p>
