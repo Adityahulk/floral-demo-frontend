@@ -33,6 +33,28 @@ const INITIAL = {
   reviews:            0,
 };
 
+function productToForm(p) {
+  return {
+    name:              p.name || "",
+    category:          p.category?._id || p.category || "",
+    description:       p.description || "",
+    price:             p.price || "",
+    originalPrice:     p.originalPrice || "",
+    quantity:          p.quantity || "",
+    badge:             p.badge || "None",
+    sizes:             p.sizes || [],
+    colors:            p.colors || [],
+    delivery_time:     p.delivery_time || "Same Day",
+    active:            p.active ?? true,
+    tags:              p.tags || [],
+    care_instructions: p.care_instructions || [],
+    what_included:     p.what_included || [],
+    rating_average:    p.rating?.average || 0,
+    rating_total:      p.rating?.total || 0,
+    reviews:           p.reviews || 0,
+  };
+}
+
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 
 function Label({ children, required, hint }) {
@@ -571,9 +593,16 @@ function PreviewCard({ form, images }) {
 // MAIN FORM
 // ══════════════════════════════════════════════════════════════════════════════
 
-export default function AddProductForm({ onBack }) {
-  const [form,       setForm]       = useState(INITIAL);
-  const [images,     setImages]     = useState([]);
+export default function AddProductForm({ onBack, initialData, onSuccess }) {
+  const isEdit = !!initialData?._id;
+  const [form,       setForm]       = useState(() => initialData ? productToForm(initialData) : INITIAL);
+  const [images,     setImages]     = useState(() =>
+    initialData?.images?.map(url => ({
+      id: Math.random().toString(36).slice(2),
+      url, name: url.split("/").pop() || "image",
+      primary: false, uploading: false, cloudUrl: url, uploadError: null,
+    })) ?? []
+  );
   const [errors,     setErrors]     = useState({});
   const [saved,      setSaved]      = useState(false);
   const [saving,     setSaving]     = useState(false);
@@ -656,8 +685,10 @@ export default function AddProductForm({ onBack }) {
 
     setSaving(true);
     try {
-      const res = await fetch("http://localhost:3001/api/product", {
-        method: "POST",
+      const url    = isEdit ? `http://localhost:3001/api/products/${initialData._id}` : "http://localhost:3001/api/product";
+      const method = isEdit ? "PUT" : "POST";
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -667,7 +698,7 @@ export default function AddProductForm({ onBack }) {
       }
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
-      handleReset();
+      if (isEdit) { onSuccess?.(); } else { handleReset(); }
     } catch (err) {
       setSaveError(err.message || "Failed to save product. Please try again.");
     } finally {
@@ -695,8 +726,8 @@ export default function AddProductForm({ onBack }) {
               <ArrowLeft size={18}/>
             </button>
             <div>
-              <h1 style={{ fontFamily:"Georgia,serif", color:"#3a2416" }} className="font-bold text-lg">Add New Product</h1>
-              <p style={{ color:"#9c7a62" }} className="text-xs">Fill in the details to list a new product</p>
+              <h1 style={{ fontFamily:"Georgia,serif", color:"#3a2416" }} className="font-bold text-lg">{isEdit ? "Edit Product" : "Add New Product"}</h1>
+              <p style={{ color:"#9c7a62" }} className="text-xs">{isEdit ? "Update the product details below" : "Fill in the details to list a new product"}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -714,8 +745,8 @@ export default function AddProductForm({ onBack }) {
               className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-60"
               style={{ background:"#c97d5b" }}>
               {saving
-                ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/> Publishing...</>
-                : <><Check size={14}/> Publish Product</>
+                ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/> {isEdit ? "Updating..." : "Publishing..."}</>
+                : <><Check size={14}/> {isEdit ? "Update Product" : "Publish Product"}</>
               }
             </button>
           </div>
@@ -727,7 +758,7 @@ export default function AddProductForm({ onBack }) {
         <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3 rounded-2xl shadow-xl"
           style={{ background:"#22c55e" }}>
           <Check size={16} className="text-white"/>
-          <span className="text-white text-sm font-semibold">Product published successfully!</span>
+          <span className="text-white text-sm font-semibold">{isEdit ? "Product updated successfully!" : "Product published successfully!"}</span>
         </div>
       )}
 
@@ -1076,7 +1107,7 @@ export default function AddProductForm({ onBack }) {
               <button onClick={() => handleSave(false)} disabled={saving}
                 className="flex-1 py-3 rounded-full text-white font-semibold text-sm hover:opacity-90"
                 style={{ background:"#c97d5b" }}>
-                {saving ? "Publishing..." : "Publish"}
+                {saving ? (isEdit ? "Updating..." : "Publishing...") : (isEdit ? "Update" : "Publish")}
               </button>
             </div>
 
