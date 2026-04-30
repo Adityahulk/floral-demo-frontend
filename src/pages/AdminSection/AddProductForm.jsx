@@ -581,7 +581,7 @@ export default function AddProductForm({ onBack }) {
   const [catLoading, setCatLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/category")
+    fetch("http://localhost:3001/api/categories")
       .then(r => {
         if (!r.ok) throw new Error("API unavailable");
         return r.json();
