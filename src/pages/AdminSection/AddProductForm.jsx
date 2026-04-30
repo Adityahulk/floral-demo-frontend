@@ -10,6 +10,8 @@ import {
 
 const SIZES      = ["Small", "Medium", "Large", "Extra Large"];
 const BADGES     = ["None", "New", "Popular", "Sale", "Premium", "Bestseller"];
+const OCCASIONS  = ["Birthday", "Anniversary", "Wedding", "Romance", "Congratulations", "Sympathy", "Corporate", "Seasonal", "Gift", "Luxury"];
+const FALLBACK_CATEGORIES = ["Bouquets", "Arrangements", "Wreaths", "Dried Flowers", "Plants", "Gift Hampers"];
 
 const INITIAL = {
   name:               "",
@@ -158,17 +160,17 @@ function DynamicListInput({ items, setItems, placeholder }) {
   const [ids, setIds] = useState(() => items.map(newId));
 
   function handleChange(index, value) {
-    setItems(prev => prev.map((item, i) => i === index ? value : item));
+    setItems(items.map((item, i) => i === index ? value : item));
   }
 
   function addItem() {
     setIds(prev => [...prev, newId()]);
-    setItems(prev => [...prev, ""]);
+    setItems([...items, ""]);
   }
 
   function removeItem(index) {
     setIds(prev => prev.filter((_, i) => i !== index));
-    setItems(prev => prev.filter((_, i) => i !== index));
+    setItems(items.filter((_, i) => i !== index));
   }
 
   return (
@@ -536,12 +538,18 @@ export default function AddProductForm({ onBack }) {
 
   useEffect(() => {
     fetch("http://localhost:3001/api/category")
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error("API unavailable");
+        return r.json();
+      })
       .then(data => {
         const list = Array.isArray(data) ? data : (data.data ?? []);
-        setCategories(list);
+        setCategories(list.length > 0
+          ? list
+          : FALLBACK_CATEGORIES.map(name => ({ _id: name, name }))
+        );
       })
-      .catch(() => setCategories([]))
+      .catch(() => setCategories(FALLBACK_CATEGORIES.map(name => ({ _id: name, name }))))
       .finally(() => setCatLoading(false));
   }, []);
 
@@ -842,10 +850,19 @@ export default function AddProductForm({ onBack }) {
               </div>
             </SectionCard>
 
-            {/* 5. Tags */}
-            <SectionCard title="Tags" icon={<Tag size={16}/>} optional>
+            {/* 5. Occasions & Tags */}
+            <SectionCard title="Occasions & Tags" icon={<Tag size={16}/>} optional>
               <div>
-                <Label hint="Press Enter or comma to add">Search Tags</Label>
+                <Label>Suitable Occasions</Label>
+                <ChipGroup
+                  options={OCCASIONS}
+                  selected={form.tags}
+                  onToggle={v => toggleMulti("tags", v)}
+                  color="#7c3aed"
+                />
+              </div>
+              <div>
+                <Label hint="Press Enter or comma to add">Custom Tags</Label>
                 <TagInput tags={form.tags} setTags={t => update("tags", t)}
                   placeholder="Type a tag and press Enter... e.g. Romantic, Spring"/>
                 <p style={{ color:"#9c7a62" }} className="text-xs mt-1">Tags help customers find your product in search</p>
