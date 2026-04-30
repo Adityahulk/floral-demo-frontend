@@ -155,23 +155,31 @@ function ChipGroup({ label, options, selected, onToggle, color = "#c97d5b" }) {
   );
 }
 
+function newId() {
+  return Math.random().toString(36).slice(2);
+}
+
 function DynamicListInput({ items, setItems, placeholder }) {
+  const [ids, setIds] = useState(() => items.map(newId));
+
   function handleChange(index, value) {
     setItems(prev => prev.map((item, i) => i === index ? value : item));
   }
 
   function addItem() {
+    setIds(prev => [...prev, newId()]);
     setItems(prev => [...prev, ""]);
   }
 
   function removeItem(index) {
+    setIds(prev => prev.filter((_, i) => i !== index));
     setItems(prev => prev.filter((_, i) => i !== index));
   }
 
   return (
     <div className="space-y-2">
       {items.map((item, index) => (
-        <div key={index} className="flex items-center gap-2">
+        <div key={ids[index]} className="flex items-center gap-2">
           <input
             type="text"
             value={item}
@@ -180,9 +188,10 @@ function DynamicListInput({ items, setItems, placeholder }) {
             className="flex-1 px-4 py-2.5 rounded-xl border text-sm outline-none transition-all"
             style={{ borderColor: "#e8d5c4", background: "white", color: "#3a2416" }}
             onFocus={e => e.target.style.borderColor = "#c97d5b"}
-            onBlur={e => e.target.style.borderColor = "#e8d5c4"}
+            onBlur={e  => e.target.style.borderColor = "#e8d5c4"}
           />
           <button
+            type="button"
             onClick={() => removeItem(index)}
             className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 hover:opacity-70 transition-opacity"
             style={{ background: "#fee2e2" }}>
@@ -191,6 +200,7 @@ function DynamicListInput({ items, setItems, placeholder }) {
         </div>
       ))}
       <button
+        type="button"
         onClick={addItem}
         className="flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-dashed text-xs font-semibold hover:opacity-70 transition-opacity"
         style={{ borderColor: "#c97d5b", color: "#c97d5b" }}>
