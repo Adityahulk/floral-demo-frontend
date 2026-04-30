@@ -15,22 +15,20 @@ const SIZES      = ["Small", "Medium", "Large", "Extra Large"];
 const BADGES     = ["None", "New", "Popular", "Sale", "Premium", "Bestseller"];
 
 const INITIAL = {
-  title:         "",
-  category:      "",
-  description:   "",
-  price:         "",
-  originalPrice: "",
-  stock:         "",
-  badge:         "None",
-  sizes:         [],
-  colors:        [],
-  occasions:     [],
-  careInstructions: "",
-  weight:        "",
-  deliveryTime:  "Same Day",
-  isActive:      true,
-  isFeatured:    false,
-  tags:          [],
+  name:               "",
+  category:           "",
+  description:        "",
+  price:              "",
+  originalPrice:      "",
+  quantity:           "",
+  badge:              "None",
+  sizes:              [],
+  colors:             [],
+  delivery_time:      "Same Day",
+  active:             true,
+  tags:               [],
+  care_instructions:  [],
+  what_included:      [],
 };
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
@@ -530,11 +528,14 @@ function PreviewCard({ form, images }) {
 // ══════════════════════════════════════════════════════════════════════════════
 
 export default function AddProductForm({ onBack }) {
-  const [form,   setForm]   = useState(INITIAL);
-  const [images, setImages] = useState([]);
-  const [errors, setErrors] = useState({});
-  const [saved,  setSaved]  = useState(false);
-  const [saving, setSaving] = useState(false);
+  const [form,       setForm]       = useState(INITIAL);
+  const [images,     setImages]     = useState([]);
+  const [errors,     setErrors]     = useState({});
+  const [saved,      setSaved]      = useState(false);
+  const [saving,     setSaving]     = useState(false);
+  const [saveError,  setSaveError]  = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [catLoading, setCatLoading] = useState(true);
 
   function update(key, val) {
     setForm(f => ({ ...f, [key]: val }));
