@@ -210,6 +210,76 @@ function DynamicListInput({ items, setItems, placeholder }) {
   );
 }
 
+function ColorPickerInput({ colors, setColors }) {
+  const [name, setName] = useState("");
+  const [hex,  setHex]  = useState("#e53e3e");
+
+  function addColor() {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    if (colors.some(c => c[0].toLowerCase() === trimmed.toLowerCase())) return;
+    setColors(prev => [...prev, [trimmed, hex]]);
+    setName("");
+    setHex("#e53e3e");
+  }
+
+  function removeColor(index) {
+    setColors(prev => prev.filter((_, i) => i !== index));
+  }
+
+  return (
+    <div className="space-y-3">
+      {colors.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {colors.map(([colorName, colorHex], index) => (
+            <span key={index}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border-2"
+              style={{ borderColor: "#e8d5c4", color: "#3a2416" }}>
+              <span className="w-3 h-3 rounded-full shrink-0 border border-white/50"
+                style={{ background: colorHex }} />
+              {colorName}
+              <button type="button" onClick={() => removeColor(index)} className="hover:opacity-70">
+                <X size={10} />
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && addColor()}
+          placeholder="Color name (e.g. Red)"
+          className="flex-1 px-4 py-2.5 rounded-xl border text-sm outline-none transition-all"
+          style={{ borderColor: "#e8d5c4", background: "white", color: "#3a2416" }}
+          onFocus={e => e.target.style.borderColor = "#c97d5b"}
+          onBlur={e  => e.target.style.borderColor = "#e8d5c4"}
+        />
+        <input
+          type="color"
+          value={hex}
+          onChange={e => setHex(e.target.value)}
+          className="w-10 h-10 rounded-xl border-2 cursor-pointer p-0.5"
+          style={{ borderColor: "#e8d5c4" }}
+          title="Pick color"
+        />
+        <button
+          type="button"
+          onClick={addColor}
+          className="flex items-center gap-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-white shrink-0 hover:opacity-90 transition-opacity"
+          style={{ background: "#c97d5b" }}>
+          <Plus size={14} /> Add
+        </button>
+      </div>
+      <p className="text-xs" style={{ color: "#9c7a62" }}>
+        Type a name, pick a color, then click Add
+      </p>
+    </div>
+  );
+}
+
 function SectionCard({ title, icon, children, optional }) {
   return (
     <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
