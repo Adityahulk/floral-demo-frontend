@@ -28,6 +28,9 @@ const INITIAL = {
   tags:               [],
   care_instructions:  [],
   what_included:      [],
+  rating_average:     0,
+  rating_total:       0,
+  reviews:            0,
 };
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
@@ -648,6 +651,8 @@ export default function AddProductForm({ onBack }) {
     };
     if (form.originalPrice) payload.originalPrice = Number(form.originalPrice);
     if (form.badge && form.badge !== "None") payload.badge = form.badge;
+    payload.rating  = { average: Number(form.rating_average), total: Number(form.rating_total) };
+    payload.reviews = Number(form.reviews);
 
     setSaving(true);
     try {
@@ -937,7 +942,60 @@ export default function AddProductForm({ onBack }) {
               </div>
             </SectionCard>
 
-            {/* 8. Visibility */}
+            {/* 8. Reviews & Rating */}
+            <SectionCard title="Reviews & Rating" icon={<Star size={16}/>} optional>
+              <div>
+                <Label hint="0 – 5">Average Rating</Label>
+                <div className="flex items-center gap-3 mt-1">
+                  <div className="flex gap-1">
+                    {[1,2,3,4,5].map(star => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => update("rating_average",
+                          form.rating_average === star ? star - 1 : star
+                        )}
+                        className="transition-transform hover:scale-110"
+                      >
+                        <Star
+                          size={28}
+                          style={{
+                            fill:   star <= form.rating_average ? "#f59e0b" : "none",
+                            color:  star <= form.rating_average ? "#f59e0b" : "#d1d5db",
+                            transition: "all 0.15s",
+                          }}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                  <span style={{ color:"#9c7a62" }} className="text-sm font-semibold">
+                    {form.rating_average}/5
+                  </span>
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <Label hint="Total votes">Total Ratings</Label>
+                  <Input
+                    value={form.rating_total}
+                    onChange={v => update("rating_total", v)}
+                    type="number"
+                    placeholder="0"
+                  />
+                </div>
+                <div>
+                  <Label hint="Written reviews">Number of Reviews</Label>
+                  <Input
+                    value={form.reviews}
+                    onChange={v => update("reviews", v)}
+                    type="number"
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+            </SectionCard>
+
+            {/* 9. Visibility */}
             <SectionCard title="Visibility & Settings" icon={<Eye size={16}/>}>
               <Toggle
                 checked={form.active}
