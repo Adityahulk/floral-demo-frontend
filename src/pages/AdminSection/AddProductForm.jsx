@@ -155,6 +155,51 @@ function ChipGroup({ label, options, selected, onToggle, color = "#c97d5b" }) {
   );
 }
 
+function DynamicListInput({ items, setItems, placeholder }) {
+  function handleChange(index, value) {
+    setItems(prev => prev.map((item, i) => i === index ? value : item));
+  }
+
+  function addItem() {
+    setItems(prev => [...prev, ""]);
+  }
+
+  function removeItem(index) {
+    setItems(prev => prev.filter((_, i) => i !== index));
+  }
+
+  return (
+    <div className="space-y-2">
+      {items.map((item, index) => (
+        <div key={index} className="flex items-center gap-2">
+          <input
+            type="text"
+            value={item}
+            onChange={e => handleChange(index, e.target.value)}
+            placeholder={`${placeholder} ${index + 1}`}
+            className="flex-1 px-4 py-2.5 rounded-xl border text-sm outline-none transition-all"
+            style={{ borderColor: "#e8d5c4", background: "white", color: "#3a2416" }}
+            onFocus={e => e.target.style.borderColor = "#c97d5b"}
+            onBlur={e => e.target.style.borderColor = "#e8d5c4"}
+          />
+          <button
+            onClick={() => removeItem(index)}
+            className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 hover:opacity-70 transition-opacity"
+            style={{ background: "#fee2e2" }}>
+            <X size={13} style={{ color: "#dc2626" }} />
+          </button>
+        </div>
+      ))}
+      <button
+        onClick={addItem}
+        className="flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-dashed text-xs font-semibold hover:opacity-70 transition-opacity"
+        style={{ borderColor: "#c97d5b", color: "#c97d5b" }}>
+        <Plus size={13} /> Add Item
+      </button>
+    </div>
+  );
+}
+
 function SectionCard({ title, icon, children, optional }) {
   return (
     <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
