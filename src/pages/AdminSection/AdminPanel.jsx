@@ -8,7 +8,7 @@ import {
   RefreshCw, LayoutGrid, List,
 } from "lucide-react";
  import FloralLogo from "../../assets/floral-logo.png";
-import { Plus } from "react-feather";
+import { Plus } from "lucide-react";
 import AddProductForm from "./AddProductForm";
 // ─── MOCK DATA ────────────────────────────────────────────────────────────────
 
@@ -739,6 +739,11 @@ function ProductsTab({ onEdit }) {
           <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold">Products</h2>
           <p style={{ color:"#9c7a62" }} className="text-sm">{products.length} total products</p>
         </div>
+        <button onClick={() => onEdit(null)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold text-white"
+          style={{ background:"#c97d5b" }}>
+          <Plus size={15}/> Add Product
+        </button>
         <div className="flex gap-2 flex-wrap">
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"#9c7a62" }} />
@@ -981,7 +986,6 @@ const NAV = [
   { id:"analytics",  icon:<BarChart2 size={18}/>,       label:"Analytics"  },
   { id:"orders",     icon:<Package size={18}/>,         label:"Orders"     },
   { id:"products",      icon:<Eye size={18}/>,          label:"Products"      },
-  { id:"add-product",   icon:<Plus size={18}/>,         label:"Add Product"   },
 ];
 
 export default function AdminPanel() {

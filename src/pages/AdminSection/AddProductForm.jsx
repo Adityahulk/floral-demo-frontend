@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import {
   ArrowLeft, Upload, X, Plus, Check, AlertCircle,
   Image, Tag, IndianRupee, Package, FileText,
-  ChevronDown, Trash2, Eye, Save, RotateCcw,
+  ChevronDown, Trash2, Eye, RotateCcw,
   Star, Layers, Palette, Ruler, Info
 } from "lucide-react";
 
@@ -736,11 +736,6 @@ export default function AddProductForm({ onBack, initialData, onSuccess }) {
               style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
               <RotateCcw size={14}/> Reset
             </button>
-            <button onClick={() => handleSave(true)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-semibold hover:opacity-70"
-              style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
-              <Save size={14}/> Save Draft
-            </button>
             <button onClick={() => handleSave(false)} disabled={saving}
               className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-60"
               style={{ background:"#c97d5b" }}>
@@ -1099,11 +1094,6 @@ export default function AddProductForm({ onBack, initialData, onSuccess }) {
             {/* Action buttons (sticky bottom for mobile) */}
             <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 flex gap-3 border-t"
               style={{ background:"white", borderColor:"#e8d5c4" }}>
-              <button onClick={() => handleSave(true)}
-                className="flex-1 py-3 rounded-full border font-semibold text-sm"
-                style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
-                Save Draft
-              </button>
               <button onClick={() => handleSave(false)} disabled={saving}
                 className="flex-1 py-3 rounded-full text-white font-semibold text-sm hover:opacity-90"
                 style={{ background:"#c97d5b" }}>
