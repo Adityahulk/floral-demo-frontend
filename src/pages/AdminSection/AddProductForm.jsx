@@ -303,14 +303,41 @@ function SectionCard({ title, icon, children, optional }) {
 function ImageUploader({ images, setImages }) {
   const inputRef = useRef();
 
+  async function uploadFile(file, id) {
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      const res = await fetch("http://localhost:3001/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.message || "Upload failed");
+      setImages(prev => prev.map(img =>
+        img.id === id ? { ...img, cloudUrl: data.url, uploading: false } : img
+      ));
+    } catch {
+      setImages(prev => prev.map(img =>
+        img.id === id ? { ...img, uploadError: true, uploading: false } : img
+      ));
+    }
+  }
+
   function handleFiles(files) {
-    const newImgs = Array.from(files).slice(0, 6 - images.length).map(file => ({
-      id:      Date.now() + Math.random(),
-      url:     URL.createObjectURL(file),
-      name:    file.name,
-      primary: images.length === 0,
+    const newImgs = Array.from(files).slice(0, 6 - images.length).map((file, i) => ({
+      id:          Date.now() + Math.random(),
+      url:         URL.createObjectURL(file),
+      name:        file.name,
+      primary:     images.length === 0 && i === 0,
+      uploading:   true,
+      cloudUrl:    null,
+      uploadError: false,
     }));
     setImages(prev => [...prev, ...newImgs]);
+    newImgs.forEach(img => {
+      const file = Array.from(files).find(f => f.name === img.name);
+      uploadFile(file, img.id);
+    });
   }
 
   function setPrimary(id) {
@@ -355,11 +382,26 @@ function ImageUploader({ images, setImages }) {
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mt-4">
           {images.map(img => (
             <div key={img.id} className="relative group aspect-square rounded-xl overflow-hidden border-2"
-              style={{ borderColor: img.primary ? "#c97d5b" : "#e8d5c4" }}>
+              style={{ borderColor: img.uploadError ? "#dc2626" : img.primary ? "#c97d5b" : "#e8d5c4" }}>
               <img src={img.url} alt="" className="w-full h-full object-cover"/>
 
+              {/* Upload spinner */}
+              {img.uploading && (
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"/>
+                </div>
+              )}
+
+              {/* Upload error */}
+              {img.uploadError && (
+                <div className="absolute inset-0 bg-red-500/70 flex flex-col items-center justify-center gap-1">
+                  <AlertCircle size={14} className="text-white"/>
+                  <span className="text-white text-xs font-bold" style={{ fontSize:"9px" }}>Failed</span>
+                </div>
+              )}
+
               {/* Primary badge */}
-              {img.primary && (
+              {img.primary && !img.uploading && !img.uploadError && (
                 <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-full text-xs font-bold"
                   style={{ background:"#c97d5b", color:"white", fontSize:"9px" }}>
                   Main
@@ -367,25 +409,27 @@ function ImageUploader({ images, setImages }) {
               )}
 
               {/* Overlay on hover */}
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5">
-                {!img.primary && (
-                  <button onClick={() => setPrimary(img.id)}
-                    className="text-white text-xs font-semibold px-2 py-1 rounded-full"
-                    style={{ background:"rgba(201,125,91,0.9)", fontSize:"9px" }}>
-                    Set Main
+              {!img.uploading && (
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5">
+                  {!img.primary && !img.uploadError && (
+                    <button type="button" onClick={() => setPrimary(img.id)}
+                      className="text-white text-xs font-semibold px-2 py-1 rounded-full"
+                      style={{ background:"rgba(201,125,91,0.9)", fontSize:"9px" }}>
+                      Set Main
+                    </button>
+                  )}
+                  <button type="button" onClick={() => removeImage(img.id)}
+                    className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
+                    <X size={11} className="text-white"/>
                   </button>
-                )}
-                <button onClick={() => removeImage(img.id)}
-                  className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
-                  <X size={11} className="text-white"/>
-                </button>
-              </div>
+                </div>
+              )}
             </div>
           ))}
 
           {/* Add more slot */}
           {images.length < 6 && (
-            <button onClick={() => inputRef.current?.click()}
+            <button type="button" onClick={() => inputRef.current?.click()}
               className="aspect-square rounded-xl border-2 border-dashed flex flex-col items-center justify-center hover:opacity-70 transition-opacity"
               style={{ borderColor:"#e8d5c4" }}>
               <Plus size={18} style={{ color:"#9c7a62" }}/>
@@ -573,6 +617,10 @@ export default function AddProductForm({ onBack }) {
     if (!form.price)                 e.price       = "Price is required";
     if (isNaN(Number(form.price)))   e.price       = "Enter a valid price";
     if (!form.quantity)              e.quantity    = "Stock quantity is required";
+    const uploadedImages = images.filter(i => i.cloudUrl);
+    if (uploadedImages.length === 0) e.images      = "Please add at least one image";
+    const stillUploading = images.some(i => i.uploading);
+    if (stillUploading)              e.images      = "Please wait for images to finish uploading";
     return e;
   }
 
@@ -598,7 +646,7 @@ export default function AddProductForm({ onBack }) {
       active:             asDraft ? false : form.active,
       care_instructions:  form.care_instructions.filter(s => s.trim()),
       what_included:      form.what_included.filter(s => s.trim()),
-      images:             [],
+      images:             images.filter(i => i.cloudUrl).map(i => i.cloudUrl),
     };
     if (form.originalPrice) payload.originalPrice = Number(form.originalPrice);
     if (form.badge && form.badge !== "None") payload.badge = form.badge;
