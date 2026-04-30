@@ -15,8 +15,8 @@ export default function ProductCard({ p, wished, onWish, onCart }) {
       className="relative bg-white rounded-2xl overflow-hidden border transition-all duration-300 cursor-pointer"
       style={{borderColor:"#f0e4d8", boxShadow: hovered?"0 20px 40px rgba(58,36,22,0.12)":"0 2px 8px rgba(58,36,22,0.06)", transform: hovered?"translateY(-4px)":"none"}}>
       <div className="relative overflow-hidden" style={{aspectRatio:"4/5"}}>
-        <img src={p.thumbnail} alt={p.name} className="w-full h-full object-cover transition-transform duration-500" style={{transform:hovered?"scale(1.06)":"scale(1)"}}/>
-        {p.badge&&<span className={`absolute top-3 left-3 text-xs font-bold px-2 py-0.5 rounded-full ${BADGE_STYLES[p.badge]}`}>{!isNaN(p.originalPrice)?`-${disc}%`:p.badge}</span>}
+        <img src={p?.images?.[0]} alt={p.name} className="w-full h-full object-cover transition-transform duration-500" style={{transform:hovered?"scale(1.06)":"scale(1)"}}/>
+        {p?.badge&&<span className={`absolute top-3 left-3 text-xs font-bold px-2 py-0.5 rounded-full ${BADGE_STYLES[p.badge]}`}>{!isNaN(p.originalPrice)?`-${disc}%`:p.badge}</span>}
         <button onClick={()=>onWish(p.id)} className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow hover:scale-110 transition-transform">
           <Heart size={14} className={wished?"fill-rose-500 text-rose-500":"text-stone-400"}/>
         </button>
