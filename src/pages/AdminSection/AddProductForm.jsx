@@ -217,28 +217,30 @@ function ColorPickerInput({ colors, setColors }) {
   function addColor() {
     const trimmed = name.trim();
     if (!trimmed) return;
-    if (colors.some(c => c[0].toLowerCase() === trimmed.toLowerCase())) return;
-    setColors(prev => [...prev, [trimmed, hex]]);
+    setColors(prev => {
+      if (prev.some(c => c[0].toLowerCase() === trimmed.toLowerCase())) return prev;
+      return [...prev, [trimmed, hex]];
+    });
     setName("");
     setHex("#e53e3e");
   }
 
-  function removeColor(index) {
-    setColors(prev => prev.filter((_, i) => i !== index));
+  function removeColor(colorName) {
+    setColors(prev => prev.filter(([n]) => n !== colorName));
   }
 
   return (
     <div className="space-y-3">
       {colors.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {colors.map(([colorName, colorHex], index) => (
-            <span key={index}
+          {colors.map(([colorName, colorHex]) => (
+            <span key={colorName}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border-2"
               style={{ borderColor: "#e8d5c4", color: "#3a2416" }}>
               <span className="w-3 h-3 rounded-full shrink-0 border border-white/50"
                 style={{ background: colorHex }} />
               {colorName}
-              <button type="button" onClick={() => removeColor(index)} className="hover:opacity-70">
+              <button type="button" onClick={() => removeColor(colorName)} className="hover:opacity-70">
                 <X size={10} />
               </button>
             </span>
