@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   ArrowLeft, Upload, X, Plus, Check, AlertCircle,
   Image, Tag, IndianRupee, Package, FileText,
@@ -8,9 +8,6 @@ import {
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
-const CATEGORIES = ["Bouquets", "Arrangements", "Wreaths", "Dried Flowers", "Plants", "Gift Hampers"];
-const OCCASIONS  = ["Birthday", "Anniversary", "Wedding", "Romance", "Congratulations", "Sympathy", "Corporate", "Seasonal", "Gift", "Luxury"];
-const COLORS     = ["Red", "Pink", "White", "Yellow", "Purple", "Orange", "Mixed", "Peach", "Blue", "Green"];
 const SIZES      = ["Small", "Medium", "Large", "Extra Large"];
 const BADGES     = ["None", "New", "Popular", "Sale", "Premium", "Bestseller"];
 
@@ -477,7 +474,7 @@ function PreviewCard({ form, images }) {
               <p style={{ color:"#9c7a62" }} className="text-xs mb-1">{form.category}</p>
             )}
             <p style={{ color:"#3a2416", fontFamily:"Georgia,serif" }} className="font-semibold text-sm mb-2">
-              {form.title || <span style={{ color:"#b89c8a" }}>Product title...</span>}
+              {form.name || <span style={{ color:"#b89c8a" }}>Product name...</span>}
             </p>
             <div className="flex gap-0.5 mb-3">
               {[1,2,3,4,5].map(i => (
@@ -505,8 +502,8 @@ function PreviewCard({ form, images }) {
         {/* Stock indicator */}
         <div className="mt-4 flex items-center justify-between text-xs">
           <span style={{ color:"#9c7a62" }}>Stock</span>
-          <span style={{ color: Number(form.stock) < 10 ? "#dc2626" : "#16a34a" }} className="font-bold">
-            {form.stock ? `${form.stock} units` : "—"}
+          <span style={{ color: Number(form.quantity) < 10 ? "#dc2626" : "#16a34a" }} className="font-bold">
+            {form.quantity ? `${form.quantity} units` : "—"}
           </span>
         </div>
 
@@ -514,8 +511,8 @@ function PreviewCard({ form, images }) {
         <div className="mt-2 flex items-center justify-between text-xs">
           <span style={{ color:"#9c7a62" }}>Status</span>
           <span className="font-bold px-2 py-0.5 rounded-full"
-            style={{ background: form.isActive ? "#dcfce7" : "#f5f5f4", color: form.isActive ? "#16a34a" : "#9c7a62" }}>
-            {form.isActive ? "Active" : "Draft"}
+            style={{ background: form.active ? "#dcfce7" : "#f5f5f4", color: form.active ? "#16a34a" : "#9c7a62" }}>
+            {form.active ? "Active" : "Draft"}
           </span>
         </div>
       </div>
@@ -537,6 +534,17 @@ export default function AddProductForm({ onBack }) {
   const [categories, setCategories] = useState([]);
   const [catLoading, setCatLoading] = useState(true);
 
+  useEffect(() => {
+    fetch("http://localhost:3001/api/category")
+      .then(r => r.json())
+      .then(data => {
+        const list = Array.isArray(data) ? data : (data.data ?? []);
+        setCategories(list);
+      })
+      .catch(() => setCategories([]))
+      .finally(() => setCatLoading(false));
+  }, []);
+
   function update(key, val) {
     setForm(f => ({ ...f, [key]: val }));
     if (errors[key]) setErrors(e => ({ ...e, [key]: null }));
@@ -551,40 +559,69 @@ export default function AddProductForm({ onBack }) {
 
   function validate() {
     const e = {};
-    if (!form.title.trim())    e.title    = "Product title is required";
-    if (!form.category)        e.category = "Please select a category";
-    if (!form.description.trim()) e.description = "Description is required";
-    if (!form.price)           e.price    = "Price is required";
-    if (isNaN(form.price))     e.price    = "Enter a valid price";
-    if (!form.stock)           e.stock    = "Stock quantity is required";
-    if (images.length === 0)   e.images   = "Please add at least one image";
+    if (!form.name.trim())           e.name        = "Product name is required";
+    if (!form.category)              e.category    = "Please select a category";
+    if (!form.description.trim())    e.description = "Description is required";
+    if (!form.price)                 e.price       = "Price is required";
+    if (isNaN(Number(form.price)))   e.price       = "Enter a valid price";
+    if (!form.quantity)              e.quantity    = "Stock quantity is required";
     return e;
   }
 
-  function handleSave(asDraft = false) {
+  async function handleSave(asDraft = false) {
+    setSaveError(null);
     const e = validate();
     if (Object.keys(e).length > 0 && !asDraft) {
       setErrors(e);
-      window.scrollTo({ top:0, behavior:"smooth" });
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
+
+    const payload = {
+      name:               form.name.trim(),
+      description:        form.description.trim(),
+      sizes:              form.sizes,
+      colors:             form.colors,
+      delivery_time:      form.delivery_time,
+      price:              Number(form.price),
+      tags:               form.tags,
+      quantity:           Number(form.quantity),
+      category:           form.category,
+      active:             asDraft ? false : form.active,
+      care_instructions:  form.care_instructions.filter(s => s.trim()),
+      what_included:      form.what_included.filter(s => s.trim()),
+      images:             [],
+    };
+    if (form.originalPrice) payload.originalPrice = Number(form.originalPrice);
+    if (form.badge && form.badge !== "None") payload.badge = form.badge;
+
     setSaving(true);
-    setTimeout(() => {
-      setSaving(false);
+    try {
+      const res = await fetch("http://localhost:3001/api/product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.message || `Server error ${res.status}`);
+      }
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
-    }, 1500);
+      handleReset();
+    } catch (err) {
+      setSaveError(err.message || "Failed to save product. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   function handleReset() {
     setForm(INITIAL);
     setImages([]);
     setErrors({});
+    setSaveError(null);
   }
-
-  const disc = form.price && form.originalPrice
-    ? Math.round((1 - Number(form.price) / Number(form.originalPrice)) * 100)
-    : null;
 
   return (
     <div style={{ fontFamily:"system-ui,sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
@@ -635,6 +672,18 @@ export default function AddProductForm({ onBack }) {
         </div>
       )}
 
+      {/* Error Toast */}
+      {saveError && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3 rounded-2xl shadow-xl"
+          style={{ background:"#dc2626" }}>
+          <AlertCircle size={16} className="text-white shrink-0"/>
+          <span className="text-white text-sm font-semibold">{saveError}</span>
+          <button type="button" onClick={() => setSaveError(null)} className="ml-2 text-white hover:opacity-70">
+            <X size={14}/>
+          </button>
+        </div>
+      )}
+
       {/* Error Banner */}
       {Object.keys(errors).length > 0 && (
         <div className="max-w-7xl mx-auto px-4 mt-4">
@@ -669,14 +718,39 @@ export default function AddProductForm({ onBack }) {
             {/* 2. Basic Info */}
             <SectionCard title="Basic Information" icon={<FileText size={16}/>}>
               <div>
-                <Label required>Product Title</Label>
-                <Input value={form.title} onChange={v => update("title", v)}
-                  placeholder="e.g. Rose Bliss Bouquet" error={errors.title}/>
+                <Label required>Product Name</Label>
+                <Input value={form.name} onChange={v => update("name", v)}
+                  placeholder="e.g. Rose Bliss Bouquet" error={errors.name}/>
               </div>
               <div>
                 <Label required>Category</Label>
-                <Select value={form.category} onChange={v => update("category", v)}
-                  options={CATEGORIES} placeholder="Select a category"/>
+                {catLoading ? (
+                  <div className="px-4 py-3 rounded-xl border text-sm"
+                    style={{ borderColor:"#e8d5c4", color:"#9c7a62" }}>
+                    Loading categories...
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <select
+                      value={form.category}
+                      onChange={e => update("category", e.target.value)}
+                      className="w-full appearance-none px-4 py-3 rounded-xl border text-sm outline-none transition-all"
+                      style={{
+                        borderColor: errors.category ? "#dc2626" : "#e8d5c4",
+                        background: "white",
+                        color: form.category ? "#3a2416" : "#9c7a62",
+                      }}
+                      onFocus={e => e.target.style.borderColor = "#c97d5b"}
+                      onBlur={e  => e.target.style.borderColor = errors.category ? "#dc2626" : "#e8d5c4"}>
+                      <option value="">Select a category</option>
+                      {categories.map(cat => (
+                        <option key={cat._id} value={cat._id}>{cat.name}</option>
+                      ))}
+                    </select>
+                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                      style={{ color:"#9c7a62" }}/>
+                  </div>
+                )}
                 {errors.category && <p className="text-xs mt-1" style={{ color:"#dc2626" }}>{errors.category}</p>}
               </div>
               <div>
@@ -688,9 +762,11 @@ export default function AddProductForm({ onBack }) {
               </div>
               <div>
                 <Label>Care Instructions</Label>
-                <Textarea value={form.careInstructions} onChange={v => update("careInstructions", v)}
-                  placeholder="e.g. Change water every 2 days. Keep away from direct sunlight. Trim stems at an angle."
-                  rows={3}/>
+                <DynamicListInput
+                  items={form.care_instructions}
+                  setItems={v => update("care_instructions", v)}
+                  placeholder="Instruction"
+                />
               </div>
             </SectionCard>
 
@@ -710,31 +786,29 @@ export default function AddProductForm({ onBack }) {
               </div>
 
               {/* Discount Preview */}
-              {disc && disc > 0 && (
-                <div className="flex items-center gap-2 p-3 rounded-xl" style={{ background:"#dcfce7" }}>
-                  <Check size={14} style={{ color:"#16a34a" }}/>
-                  <p style={{ color:"#15803d" }} className="text-sm font-semibold">
-                    Customer saves ₹{(Number(form.originalPrice) - Number(form.price)).toLocaleString("en-IN")} ({disc}% off)
-                  </p>
-                </div>
-              )}
-
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <Label required>Stock Quantity</Label>
-                  <Input value={form.stock} onChange={v => update("stock", v)}
-                    type="number" placeholder="50" suffix="units" error={errors.stock}/>
-                  {form.stock && Number(form.stock) < 10 && (
-                    <p className="text-xs mt-1 flex items-center gap-1" style={{ color:"#ca8a04" }}>
-                      <AlertCircle size={11}/> Low stock warning will show under 10 units
+              {(() => {
+                const disc = form.price && form.originalPrice
+                  ? Math.round((1 - Number(form.price) / Number(form.originalPrice)) * 100)
+                  : null;
+                return disc && disc > 0 ? (
+                  <div className="flex items-center gap-2 p-3 rounded-xl" style={{ background:"#dcfce7" }}>
+                    <Check size={14} style={{ color:"#16a34a" }}/>
+                    <p style={{ color:"#15803d" }} className="text-sm font-semibold">
+                      Customer saves ₹{(Number(form.originalPrice) - Number(form.price)).toLocaleString("en-IN")} ({disc}% off)
                     </p>
-                  )}
-                </div>
-                <div>
-                  <Label>Product Weight</Label>
-                  <Input value={form.weight} onChange={v => update("weight", v)}
-                    placeholder="500" suffix="grams"/>
-                </div>
+                  </div>
+                ) : null;
+              })()}
+
+              <div>
+                <Label required>Stock Quantity</Label>
+                <Input value={form.quantity} onChange={v => update("quantity", v)}
+                  type="number" placeholder="50" suffix="units" error={errors.quantity}/>
+                {form.quantity && Number(form.quantity) < 10 && (
+                  <p className="text-xs mt-1 flex items-center gap-1" style={{ color:"#ca8a04" }}>
+                    <AlertCircle size={11}/> Low stock warning will show under 10 units
+                  </p>
+                )}
               </div>
 
               <div>
@@ -761,16 +835,15 @@ export default function AddProductForm({ onBack }) {
               </div>
               <div>
                 <Label>Available Colors</Label>
-                <ChipGroup options={COLORS} selected={form.colors} onToggle={v => toggleMulti("colors", v)} color="#e11d48"/>
+                <ColorPickerInput
+                  colors={form.colors}
+                  setColors={v => update("colors", v)}
+                />
               </div>
             </SectionCard>
 
-            {/* 5. Occasions & Tags */}
-            <SectionCard title="Occasions & Tags" icon={<Tag size={16}/>} optional>
-              <div>
-                <Label>Suitable Occasions</Label>
-                <ChipGroup options={OCCASIONS} selected={form.occasions} onToggle={v => toggleMulti("occasions", v)} color="#7c3aed"/>
-              </div>
+            {/* 5. Tags */}
+            <SectionCard title="Tags" icon={<Tag size={16}/>} optional>
               <div>
                 <Label hint="Press Enter or comma to add">Search Tags</Label>
                 <TagInput tags={form.tags} setTags={t => update("tags", t)}
@@ -783,24 +856,31 @@ export default function AddProductForm({ onBack }) {
             <SectionCard title="Delivery" icon={<Package size={16}/>} optional>
               <div>
                 <Label>Estimated Delivery Time</Label>
-                <Select value={form.deliveryTime} onChange={v => update("deliveryTime", v)}
+                <Select value={form.delivery_time} onChange={v => update("delivery_time", v)}
                   options={["Same Day","Next Day","2-3 Days","3-5 Days"]}
                   placeholder="Select delivery time"/>
               </div>
             </SectionCard>
 
-            {/* 7. Visibility */}
+            {/* 7. What's Included */}
+            <SectionCard title="What's Included" icon={<Package size={16}/>} optional>
+              <div>
+                <Label hint="Items included with this product">Items</Label>
+                <DynamicListInput
+                  items={form.what_included}
+                  setItems={v => update("what_included", v)}
+                  placeholder="Item"
+                />
+              </div>
+            </SectionCard>
+
+            {/* 8. Visibility */}
             <SectionCard title="Visibility & Settings" icon={<Eye size={16}/>}>
               <Toggle
-                checked={form.isActive}
-                onChange={v => update("isActive", v)}
+                checked={form.active}
+                onChange={v => update("active", v)}
                 label="Active / Published"
                 sub="Customers can see and purchase this product"/>
-              <Toggle
-                checked={form.isFeatured}
-                onChange={v => update("isFeatured", v)}
-                label="Featured Product"
-                sub="Show in homepage and featured collections"/>
             </SectionCard>
 
           </div>
@@ -816,14 +896,14 @@ export default function AddProductForm({ onBack }) {
               <p style={{ fontFamily:"Georgia,serif", color:"#3a2416" }} className="font-bold mb-4">Publishing Checklist</p>
               <div className="space-y-2.5">
                 {[
-                  ["Product title",   !!form.title.trim()],
-                  ["Category",        !!form.category],
-                  ["Description",     !!form.description.trim()],
-                  ["Selling price",   !!form.price],
-                  ["Stock quantity",  !!form.stock],
-                  ["Product images",  images.length > 0],
-                  ["Occasions",       form.occasions.length > 0],
-                  ["Sizes added",     form.sizes.length > 0],
+                  ["Product name",      !!form.name.trim()],
+                  ["Category",          !!form.category],
+                  ["Description",       !!form.description.trim()],
+                  ["Selling price",     !!form.price],
+                  ["Stock quantity",    !!form.quantity],
+                  ["Colors added",      form.colors.length > 0],
+                  ["Sizes added",       form.sizes.length > 0],
+                  ["Care instructions", form.care_instructions.some(s => s.trim())],
                 ].map(([label, done]) => (
                   <div key={label} className="flex items-center gap-2.5">
                     <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
@@ -844,9 +924,9 @@ export default function AddProductForm({ onBack }) {
                   <span style={{ color:"#9c7a62" }} className="text-xs">Completion</span>
                   <span style={{ color:"#c97d5b" }} className="text-xs font-bold">
                     {Math.round(([
-                      !!form.title.trim(), !!form.category, !!form.description.trim(),
-                      !!form.price, !!form.stock, images.length>0,
-                      form.occasions.length>0, form.sizes.length>0
+                      !!form.name.trim(), !!form.category, !!form.description.trim(),
+                      !!form.price, !!form.quantity, form.colors.length > 0,
+                      form.sizes.length > 0, form.care_instructions.some(s => s.trim())
                     ].filter(Boolean).length / 8) * 100)}%
                   </span>
                 </div>
@@ -855,9 +935,9 @@ export default function AddProductForm({ onBack }) {
                     style={{
                       background:"#c97d5b",
                       width: `${Math.round(([
-                        !!form.title.trim(), !!form.category, !!form.description.trim(),
-                        !!form.price, !!form.stock, images.length>0,
-                        form.occasions.length>0, form.sizes.length>0
+                        !!form.name.trim(), !!form.category, !!form.description.trim(),
+                        !!form.price, !!form.quantity, form.colors.length > 0,
+                        form.sizes.length > 0, form.care_instructions.some(s => s.trim())
                       ].filter(Boolean).length / 8) * 100)}%`
                     }}/>
                 </div>
