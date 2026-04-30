@@ -214,16 +214,14 @@ function ColorPickerInput({ colors, setColors }) {
   function addColor() {
     const trimmed = name.trim();
     if (!trimmed) return;
-    setColors(prev => {
-      if (prev.some(c => c[0].toLowerCase() === trimmed.toLowerCase())) return prev;
-      return [...prev, [trimmed, hex]];
-    });
+    if (colors.some(c => c[0].toLowerCase() === trimmed.toLowerCase())) return;
+    setColors([...colors, [trimmed, hex]]);
     setName("");
     setHex("#e53e3e");
   }
 
   function removeColor(colorName) {
-    setColors(prev => prev.filter(([n]) => n !== colorName));
+    setColors(colors.filter(([n]) => n !== colorName));
   }
 
   return (
