@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { authFetch } from "../../utils/auth";
+import { useState, useEffect, useRef } from "react";
+import { authFetch, getTokenPayload } from "../../utils/auth";
 import {
   LayoutDashboard, Users, BarChart2, Package,
   TrendingUp, ShoppingBag, IndianRupee,
-  Bell, Search, Menu, X, ChevronRight, Eye, Star,
+  Bell, Search, Menu, X, ChevronRight, Eye,
   ArrowUpRight, ArrowDownRight,
   ChevronUp, ChevronDown, LogOut, Home, Edit2, Trash2, ToggleLeft, ToggleRight,
   RefreshCw, LayoutGrid, List,
@@ -11,65 +11,8 @@ import {
  import FloralLogo from "../../assets/floral-logo.png";
 import { Plus } from "lucide-react";
 import AddProductForm from "./AddProductForm";
-// ─── MOCK DATA ────────────────────────────────────────────────────────────────
-
-const REVENUE = {
-  daily:   { value:12480,  change:+8.2,  chart:[4200,5100,3800,6200,7100,5800,12480] },
-  weekly:  { value:68900,  change:+12.4, chart:[9200,11400,8700,13200,14100,11800,10500] },
-  monthly: { value:284500, change:+18.7, chart:[42000,51000,38000,62000,71000,58000,79000,88000,72000,91000,95000,102000] },
-};
-
-const RECENT_ORDERS = [
-  { id:"FS-0431", customer:"Priya Sharma",   item:"Rose Bliss Bouquet",        price:1299, status:"Delivered",  time:"2 min ago",  img:"https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=100&q=80" },
-  { id:"FS-0430", customer:"Rahul Verma",    item:"Pastel Dream Arrangement",  price:3798, status:"In Transit", time:"18 min ago", img:"https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=100&q=80" },
-  { id:"FS-0429", customer:"Ananya Singh",   item:"Wildflower Wreath",         price:999,  status:"Processing", time:"45 min ago", img:"https://images.unsplash.com/photo-1491013516836-7db643ee125a?w=100&q=80" },
-  { id:"FS-0428", customer:"Vikram Mehta",   item:"Orchid Elegance Set",       price:2199, status:"Delivered",  time:"1 hr ago",   img:"https://images.unsplash.com/photo-1566873535350-96e04c74fb1a?w=100&q=80" },
-  { id:"FS-0427", customer:"Sneha Gupta",    item:"Sunflower Garden Bundle",   price:1499, status:"Cancelled",  time:"2 hr ago",   img:"https://images.unsplash.com/photo-1543218024-57a70143c369?w=100&q=80" },
-  { id:"FS-0426", customer:"Rohan Kapoor",   item:"Lavender & Eucalyptus",     price:849,  status:"Delivered",  time:"3 hr ago",   img:"https://images.unsplash.com/photo-1471086569966-db3eebc25a59?w=100&q=80" },
-  { id:"FS-0425", customer:"Meena Joshi",    item:"Dahlia Delight Box",        price:1699, status:"In Transit", time:"4 hr ago",   img:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=100&q=80" },
-  { id:"FS-0424", customer:"Arjun Patel",    item:"Mixed Tulip Bunch",         price:749,  status:"Delivered",  time:"5 hr ago",   img:"https://images.unsplash.com/photo-1520763185298-1b434c919102?w=100&q=80" },
-];
-
-
-const TOP_PRODUCTS = [
-  { id:1, name:"Rose Bliss Bouquet",       category:"Bouquets",     price:1299, sold:284, revenue:368916, rating:4.8, stock:42, trend:+12.4, img:"https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=200&q=80" },
-  { id:2, name:"Pastel Dream Arrangement", category:"Arrangements", price:1899, sold:198, revenue:376002, rating:4.9, stock:18, trend:+8.1,  img:"https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=200&q=80" },
-  { id:3, name:"Orchid Elegance Set",      category:"Arrangements", price:2199, sold:156, revenue:342444, rating:5.0, stock:9,  trend:+21.3, img:"https://images.unsplash.com/photo-1566873535350-96e04c74fb1a?w=200&q=80" },
-  { id:4, name:"Sunflower Garden Bundle",  category:"Bouquets",     price:1499, sold:241, revenue:361259, rating:4.6, stock:31, trend:-3.2,  img:"https://images.unsplash.com/photo-1543218024-57a70143c369?w=200&q=80" },
-  { id:5, name:"Wildflower Wreath",        category:"Wreaths",      price:999,  sold:189, revenue:188811, rating:4.7, stock:24, trend:+5.8,  img:"https://images.unsplash.com/photo-1491013516836-7db643ee125a?w=200&q=80" },
-  { id:6, name:"Lavender & Eucalyptus",    category:"Dried",        price:849,  sold:167, revenue:141783, rating:4.9, stock:56, trend:+15.9, img:"https://images.unsplash.com/photo-1471086569966-db3eebc25a59?w=200&q=80" },
-  { id:7, name:"Dahlia Delight Box",       category:"Bouquets",     price:1699, sold:134, revenue:227666, rating:4.8, stock:12, trend:+9.2,  img:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=200&q=80" },
-  { id:8, name:"Mixed Tulip Bunch",        category:"Bouquets",     price:749,  sold:312, revenue:233688, rating:4.5, stock:67, trend:+2.1,  img:"https://images.unsplash.com/photo-1520763185298-1b434c919102?w=200&q=80" },
-];
-
-const STATUS_CONFIG = {
-  Delivered:    { bg:"#dcfce7", color:"#16a34a", dot:"#16a34a" },
-  "In Transit": { bg:"#fef9c3", color:"#ca8a04", dot:"#ca8a04" },
-  Processing:   { bg:"#dbeafe", color:"#2563eb", dot:"#2563eb" },
-  Cancelled:    { bg:"#fee2e2", color:"#dc2626", dot:"#dc2626" },
-};
-
 const fmt   = n => "₹" + n.toLocaleString("en-IN");
 const fmtK  = n => n >= 100000 ? `₹${(n/100000).toFixed(1)}L` : n >= 1000 ? `₹${(n/1000).toFixed(1)}K` : `₹${n}`;
-
-// ─── MINI SPARKLINE ───────────────────────────────────────────────────────────
-
-function Sparkline({ data, color }) {
-  const max = Math.max(...data);
-  const min = Math.min(...data);
-  const range = max - min || 1;
-  const W = 80, H = 32;
-  const pts = data.map((v, i) => {
-    const x = (i / (data.length - 1)) * W;
-    const y = H - ((v - min) / range) * H;
-    return `${x},${y}`;
-  }).join(" ");
-  return (
-    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
-      <polyline points={pts} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 // ─── BAR CHART ────────────────────────────────────────────────────────────────
 
@@ -88,211 +31,238 @@ function BarChart({ data, labels, color = "#c97d5b" }) {
   );
 }
 
-// ─── STATUS BADGE ─────────────────────────────────────────────────────────────
-
-function Badge({ status, small }) {
-  const s = STATUS_CONFIG[status] || STATUS_CONFIG.Processing;
-  return (
-    <span className={`inline-flex items-center gap-1 font-bold rounded-full ${small ? "text-xs px-2 py-0.5" : "text-xs px-2.5 py-1"}`}
-      style={{ background: s.bg, color: s.color }}>
-      <span className="w-1.5 h-1.5 rounded-full" style={{ background: s.dot }} />
-      {status}
-    </span>
-  );
-}
-
-// ─── ORDER POPUP ──────────────────────────────────────────────────────────────
-
-function OrderPopup({ order, onClose }) {
-  if (!order) return null;
-  return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden">
-        <div className="flex items-center justify-between p-5 border-b" style={{ borderColor:"#f0e4d8", background:"#fdf8f3" }}>
-          <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">Order Details</h3>
-          <button onClick={onClose} className="p-1.5 rounded-full hover:opacity-70" style={{ background:"#f5ede5" }}>
-            <X size={16} style={{ color:"#5c4033" }} />
-          </button>
-        </div>
-        <div className="p-5 space-y-4">
-          <div className="flex gap-3 items-center">
-            <img src={order.img} alt={order.item} className="w-16 h-16 object-cover rounded-2xl" />
-            <div>
-              <p style={{ color:"#3a2416" }} className="font-bold">{order.item}</p>
-              <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">Order {order.id}</p>
-              <Badge status={order.status} />
-            </div>
-          </div>
-          {[
-            ["Customer",  order.customer],
-            ["Amount",    fmt(order.price)],
-            ["Ordered",   order.time],
-          ].map(([k, v]) => (
-            <div key={k} className="flex justify-between text-sm">
-              <span style={{ color:"#9c7a62" }}>{k}</span>
-              <span style={{ color:"#4a3728" }} className="font-semibold">{v}</span>
-            </div>
-          ))}
-          <div className="flex gap-2 pt-2">
-            <button style={{ background:"#f5ede5", color:"#c97d5b" }}
-              className="flex-1 py-2 rounded-full text-sm font-semibold hover:opacity-80">
-              View Full Order
-            </button>
-            <button style={{ background:"#c97d5b" }}
-              className="flex-1 py-2 rounded-full text-sm font-semibold text-white hover:opacity-90">
-              Update Status
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ══════════════════════════════════════════════════════════════════════════════
 // DASHBOARD TAB
 // ══════════════════════════════════════════════════════════════════════════════
 
-function Dashboard() {
-  const [period,   setPeriod]   = useState("daily");
-  const [popup,    setPopup]    = useState(null);
-  const [notif,    setNotif]    = useState(true);
-  const rev = REVENUE[period];
+const DASH_STATUS_COLORS = {
+  delivered:    { bg:"#dcfce7", color:"#16a34a" },
+  "in transit": { bg:"#fef9c3", color:"#ca8a04" },
+  confirmed:    { bg:"#dbeafe", color:"#2563eb" },
+  processing:   { bg:"#dbeafe", color:"#2563eb" },
+  cancelled:    { bg:"#fee2e2", color:"#dc2626" },
+  pending:      { bg:"#f5ede5", color:"#9c7a62" },
+};
 
-  const STATS = [
-    { label:"Total Revenue",  value:fmtK(rev.value),  change:rev.change,  icon:<IndianRupee size={20}/>, color:"#c97d5b", chart:rev.chart },
-    { label:"Total Orders",   value:"1,284",           change:+6.4,        icon:<ShoppingBag size={20}/>, color:"#8b5cf6", chart:[80,110,90,130,140,120,160] },
-    { label:"New Customers",  value:"348",             change:+14.2,       icon:<Users size={20}/>,       color:"#06b6d4", chart:[30,45,38,52,48,60,72] },
-    { label:"Avg Order Value",value:"₹1,840",          change:-2.1,        icon:<TrendingUp size={20}/>,  color:"#f59e0b", chart:[1600,1750,1800,1720,1900,1820,1840] },
+function Dashboard() {
+  const [period,      setPeriod]      = useState("daily");
+  const [kpi,         setKpi]         = useState(null);
+  const [dash,        setDash]        = useState(null);
+  const [initialLoad, setInitialLoad] = useState(true);
+  const [dashLoading, setDashLoading] = useState(false);
+  const periodChanged = useRef(false);
+
+  // Parallel initial fetch: KPI + dashboard(daily)
+  useEffect(() => {
+    Promise.all([
+      authFetch(`${CUST_BASE}/api/admin/analytics/kpi`).then(r => r.json()).catch(() => null),
+      authFetch(`${CUST_BASE}/api/admin/analytics/dashboard?period=daily`).then(r => r.json()).catch(() => null),
+    ]).then(([k, d]) => {
+      setKpi(k);
+      setDash(d);
+      setInitialLoad(false);
+      periodChanged.current = true;
+    });
+  }, []);
+
+  // Refetch dashboard only when user explicitly changes period
+  useEffect(() => {
+    if (!periodChanged.current) return;
+    authFetch(`${CUST_BASE}/api/admin/analytics/dashboard?period=${period}`)
+      .then(r => r.json())
+      .then(data => { setDash(data); setDashLoading(false); })
+      .catch(() => setDashLoading(false));
+  }, [period]);
+
+  function changePeriod(p) { setDashLoading(true); setPeriod(p); }
+
+  // KPI response: { kpi: { totalRevenue, ordersToday, activeCustomers, pendingOrders } }
+  const k = kpi?.kpi;
+  const kpiCards = [
+    {
+      label: "Total Revenue",
+      value: k ? fmtK(k.totalRevenue?.value ?? 0) : "—",
+      sub:   k?.totalRevenue?.monthlyChange != null
+               ? `${k.totalRevenue.monthlyChange >= 0 ? "+" : ""}${k.totalRevenue.monthlyChange}% this month`
+               : null,
+      pos:   (k?.totalRevenue?.monthlyChange ?? 0) >= 0,
+    },
+    {
+      label: "Orders Today",
+      value: k ? (k.ordersToday?.value ?? 0).toString() : "—",
+      sub:   k?.ordersToday?.vsYesterday != null
+               ? `${k.ordersToday.vsYesterday >= 0 ? "+" : ""}${k.ordersToday.vsYesterday}% vs yesterday`
+               : null,
+      pos:   (k?.ordersToday?.vsYesterday ?? 0) >= 0,
+    },
+    {
+      label: "Active Customers",
+      value: k ? (k.activeCustomers?.value ?? 0).toLocaleString() : "—",
+      sub:   k?.activeCustomers?.monthlyChange != null
+               ? `${k.activeCustomers.monthlyChange >= 0 ? "+" : ""}${k.activeCustomers.monthlyChange}% this month`
+               : null,
+      pos:   (k?.activeCustomers?.monthlyChange ?? 0) >= 0,
+    },
+    {
+      label: "Pending Orders",
+      value: k ? (k.pendingOrders?.value ?? 0).toString() : "—",
+      sub:   k?.pendingOrders?.overdue > 0 ? `${k.pendingOrders.overdue} overdue` : "All on track",
+      pos:   !(k?.pendingOrders?.overdue > 0),
+    },
   ];
+
+  // Dashboard response: { overview: { totalRevenue, totalOrders, newCustomers, avgOrderValue }, revenueChart: [] }
+  const ov = dash?.overview;
+  const stats = ov ? [
+    { label:"Total Revenue",   value: fmtK(ov.totalRevenue?.value ?? 0),             change: ov.totalRevenue?.change ?? 0,   icon:<IndianRupee size={20}/>, color:"#c97d5b" },
+    { label:"Total Orders",    value: (ov.totalOrders?.value ?? 0).toLocaleString(),  change: ov.totalOrders?.change ?? 0,    icon:<ShoppingBag size={20}/>, color:"#8b5cf6" },
+    { label:"New Customers",   value: (ov.newCustomers?.value ?? 0).toLocaleString(), change: ov.newCustomers?.change ?? 0,   icon:<Users size={20}/>,       color:"#06b6d4" },
+    { label:"Avg Order Value", value: fmtK(ov.avgOrderValue?.value ?? 0),            change: ov.avgOrderValue?.change ?? 0,  icon:<TrendingUp size={20}/>,  color:"#f59e0b" },
+  ] : [];
+
+  // revenueChart: [{ day, revenue, orders }]
+  const chartData   = dash?.revenueChart ?? [];
+  const chartValues = chartData.map(d => d.revenue ?? 0);
+  const chartLabels = chartData.map(d => d.day ?? "");
+  const recentOrders = dash?.recentOrders ?? [];
+
+  if (initialLoad) {
+    return (
+      <div className="flex justify-center py-20">
+        <div className="w-7 h-7 border-2 rounded-full animate-spin"
+          style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      {/* Popup */}
-      {popup && <OrderPopup order={popup} onClose={() => setPopup(null)} />}
 
-      {/* Notif Banner */}
-      {notif && (
-        <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background:"#fef9c3", border:"1px solid #fde68a" }}>
-          <Bell size={16} style={{ color:"#ca8a04" }} className="shrink-0" />
-          <p className="text-sm flex-1" style={{ color:"#92400e" }}>
-            🌸 <strong>5 new orders</strong> received in the last hour. 2 orders need your attention.
-          </p>
-          <button onClick={() => setNotif(false)}><X size={14} style={{ color:"#92400e" }} /></button>
+      {/* KPI Cards — dark style */}
+      <div>
+        <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold mb-4">
+          Key Performance Indicators
+        </h2>
+        <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          {kpiCards.map(({ label, value, sub, pos }) => (
+            <div key={label} className="rounded-2xl p-5" style={{ background:"#1e1410" }}>
+              <p style={{ color:"#a08070" }} className="text-xs font-semibold uppercase tracking-wide mb-2">{label}</p>
+              <p style={{ color:"white", fontFamily:"Georgia, serif" }} className="text-3xl font-bold mb-1">{value}</p>
+              {sub && <p style={{ color: pos ? "#4ade80" : "#f87171" }} className="text-xs">{sub}</p>}
+            </div>
+          ))}
         </div>
-      )}
+      </div>
 
       {/* Period Toggle */}
       <div className="flex items-center justify-between">
         <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold">Overview</h2>
         <div className="flex gap-1 p-1 rounded-full" style={{ background:"#f5ede5" }}>
           {["daily","weekly","monthly"].map(p => (
-            <button key={p} onClick={() => setPeriod(p)}
+            <button key={p} onClick={() => changePeriod(p)}
               className="px-4 py-1.5 rounded-full text-xs font-bold capitalize transition-all"
-              style={period === p
-                ? { background:"#c97d5b", color:"white" }
-                : { color:"#9c7a62" }}>
+              style={period === p ? { background:"#c97d5b", color:"white" } : { color:"#9c7a62" }}>
               {p}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Stat Cards */}
-      <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        {STATS.map(({ label, value, change, icon, color, chart }) => {
-          const up = change >= 0;
-          return (
-            <div key={label} className="bg-white rounded-2xl p-5 border" style={{ borderColor:"#e8d5c4" }}>
-              <div className="flex items-start justify-between mb-4">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background:`${color}18`, color }}>
-                  {icon}
+      {dashLoading ? (
+        <div className="flex justify-center py-8">
+          <div className="w-6 h-6 border-2 rounded-full animate-spin"
+            style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
+        </div>
+      ) : (
+        <>
+          {/* Stat Cards */}
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            {stats.map(({ label, value, change, icon, color }) => {
+              const up = change >= 0;
+              return (
+                <div key={label} className="bg-white rounded-2xl p-5 border" style={{ borderColor:"#e8d5c4" }}>
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                      style={{ background:`${color}18`, color }}>
+                      {icon}
+                    </div>
+                    <div className="flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full"
+                      style={{ background: up ? "#dcfce7" : "#fee2e2", color: up ? "#16a34a" : "#dc2626" }}>
+                      {up ? <ArrowUpRight size={12}/> : <ArrowDownRight size={12}/>}
+                      {Math.abs(change)}%
+                    </div>
+                  </div>
+                  <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold mb-0.5">{value}</p>
+                  <p style={{ color:"#9c7a62" }} className="text-xs">{label}</p>
                 </div>
-                <div className={`flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full`}
-                  style={{ background: up ? "#dcfce7" : "#fee2e2", color: up ? "#16a34a" : "#dc2626" }}>
-                  {up ? <ArrowUpRight size={12}/> : <ArrowDownRight size={12}/>}
-                  {Math.abs(change)}%
+              );
+            })}
+          </div>
+
+          {/* Revenue Bar Chart */}
+          {chartValues.length > 0 && (
+            <div className="bg-white rounded-3xl p-6 border" style={{ borderColor:"#e8d5c4" }}>
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">Revenue Chart</h3>
+                  <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">
+                    {period === "daily" ? "Last 7 days" : period === "weekly" ? "Last 7 weeks" : "Last 12 months"}
+                  </p>
                 </div>
+                <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }} className="text-2xl font-bold">
+                  {fmtK(ov?.totalRevenue?.value ?? 0)}
+                </p>
               </div>
-              <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold mb-0.5">{value}</p>
-              <p style={{ color:"#9c7a62" }} className="text-xs mb-3">{label}</p>
-              <Sparkline data={chart} color={color} />
+              <BarChart data={chartValues} labels={chartLabels} />
             </div>
-          );
-        })}
-      </div>
+          )}
 
-      {/* Revenue Bar Chart */}
-      <div className="bg-white rounded-3xl p-6 border" style={{ borderColor:"#e8d5c4" }}>
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">Revenue Chart</h3>
-            <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">
-              {period === "daily" ? "Last 7 days" : period === "weekly" ? "Last 7 weeks" : "Last 12 months"}
-            </p>
-          </div>
-          <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }} className="text-2xl font-bold">{fmtK(rev.value)}</p>
-        </div>
-        <BarChart
-          data={rev.chart}
-          labels={period === "daily"
-            ? ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
-            : period === "weekly"
-              ? ["W1","W2","W3","W4","W5","W6","W7"]
-              : ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-          }
-        />
-      </div>
-
-      {/* Recent Orders */}
-      <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
-        <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor:"#f0e4d8", background:"#fdf8f3" }}>
-          <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">Recent Orders</h3>
-          <button style={{ color:"#c97d5b" }} className="text-sm font-semibold flex items-center gap-1 hover:opacity-70">
-            View All <ChevronRight size={14}/>
-          </button>
-        </div>
-        <div className="divide-y" style={{ "--tw-divide-opacity":1 }}>
-          {RECENT_ORDERS.map(order => (
-            <div key={order.id}
-              onClick={() => setPopup(order)}
-              className="flex items-center gap-4 px-6 py-4 hover:cursor-pointer transition-colors"
-              style={{ background:"white" }}
-              onMouseEnter={e => e.currentTarget.style.background="#fdf8f3"}
-              onMouseLeave={e => e.currentTarget.style.background="white"}>
-              <img src={order.img} alt={order.item} className="w-10 h-10 object-cover rounded-xl shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{order.item}</p>
-                <p style={{ color:"#9c7a62" }} className="text-xs">{order.customer} · {order.time}</p>
+          {/* Recent Orders */}
+          {recentOrders.length > 0 && (
+            <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+              <div className="flex items-center justify-between px-6 py-4 border-b"
+                style={{ borderColor:"#f0e4d8", background:"#fdf8f3" }}>
+                <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">Recent Orders</h3>
+                <button style={{ color:"#c97d5b" }} className="text-sm font-semibold flex items-center gap-1 hover:opacity-70">
+                  View All <ChevronRight size={14}/>
+                </button>
               </div>
-              <Badge status={order.status} small />
-              <p style={{ color:"#c97d5b" }} className="font-bold text-sm shrink-0">{fmt(order.price)}</p>
-              <span style={{ color:"#9c7a62" }} className="text-xs shrink-0">{order.id}</span>
+              <div className="divide-y">
+                {recentOrders.map(order => {
+                  const id          = order._id || order.id || "";
+                  const customer    = order.shippingAddress?.name || order.user?.name || "Customer";
+                  const amount      = order.totalAmount ?? order.total ?? order.price ?? 0;
+                  const statusLabel = order.status || "pending";
+                  const product     = order.items?.[0]?.product?.name || order.item || "Order";
+                  const imgSrc      = order.items?.[0]?.product?.images?.[0] || order.img || null;
+                  const sc          = DASH_STATUS_COLORS[statusLabel.toLowerCase()] || DASH_STATUS_COLORS.pending;
+                  return (
+                    <div key={id} className="flex items-center gap-4 px-6 py-4 transition-colors"
+                      style={{ background:"white" }}
+                      onMouseEnter={e => e.currentTarget.style.background="#fdf8f3"}
+                      onMouseLeave={e => e.currentTarget.style.background="white"}>
+                      {imgSrc
+                        ? <img src={imgSrc} alt={product} className="w-10 h-10 object-cover rounded-xl shrink-0" />
+                        : <div className="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-lg"
+                            style={{ background:"#f5ede5" }}>🌸</div>
+                      }
+                      <div className="flex-1 min-w-0">
+                        <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{product}</p>
+                        <p style={{ color:"#9c7a62" }} className="text-xs">{customer}</p>
+                      </div>
+                      <span className="text-xs font-bold px-2.5 py-1 rounded-full capitalize"
+                        style={{ background: sc.bg, color: sc.color }}>
+                        {statusLabel}
+                      </span>
+                      <p style={{ color:"#c97d5b" }} className="font-bold text-sm shrink-0">{fmt(amount)}</p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Quick Stats Row */}
-      <div className="grid sm:grid-cols-3 gap-4">
-        {[
-          { label:"Orders Today",     value:"47",   sub:"↑ 8 from yesterday",   color:"#c97d5b" },
-          { label:"Pending Delivery", value:"12",   sub:"Estimated by 9PM",      color:"#ca8a04" },
-          { label:"Low Stock Items",  value:"3",    sub:"Action needed",          color:"#dc2626" },
-        ].map(({ label, value, sub, color }) => (
-          <div key={label} className="bg-white rounded-2xl p-5 border flex items-center gap-4" style={{ borderColor:"#e8d5c4" }}>
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 text-2xl font-bold"
-              style={{ background:`${color}15`, color }}>
-              {value}
-            </div>
-            <div>
-              <p style={{ color:"#3a2416" }} className="font-bold text-sm">{label}</p>
-              <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">{sub}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
@@ -694,18 +664,54 @@ function CustomersTab() {
 // ══════════════════════════════════════════════════════════════════════════════
 
 function AnalyticsTab() {
-  const [sortBy,  setSortBy]  = useState("sold");
+  const [sortBy,  setSortBy]  = useState("revenue");
   const [sortDir, setSortDir] = useState("desc");
   const [filter,  setFilter]  = useState("All");
+  const [summary, setSummary] = useState(null);
+  const [revByProd, setRevByProd] = useState([]);
+  const [products, setProducts]   = useState([]);
+  const [loading,  setLoading]    = useState(true);
 
-  const CATS = ["All", "Bouquets", "Arrangements", "Wreaths", "Dried"];
+  // Parallel: analytics summary + products table
+  useEffect(() => {
+    Promise.all([
+      authFetch(`${CUST_BASE}/api/admin/analytics/products`).then(r => r.json()).catch(() => null),
+      fetch(`${CUST_BASE}/api/products`).then(r => r.json()).catch(() => null),
+    ]).then(([analytics, prods]) => {
+      if (analytics?.summary) {
+        setSummary(analytics.summary);
+        setRevByProd(analytics.revenueByProduct ?? []);
+      }
+      if (prods) {
+        const list = Array.isArray(prods) ? prods : (prods.data ?? prods.products ?? []);
+        setProducts(list);
+        // If no dedicated analytics endpoint, derive summary from products
+        if (!analytics?.summary) {
+          setSummary({
+            totalProducts: list.length,
+            totalRevenue:  list.reduce((s, p) => s + (p.revenue ?? 0), 0),
+            unitsSold:     list.reduce((s, p) => s + (p.totalSold ?? 0), 0),
+            avgRating:     null,
+          });
+        }
+      }
+      setLoading(false);
+    });
+  }, []);
 
-  const sorted = [...TOP_PRODUCTS]
-    .filter(p => filter === "All" || p.category === filter)
-    .sort((a, b) => sortDir === "desc" ? b[sortBy] - a[sortBy] : a[sortBy] - b[sortBy]);
+  // category may be a populated object { _id, name, ... } or a plain string
+  const getCat = p => (typeof p.category === "object" ? (p.category?.name ?? "") : (p.category ?? ""));
 
-  const totalRevenue = TOP_PRODUCTS.reduce((s, p) => s + p.revenue, 0);
-  const totalSold    = TOP_PRODUCTS.reduce((s, p) => s + p.sold, 0);
+  const cats = ["All", ...new Set(products.map(p => getCat(p)).filter(Boolean))];
+
+  // Products table sort — "totalSold" is the field name from /api/products
+  const sorted = [...products]
+    .filter(p => filter === "All" || getCat(p) === filter)
+    .sort((a, b) => {
+      const av = a[sortBy] ?? 0;
+      const bv = b[sortBy] ?? 0;
+      return sortDir === "desc" ? bv - av : av - bv;
+    });
 
   function toggleSort(k) {
     if (sortBy === k) setSortDir(d => d === "desc" ? "asc" : "desc");
@@ -716,6 +722,15 @@ function AnalyticsTab() {
     ? sortDir === "desc" ? <ChevronDown size={13}/> : <ChevronUp size={13}/>
     : <ChevronDown size={13} className="opacity-30"/>;
 
+  if (loading) {
+    return (
+      <div className="flex justify-center py-16">
+        <div className="w-6 h-6 border-2 rounded-full animate-spin"
+          style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -723,13 +738,13 @@ function AnalyticsTab() {
         <p style={{ color:"#9c7a62" }} className="text-sm">Top selling products & performance metrics</p>
       </div>
 
-      {/* Summary Cards */}
+      {/* Summary Cards — from summary.* */}
       <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {[
-          { label:"Total Products",  value:TOP_PRODUCTS.length,     unit:"",   color:"#c97d5b" },
-          { label:"Total Revenue",   value:fmtK(totalRevenue),      unit:"",   color:"#8b5cf6" },
-          { label:"Units Sold",      value:totalSold.toLocaleString(),unit:"",  color:"#06b6d4" },
-          { label:"Avg Rating",      value:"4.8",                   unit:"★",  color:"#f59e0b" },
+          { label:"Total Products", value: summary?.totalProducts ?? products.length,                    unit:"",  color:"#c97d5b" },
+          { label:"Total Revenue",  value: fmtK(summary?.totalRevenue ?? 0),                             unit:"",  color:"#8b5cf6" },
+          { label:"Units Sold",     value: (summary?.unitsSold ?? 0).toLocaleString(),                   unit:"",  color:"#06b6d4" },
+          { label:"Avg Rating",     value: summary?.avgRating != null ? Number(summary.avgRating).toFixed(1) : "—", unit:"★", color:"#f59e0b" },
         ].map(({ label, value, unit, color }) => (
           <div key={label} className="bg-white rounded-2xl p-5 border" style={{ borderColor:"#e8d5c4" }}>
             <p style={{ color, fontFamily:"Georgia, serif" }} className="text-3xl font-bold">{value}{unit}</p>
@@ -738,46 +753,43 @@ function AnalyticsTab() {
         ))}
       </div>
 
-      {/* Revenue Share Visual */}
-      <div className="bg-white rounded-3xl p-6 border" style={{ borderColor:"#e8d5c4" }}>
-        <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold mb-5">Revenue Share by Product</h3>
-        <div className="space-y-3">
-          {[...TOP_PRODUCTS]
-            .sort((a, b) => b.revenue - a.revenue)
-            .slice(0, 5)
-            .map((p, i) => {
-              const pct = Math.round((p.revenue / totalRevenue) * 100);
+      {/* Revenue Share — from revenueByProduct[].{name, revenue, percentage} */}
+      {revByProd.length > 0 && (
+        <div className="bg-white rounded-3xl p-6 border" style={{ borderColor:"#e8d5c4" }}>
+          <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold mb-5">Revenue Share by Product</h3>
+          <div className="space-y-3">
+            {revByProd.slice(0, 5).map((p, i) => {
               const colors = ["#c97d5b","#8b5cf6","#06b6d4","#f59e0b","#22c55e"];
               return (
-                <div key={p.id}>
+                <div key={p.productId?.toString() || String(i)}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
                       <div className="w-2.5 h-2.5 rounded-full" style={{ background: colors[i] }} />
                       <span style={{ color:"#4a3728" }} className="text-sm font-medium">{p.name}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span style={{ color:"#9c7a62" }} className="text-xs">{pct}%</span>
-                      <span style={{ color:"#c97d5b" }} className="text-sm font-bold">{fmtK(p.revenue)}</span>
+                      <span style={{ color:"#9c7a62" }} className="text-xs">{p.percentage}%</span>
+                      <span style={{ color:"#c97d5b" }} className="text-sm font-bold">{fmtK(p.revenue ?? 0)}</span>
                     </div>
                   </div>
                   <div className="h-2 rounded-full" style={{ background:"#f5ede5" }}>
                     <div className="h-full rounded-full transition-all duration-700"
-                      style={{ width:`${pct}%`, background: colors[i] }} />
+                      style={{ width:`${p.percentage ?? 0}%`, background: colors[i] }} />
                   </div>
                 </div>
               );
-            })
-          }
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Products Table */}
+      {/* Products Table — from /api/products with totalSold, revenue, trend(string) */}
       <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 py-4 border-b"
           style={{ borderColor:"#f0e4d8", background:"#fdf8f3" }}>
           <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">All Products</h3>
           <div className="flex gap-2 flex-wrap">
-            {CATS.map(c => (
+            {cats.map(c => (
               <button key={c} onClick={() => setFilter(c)}
                 className="px-3 py-1 rounded-full text-xs font-semibold border transition-all"
                 style={filter === c
@@ -789,61 +801,68 @@ function AnalyticsTab() {
           </div>
         </div>
 
-        {/* Col Headers */}
         <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-3 border-b text-xs font-bold uppercase tracking-wide"
           style={{ borderColor:"#f0e4d8", background:"#fafaf9", color:"#9c7a62" }}>
           <span>Product</span>
           <span>Price</span>
-          <button onClick={() => toggleSort("sold")} className="flex items-center gap-1 hover:opacity-70">
-            Sold {sortIcon("sold")}
+          <button onClick={() => toggleSort("totalSold")} className="flex items-center gap-1 hover:opacity-70">
+            Sold {sortIcon("totalSold")}
           </button>
           <button onClick={() => toggleSort("revenue")} className="flex items-center gap-1 hover:opacity-70">
             Revenue {sortIcon("revenue")}
           </button>
-          <button onClick={() => toggleSort("stock")} className="flex items-center gap-1 hover:opacity-70">
-            Stock {sortIcon("stock")}
+          <button onClick={() => toggleSort("quantity")} className="flex items-center gap-1 hover:opacity-70">
+            Stock {sortIcon("quantity")}
           </button>
           <span>Trend</span>
         </div>
 
-        {sorted.map((p, i) => (
-          <div key={p.id}
-            className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-4 items-center border-b hover:bg-amber-50 transition-colors"
-            style={{ borderColor:"#f0e4d8" }}>
-            {/* Product */}
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="relative shrink-0">
-                <img src={p.img} alt={p.name} className="w-10 h-10 object-cover rounded-xl" />
-                <span className="absolute -top-1 -left-1 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold"
-                  style={{ background:"#4a3728", fontSize:"10px" }}>#{i+1}</span>
-              </div>
-              <div className="min-w-0">
-                <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{p.name}</p>
-                <div className="flex items-center gap-1">
-                  <Star size={10} className="fill-amber-400 text-amber-400"/>
-                  <span style={{ color:"#9c7a62" }} className="text-xs">{p.rating}</span>
-                  <span style={{ color:"#d4b5a0" }} className="text-xs">· {p.category}</span>
+        {sorted.length === 0 ? (
+          <div className="text-center py-12">
+            <p style={{ color:"#9c7a62" }} className="text-sm">No products found</p>
+          </div>
+        ) : sorted.map((p, i) => {
+          const pid    = p._id || p.id || i;
+          const imgSrc = Array.isArray(p.images) ? p.images[0] : (p.image || p.img || null);
+          // trend is "up" | "down" | "stable" string from backend
+          const trendUp   = p.trend === "up";
+          const trendDown = p.trend === "down";
+          const qty = p.quantity ?? p.stock ?? null;
+          return (
+            <div key={pid}
+              className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-4 items-center border-b hover:bg-amber-50 transition-colors"
+              style={{ borderColor:"#f0e4d8" }}>
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="relative shrink-0">
+                  {imgSrc
+                    ? <img src={imgSrc} alt={p.name} className="w-10 h-10 object-cover rounded-xl" />
+                    : <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style={{ background:"#f5ede5" }}>🌸</div>
+                  }
+                  <span className="absolute -top-1 -left-1 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold"
+                    style={{ background:"#4a3728", fontSize:"10px" }}>#{i+1}</span>
+                </div>
+                <div className="min-w-0">
+                  <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{p.name}</p>
+                  {getCat(p) && <span style={{ color:"#d4b5a0" }} className="text-xs">{getCat(p)}</span>}
                 </div>
               </div>
+              <p style={{ color:"#4a3728" }} className="text-sm font-medium">{fmt(p.price ?? 0)}</p>
+              <p style={{ color:"#4a3728" }} className="text-sm font-medium">{(p.totalSold ?? 0).toLocaleString()}</p>
+              <p style={{ color:"#c97d5b" }} className="text-sm font-bold">{fmtK(p.revenue ?? 0)}</p>
+              <div>
+                <p style={{ color: qty != null && qty < 10 ? "#dc2626" : "#4a3728" }} className="text-sm font-medium">
+                  {qty ?? "—"}
+                </p>
+                {qty != null && qty < 10 && <p style={{ color:"#dc2626" }} className="text-xs">Low stock!</p>}
+              </div>
+              <div className="flex items-center gap-1 text-xs font-bold"
+                style={{ color: trendUp ? "#16a34a" : trendDown ? "#dc2626" : "#9c7a62" }}>
+                {trendUp ? <ArrowUpRight size={14}/> : trendDown ? <ArrowDownRight size={14}/> : <span>—</span>}
+                {p.trend ?? "stable"}
+              </div>
             </div>
-            <p style={{ color:"#4a3728" }} className="text-sm font-medium">{fmt(p.price)}</p>
-            <p style={{ color:"#4a3728" }} className="text-sm font-medium">{p.sold.toLocaleString()}</p>
-            <p style={{ color:"#c97d5b" }} className="text-sm font-bold">{fmtK(p.revenue)}</p>
-            {/* Stock */}
-            <div>
-              <p style={{ color: p.stock < 15 ? "#dc2626" : "#4a3728" }} className="text-sm font-medium">{p.stock}</p>
-              {p.stock < 15 && (
-                <p style={{ color:"#dc2626" }} className="text-xs">Low stock!</p>
-              )}
-            </div>
-            {/* Trend */}
-            <div className={`flex items-center gap-1 text-xs font-bold`}
-              style={{ color: p.trend >= 0 ? "#16a34a" : "#dc2626" }}>
-              {p.trend >= 0 ? <ArrowUpRight size={14}/> : <ArrowDownRight size={14}/>}
-              {Math.abs(p.trend)}%
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -1568,6 +1587,10 @@ export default function AdminPanel() {
   const [sidebarOpen,    setSidebarOpen]    = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
+  const payload   = getTokenPayload();
+  const adminName = payload?.name || payload?.email || "Admin";
+  const adminInitial = adminName.charAt(0).toUpperCase();
+
   function handleEdit(product) {
     setEditingProduct(product);
     setTab("add-product");
@@ -1633,9 +1656,9 @@ export default function AdminPanel() {
         {/* Bottom */}
         <div className="p-4 border-t" style={{ borderColor:"#4a3728" }}>
           <div className="flex items-center gap-2 mb-3">
-            <div style={{ background:"#c97d5b" }} className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">A</div>
+            <div style={{ background:"#c97d5b" }} className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">{adminInitial}</div>
             <div className="min-w-0">
-              <p style={{ color:"#f5e6d3" }} className="text-xs font-semibold truncate">Ananya Mehta</p>
+              <p style={{ color:"#f5e6d3" }} className="text-xs font-semibold truncate">{adminName}</p>
               <p style={{ color:"#7a5c4a" }} className="text-xs">Admin</p>
             </div>
           </div>
@@ -1659,7 +1682,7 @@ export default function AdminPanel() {
             </button>
             <div>
               <h1 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold capitalize">
-                {tab === "dashboard" ? "Good Morning, Ananya 🌸" : NAV.find(n => n.id === tab)?.label}
+                {tab === "dashboard" ? `Good Morning, ${adminName.split(" ")[0]} 🌸` : NAV.find(n => n.id === tab)?.label}
               </h1>
               <p style={{ color:"#9c7a62" }} className="text-xs">
                 {new Date().toLocaleDateString("en-IN", { weekday:"long", day:"numeric", month:"long", year:"numeric" })}
