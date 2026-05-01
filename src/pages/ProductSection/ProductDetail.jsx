@@ -7,6 +7,7 @@ import Breadcrumb from "../../components/Breadcrumb";
 import { useParams } from "react-router-dom";
 import ProductDetailSkeleton from "./ProductSkeletons/ProductDetailSkeleton";
 import { useCart } from "../../context/CartContext";
+import ReviewsSection from "./ReviewsSection";
 
 
 const PRODUCT = {
@@ -42,11 +43,6 @@ const RELATED = [
   { id:4, name:"Sunflower Bunch",price:1499, img:"https://images.unsplash.com/photo-1543218024-57a70143c369?w=400&q=80", rating:4.6 },
 ];
 
-const REVIEWS_DATA = [
-  { name:"Priya S.", rating:5, date:"12 Apr 2025", text:"Absolutely gorgeous! The roses were fresh and fragrant. Lasted 10 days. Will order again!" },
-  { name:"Rahul V.", rating:5, date:"3 Apr 2025",  text:"Ordered for my wife's birthday. She was overjoyed. Beautiful packaging and on-time delivery." },
-  { name:"Meena K.", rating:4, date:"28 Mar 2025", text:"Very pretty arrangement, slightly smaller than expected but overall a wonderful experience." },
-];
 
 const fmt = n => "₹" + n.toLocaleString("en-IN");
 
@@ -284,40 +280,7 @@ export default function ProductDetail() {
         </div>
 
         {/* Reviews */}
-        <div className="mb-16">
-          <div className="flex items-end justify-between mb-8">
-            <div>
-              <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-3xl font-bold">Customer Reviews</h2>
-              <div className="flex items-center gap-3 mt-2">
-                <Stars n={product?.rating?.average} size={20} />
-                <span style={{ color: "#4a3728" }} className="font-bold text-lg">{product?.rating?.average} / 5</span>
-                <span style={{ color: "#9c7a62" }}>({product?.rating?.total} reviews)</span>
-              </div>
-            </div>
-            <button style={{ background: "#c97d5b" }} className="text-white px-5 py-2 rounded-full text-sm font-semibold hover:opacity-90">
-              Write a Review
-            </button>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-5">
-            {REVIEWS_DATA.map(({ name, rating, date, text }) => (
-              <div key={name} className="p-5 rounded-2xl border" style={{ borderColor: "#e8d5c4", background: "white" }}>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div style={{ background: "#f5ede5", color: "#c97d5b" }} className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm">
-                      {name[0]}
-                    </div>
-                    <div>
-                      <p style={{ color: "#3a2416" }} className="font-semibold text-sm">{name}</p>
-                      <p style={{ color: "#9c7a62" }} className="text-xs">{date}</p>
-                    </div>
-                  </div>
-                </div>
-                <Stars n={rating} size={13} />
-                <p style={{ color: "#5c4033" }} className="text-sm leading-relaxed mt-3">{text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ReviewsSection productId={productId} />
 
         {/* FAQ */}
         <div className="mb-16">
