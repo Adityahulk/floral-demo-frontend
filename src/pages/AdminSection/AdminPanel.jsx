@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Users, BarChart2, Package,
   TrendingUp, ShoppingBag, IndianRupee,
   Bell, Search, Menu, X, ChevronRight, Eye, Star,
-  ArrowUpRight, ArrowDownRight, Download,
+  ArrowUpRight, ArrowDownRight,
   ChevronUp, ChevronDown, LogOut, Home, Edit2, Trash2, ToggleLeft, ToggleRight,
   RefreshCw, LayoutGrid, List,
 } from "lucide-react";
@@ -30,32 +30,6 @@ const RECENT_ORDERS = [
   { id:"FS-0424", customer:"Arjun Patel",    item:"Mixed Tulip Bunch",         price:749,  status:"Delivered",  time:"5 hr ago",   img:"https://images.unsplash.com/photo-1520763185298-1b434c919102?w=100&q=80" },
 ];
 
-const CUSTOMERS = [
-  { id:1, name:"Priya Sharma",  email:"priya@gmail.com",  phone:"+91 98765 43210", city:"Lucknow",   orders:12, totalSpent:18400, lastOrder:"28 Apr 2025", status:"Active",  avatar:"PS", history:[
-    { id:"FS-0431", item:"Rose Bliss Bouquet",       price:1299, date:"28 Apr 2025", status:"Delivered"  },
-    { id:"FS-0398", item:"Orchid Elegance Set",      price:2199, date:"10 Apr 2025", status:"Delivered"  },
-    { id:"FS-0372", item:"Pastel Dream Arrangement", price:1899, date:"22 Mar 2025", status:"Delivered"  },
-  ]},
-  { id:2, name:"Rahul Verma",   email:"rahul@gmail.com",  phone:"+91 87654 32109", city:"Delhi",     orders:8,  totalSpent:11200, lastOrder:"15 Apr 2025", status:"Active",  avatar:"RV", history:[
-    { id:"FS-0430", item:"Pastel Dream Arrangement", price:3798, date:"15 Apr 2025", status:"In Transit" },
-    { id:"FS-0401", item:"Sunflower Bundle",         price:1499, date:"1 Apr 2025",  status:"Delivered"  },
-  ]},
-  { id:3, name:"Ananya Singh",  email:"ananya@gmail.com", phone:"+91 76543 21098", city:"Mumbai",    orders:15, totalSpent:24600, lastOrder:"28 Apr 2025", status:"Active",  avatar:"AS", history:[
-    { id:"FS-0429", item:"Wildflower Wreath",        price:999,  date:"28 Apr 2025", status:"Processing" },
-    { id:"FS-0411", item:"Lavender & Eucalyptus",    price:849,  date:"11 Apr 2025", status:"Delivered"  },
-    { id:"FS-0385", item:"Mixed Tulip Bunch",        price:749,  date:"25 Mar 2025", status:"Delivered"  },
-  ]},
-  { id:4, name:"Vikram Mehta",  email:"vikram@gmail.com", phone:"+91 65432 10987", city:"Bengaluru", orders:5,  totalSpent:7800,  lastOrder:"20 Apr 2025", status:"Active",  avatar:"VM", history:[
-    { id:"FS-0428", item:"Orchid Elegance Set",      price:2199, date:"20 Apr 2025", status:"Delivered"  },
-  ]},
-  { id:5, name:"Sneha Gupta",   email:"sneha@gmail.com",  phone:"+91 54321 09876", city:"Pune",      orders:3,  totalSpent:4200,  lastOrder:"5 Mar 2025",  status:"Inactive",avatar:"SG", history:[
-    { id:"FS-0427", item:"Sunflower Garden Bundle",  price:1499, date:"5 Mar 2025",  status:"Cancelled"  },
-  ]},
-  { id:6, name:"Rohan Kapoor",  email:"rohan@gmail.com",  phone:"+91 43210 98765", city:"Jaipur",    orders:9,  totalSpent:13500, lastOrder:"28 Apr 2025", status:"Active",  avatar:"RK", history:[
-    { id:"FS-0426", item:"Lavender & Eucalyptus",    price:849,  date:"28 Apr 2025", status:"Delivered"  },
-    { id:"FS-0399", item:"Rose Bliss Bouquet",       price:1299, date:"9 Apr 2025",  status:"Delivered"  },
-  ]},
-];
 
 const TOP_PRODUCTS = [
   { id:1, name:"Rose Bliss Bouquet",       category:"Bouquets",     price:1299, sold:284, revenue:368916, rating:4.8, stock:42, trend:+12.4, img:"https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=200&q=80" },
@@ -327,167 +301,387 @@ function Dashboard() {
 // CUSTOMERS TAB
 // ══════════════════════════════════════════════════════════════════════════════
 
+const CUST_BASE = "http://localhost:3001";
+
+function initials(name = "") {
+  return name.trim().split(" ").filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("");
+}
+
 function CustomersTab() {
-  const [search,   setSearch]   = useState("");
-  const [selected, setSelected] = useState(null);
-  const [sortBy,   setSortBy]   = useState("totalSpent");
-  const [sortDir,  setSortDir]  = useState("desc");
+  const [users,      setUsers]      = useState([]);
+  const [loading,    setLoading]    = useState(true);
+  const [total,      setTotal]      = useState(0);
+  const [page,       setPage]       = useState(1);
+  const LIMIT = 20;
 
-  const filtered = CUSTOMERS
-    .filter(c =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.email.toLowerCase().includes(search.toLowerCase()) ||
-      c.city.toLowerCase().includes(search.toLowerCase())
-    )
-    .sort((a, b) => sortDir === "desc" ? b[sortBy] - a[sortBy] : a[sortBy] - b[sortBy]);
+  const [search,     setSearch]     = useState("");
+  const [activeFilter, setActiveFilter] = useState("all"); // "all" | "true" | "false"
+  const [selected,   setSelected]   = useState(null);
+  const [toggling,   setToggling]   = useState(null);
 
-  function toggleSort(key) {
-    if (sortBy === key) setSortDir(d => d === "desc" ? "asc" : "desc");
-    else { setSortBy(key); setSortDir("desc"); }
+  // Edit state
+  const [editing,    setEditing]    = useState(false);
+  const [editForm,   setEditForm]   = useState({});
+  const [saving,     setSaving]     = useState(false);
+  const [editError,  setEditError]  = useState("");
+
+  // Effect only calls setState inside async callbacks — satisfies no-setState-in-effect rule
+  useEffect(() => {
+    const params = new URLSearchParams({ page, limit: LIMIT });
+    if (activeFilter !== "all") params.set("active", activeFilter);
+    authFetch(`${CUST_BASE}/api/auth/admin/users?${params}`)
+      .then(r => r.json())
+      .then(data => { setUsers(data.users || []); setTotal(data.total || 0); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, [page, activeFilter]);
+
+  // setLoading(true) lives in event handlers (not effect body) — allowed by linter
+  function changeFilter(af) { setLoading(true); setActiveFilter(af); setPage(1); }
+  function handlePageChange(pg) { setLoading(true); setPage(pg); }
+
+  // Client-side search on loaded page
+  const filtered = users.filter(u =>
+    search === "" ||
+    (u.name || "").toLowerCase().includes(search.toLowerCase()) ||
+    (u.email || "").toLowerCase().includes(search.toLowerCase()) ||
+    (u.contactNumber || "").includes(search)
+  );
+
+  async function handleToggle(u, e) {
+    e.stopPropagation();
+    setToggling(u._id);
+    try {
+      const res  = await authFetch(`${CUST_BASE}/api/auth/admin/users/${u._id}/status`, { method: "PATCH" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed");
+      const updated = data.user || { ...u, active: !u.active };
+      setUsers(prev => prev.map(x => x._id === u._id ? { ...x, active: updated.active } : x));
+      if (selected?._id === u._id) setSelected(s => ({ ...s, active: updated.active }));
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setToggling(null);
+    }
   }
 
-  const sortIcon = (k) => sortBy === k
-    ? sortDir === "desc" ? <ChevronDown size={13}/> : <ChevronUp size={13}/>
-    : <ChevronDown size={13} className="opacity-30"/>;
+  function openEdit(u) {
+    setEditForm({ name: u.name || "", email: u.email || "", contactNumber: u.contactNumber || "", role: u.role || "user" });
+    setEditError("");
+    setEditing(true);
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    setEditError("");
+    try {
+      const res  = await authFetch(`${CUST_BASE}/api/auth/admin/users/${selected._id}`, {
+        method: "PUT",
+        body:   JSON.stringify(editForm),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Save failed");
+      const updated = data.user;
+      setUsers(prev => prev.map(x => x._id === selected._id ? { ...x, ...updated } : x));
+      setSelected(s => ({ ...s, ...updated }));
+      setEditing(false);
+    } catch (err) {
+      setEditError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const totalPages = Math.ceil(total / LIMIT);
 
   return (
     <div className="space-y-5">
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold">Customers</h2>
-          <p style={{ color:"#9c7a62" }} className="text-sm">{CUSTOMERS.length} total customers</p>
+          <p style={{ color:"#9c7a62" }} className="text-sm">{total} total users</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
+          {/* Active Filter */}
+          {[["all","All"],["true","Active"],["false","Inactive"]].map(([val, label]) => (
+            <button key={val} onClick={() => changeFilter(val)}
+              className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all"
+              style={activeFilter === val
+                ? { background:"#4a3728", borderColor:"#4a3728", color:"white" }
+                : { borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+              {label}
+            </button>
+          ))}
+          {/* Search */}
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"#9c7a62" }} />
             <input value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Search customers..."
-              className="pl-9 pr-4 py-2.5 rounded-full border text-sm outline-none w-52"
+              placeholder="Name, email, phone…"
+              className="pl-9 pr-4 py-2 rounded-full border text-sm outline-none w-48"
               style={{ borderColor:"#e8d5c4", background:"white", color:"#3a2416" }} />
           </div>
-          <button style={{ background:"#f5ede5", color:"#c97d5b" }}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold hover:opacity-80">
-            <Download size={14}/> Export
-          </button>
         </div>
       </div>
 
       <div className="grid lg:grid-cols-[1fr_360px] gap-5 items-start">
-        {/* Table */}
+
+        {/* ── Table ── */}
         <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
-          {/* Table Header */}
-          <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-4 px-5 py-3 border-b text-xs font-bold uppercase tracking-wide"
+          {/* Col headers */}
+          <div className="grid grid-cols-[2fr_1fr_0.8fr_0.8fr_0.8fr_auto] gap-3 px-5 py-3 border-b text-xs font-bold uppercase tracking-wide"
             style={{ borderColor:"#f0e4d8", background:"#fdf8f3", color:"#9c7a62" }}>
             <span>Customer</span>
-            <button onClick={() => toggleSort("orders")} className="flex items-center gap-1 hover:opacity-70">
-              Orders {sortIcon("orders")}
-            </button>
-            <button onClick={() => toggleSort("totalSpent")} className="flex items-center gap-1 hover:opacity-70">
-              Spent {sortIcon("totalSpent")}
-            </button>
+            <span>Phone</span>
+            <span>Orders</span>
+            <span>Spent</span>
             <span>Status</span>
             <span></span>
           </div>
 
-          {/* Rows */}
-          {filtered.map(c => (
-            <div key={c.id}
-              onClick={() => setSelected(selected?.id === c.id ? null : c)}
-              className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-4 px-5 py-4 items-center border-b cursor-pointer transition-colors"
-              style={{
-                borderColor:"#f0e4d8",
-                background: selected?.id === c.id ? "#fdf8f3" : "white",
-                borderLeft: selected?.id === c.id ? "3px solid #c97d5b" : "3px solid transparent",
-              }}
-              onMouseEnter={e => { if(selected?.id !== c.id) e.currentTarget.style.background="#fafaf9" }}
-              onMouseLeave={e => { if(selected?.id !== c.id) e.currentTarget.style.background="white" }}>
-              {/* Name */}
-              <div className="flex items-center gap-3 min-w-0">
-                <div style={{ background:"#c97d5b" }}
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
-                  {c.avatar}
-                </div>
-                <div className="min-w-0">
-                  <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{c.name}</p>
-                  <p style={{ color:"#9c7a62" }} className="text-xs truncate">{c.city}</p>
-                </div>
-              </div>
-              <p style={{ color:"#4a3728" }} className="text-sm font-medium">{c.orders}</p>
-              <p style={{ color:"#c97d5b" }} className="text-sm font-bold">{fmtK(c.totalSpent)}</p>
-              <span className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full"
-                style={{ background: c.status==="Active" ? "#dcfce7" : "#f5f5f4", color: c.status==="Active" ? "#16a34a" : "#9c7a62" }}>
-                {c.status}
-              </span>
-              <ChevronRight size={14} style={{ color:"#9c7a62" }} />
+          {loading ? (
+            <div className="flex items-center justify-center py-16">
+              <div className="w-6 h-6 border-2 border-t-transparent rounded-full animate-spin"
+                style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
             </div>
-          ))}
-        </div>
+          ) : filtered.length === 0 ? (
+            <div className="text-center py-12">
+              <span className="text-3xl block mb-2">👤</span>
+              <p style={{ color:"#9c7a62" }} className="text-sm">No users found</p>
+            </div>
+          ) : filtered.map((u, idx) => {
+            const isSelected = selected?._id === u._id;
+            const isTog      = toggling === u._id;
+            return (
+              <div key={u._id}
+                onClick={() => { setSelected(isSelected ? null : u); setEditing(false); }}
+                className="grid grid-cols-[2fr_1fr_0.8fr_0.8fr_0.8fr_auto] gap-3 px-5 py-3.5 items-center border-b cursor-pointer transition-colors"
+                style={{
+                  borderColor:"#f0e4d8",
+                  background: isSelected ? "#fdf8f3" : "white",
+                  borderLeft: isSelected ? "3px solid #c97d5b" : "3px solid transparent",
+                  ...(idx === filtered.length - 1 ? { borderBottom:"none" } : {}),
+                }}>
 
-        {/* Customer Detail Panel */}
-        {selected ? (
-          <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
-            <div className="p-5 border-b" style={{ borderColor:"#f0e4d8", background:"#fdf8f3" }}>
-              <div className="flex items-center justify-between mb-4">
-                <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold">Customer Profile</p>
-                <button onClick={() => setSelected(null)} className="p-1 hover:opacity-70">
-                  <X size={15} style={{ color:"#9c7a62" }} />
+                {/* Avatar + Name + Email */}
+                <div className="flex items-center gap-3 min-w-0">
+                  {u.profileImage
+                    ? <img src={u.profileImage} alt={u.name} className="w-9 h-9 rounded-full object-cover shrink-0"/>
+                    : <div style={{ background: u.active ? "#c97d5b" : "#d4b5a0" }}
+                        className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
+                        {initials(u.name) || "?"}
+                      </div>
+                  }
+                  <div className="min-w-0">
+                    <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{u.name || "—"}</p>
+                    <p style={{ color:"#9c7a62" }} className="text-xs truncate">{u.email}</p>
+                  </div>
+                </div>
+
+                {/* Phone */}
+                <p style={{ color:"#5c4033" }} className="text-xs truncate">{u.contactNumber || "—"}</p>
+
+                {/* Orders */}
+                <p style={{ color:"#4a3728" }} className="text-sm font-semibold text-center">{u.totalOrders ?? "—"}</p>
+
+                {/* Spent */}
+                <p style={{ color:"#c97d5b" }} className="text-xs font-bold">
+                  {u.totalSpent != null ? fmtK(u.totalSpent) : "—"}
+                </p>
+
+                {/* Active toggle */}
+                <button
+                  onClick={e => handleToggle(u, e)}
+                  disabled={isTog}
+                  title={u.active ? "Deactivate" : "Activate"}
+                  className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full transition-all hover:opacity-80 disabled:opacity-50"
+                  style={u.active
+                    ? { background:"#dcfce7", color:"#16a34a" }
+                    : { background:"#f5f5f4", color:"#9c7a62" }}>
+                  {isTog
+                    ? <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"/>
+                    : <span className="w-1.5 h-1.5 rounded-full" style={{ background: u.active ? "#16a34a" : "#9c7a62" }}/>
+                  }
+                  {u.active ? "Active" : "Inactive"}
+                </button>
+
+                <ChevronRight size={14} style={{ color: isSelected ? "#c97d5b" : "#d4b5a0" }} />
+              </div>
+            );
+          })}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between px-5 py-3 border-t" style={{ borderColor:"#f0e4d8" }}>
+              <p style={{ color:"#9c7a62" }} className="text-xs">Page {page} of {totalPages}</p>
+              <div className="flex gap-2">
+                <button disabled={page === 1} onClick={() => handlePageChange(page - 1)}
+                  className="px-3 py-1 rounded-full text-xs font-semibold border disabled:opacity-40"
+                  style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                  ← Prev
+                </button>
+                <button disabled={page === totalPages} onClick={() => handlePageChange(page + 1)}
+                  className="px-3 py-1 rounded-full text-xs font-semibold border disabled:opacity-40"
+                  style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                  Next →
                 </button>
               </div>
-              <div className="text-center">
-                <div style={{ background:"#c97d5b" }}
-                  className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
-                  {selected.avatar}
+            </div>
+          )}
+        </div>
+
+        {/* ── Detail / Edit Panel ── */}
+        {selected ? (
+          <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+            {/* Profile header */}
+            <div className="p-5 border-b" style={{ borderColor:"#f0e4d8", background:"#fdf8f3" }}>
+              <div className="flex items-center justify-between mb-4">
+                <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold">
+                  {editing ? "Edit User" : "User Profile"}
+                </p>
+                <div className="flex items-center gap-2">
+                  {!editing && (
+                    <button onClick={() => openEdit(selected)}
+                      className="p-1.5 rounded-lg border hover:opacity-70"
+                      style={{ borderColor:"#e8d5c4", color:"#5c4033" }}
+                      title="Edit">
+                      <Edit2 size={13}/>
+                    </button>
+                  )}
+                  <button onClick={() => { setSelected(null); setEditing(false); }} className="p-1 hover:opacity-70">
+                    <X size={15} style={{ color:"#9c7a62" }} />
+                  </button>
                 </div>
-                <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">{selected.name}</p>
-                <p style={{ color:"#9c7a62" }} className="text-xs">{selected.email}</p>
-                <p style={{ color:"#9c7a62" }} className="text-xs">{selected.phone}</p>
               </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 divide-x p-0" style={{ borderBottom:"1px solid #f0e4d8" }}>
-              {[
-                ["Orders",    selected.orders],
-                ["Spent",     fmtK(selected.totalSpent)],
-                ["City",      selected.city],
-              ].map(([k, v]) => (
-                <div key={k} className="py-4 text-center">
-                  <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }} className="font-bold">{v}</p>
-                  <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">{k}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Order History */}
-            <div className="p-5">
-              <p style={{ color:"#4a3728" }} className="text-sm font-bold mb-3">Order History</p>
-              <div className="space-y-3">
-                {selected.history.map(o => (
-                  <div key={o.id} className="p-3 rounded-2xl" style={{ background:"#fdf8f3", border:"1px solid #f0e4d8" }}>
-                    <div className="flex items-center justify-between mb-1">
-                      <p style={{ color:"#3a2416" }} className="text-xs font-bold">{o.id}</p>
-                      <Badge status={o.status} small />
+              <div className="text-center">
+                {selected.profileImage
+                  ? <img src={selected.profileImage} alt={selected.name}
+                      className="w-16 h-16 rounded-full object-cover border-2 mx-auto mb-3"
+                      style={{ borderColor:"#c97d5b" }}/>
+                  : <div style={{ background: selected.active ? "#c97d5b" : "#d4b5a0" }}
+                      className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                      {initials(selected.name) || "?"}
                     </div>
-                    <p style={{ color:"#5c4033" }} className="text-xs truncate">{o.item}</p>
-                    <div className="flex items-center justify-between mt-1.5">
-                      <p style={{ color:"#9c7a62" }} className="text-xs">{o.date}</p>
-                      <p style={{ color:"#c97d5b" }} className="text-xs font-bold">{fmt(o.price)}</p>
+                }
+                <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">{selected.name || "—"}</p>
+                <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">{selected.email}</p>
+                {selected.contactNumber && (
+                  <p style={{ color:"#9c7a62" }} className="text-xs">📞 {selected.contactNumber}</p>
+                )}
+                <div className="flex items-center justify-center gap-2 mt-2">
+                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full"
+                    style={selected.role === "admin"
+                      ? { background:"#fef3c7", color:"#d97706" }
+                      : { background:"#f5ede5", color:"#9c7a62" }}>
+                    {selected.role === "admin" ? "Admin" : "User"}
+                  </span>
+                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full"
+                    style={selected.active
+                      ? { background:"#dcfce7", color:"#16a34a" }
+                      : { background:"#fee2e2", color:"#dc2626" }}>
+                    {selected.active ? "Active" : "Inactive"}
+                  </span>
+                </div>
+                {/* Order stats */}
+                {(selected.totalOrders != null || selected.totalSpent != null) && (
+                  <div className="grid grid-cols-2 gap-2 mt-4">
+                    <div className="rounded-xl py-2" style={{ background:"#f5ede5" }}>
+                      <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }} className="font-bold text-lg">{selected.totalOrders ?? 0}</p>
+                      <p style={{ color:"#9c7a62" }} className="text-xs">Orders</p>
+                    </div>
+                    <div className="rounded-xl py-2" style={{ background:"#f5ede5" }}>
+                      <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }} className="font-bold text-lg">{selected.totalSpent != null ? fmtK(selected.totalSpent) : "—"}</p>
+                      <p style={{ color:"#9c7a62" }} className="text-xs">Spent</p>
                     </div>
                   </div>
-                ))}
+                )}
               </div>
-              <p style={{ color:"#9c7a62" }} className="text-xs text-center mt-3">
-                Last order: {selected.lastOrder}
-              </p>
             </div>
+
+            {/* Info rows */}
+            {!editing ? (
+              <div className="p-5 space-y-3">
+                {[
+                  ["User ID",      `#${selected._id.slice(-8).toUpperCase()}`],
+                  ["Email",        selected.email],
+                  ["Phone",        selected.contactNumber || "—"],
+                  ["Role",         selected.role],
+                  ["Total Orders", selected.totalOrders ?? "—"],
+                  ["Total Spent",  selected.totalSpent != null ? fmt(selected.totalSpent) : "—"],
+                  ["Member Since", selected.createdAt ? new Date(selected.createdAt).toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric" }) : "—"],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex justify-between text-sm border-b pb-2" style={{ borderColor:"#f5ede5" }}>
+                    <span style={{ color:"#9c7a62" }}>{k}</span>
+                    <span style={{ color:"#4a3728" }} className="font-semibold text-right max-w-[55%] truncate">{v}</span>
+                  </div>
+                ))}
+                {/* Toggle active */}
+                <button
+                  onClick={e => handleToggle(selected, e)}
+                  disabled={toggling === selected._id}
+                  className="w-full mt-2 py-2.5 rounded-full text-sm font-semibold transition-all hover:opacity-80 disabled:opacity-50"
+                  style={selected.active
+                    ? { background:"#fee2e2", color:"#dc2626" }
+                    : { background:"#dcfce7", color:"#16a34a" }}>
+                  {toggling === selected._id
+                    ? "Updating…"
+                    : selected.active ? "Deactivate User" : "Activate User"}
+                </button>
+              </div>
+            ) : (
+              <div className="p-5 space-y-3">
+                {editError && (
+                  <p className="text-xs text-center py-1 px-3 rounded-xl" style={{ background:"#fee2e2", color:"#dc2626" }}>
+                    {editError}
+                  </p>
+                )}
+                {[
+                  { key:"name",          label:"Full Name",    type:"text"  },
+                  { key:"email",         label:"Email",        type:"email" },
+                  { key:"contactNumber", label:"Phone",        type:"tel"   },
+                ].map(({ key, label, type }) => (
+                  <div key={key}>
+                    <label style={{ color:"#7a5c4a" }} className="text-xs font-semibold block mb-1">{label}</label>
+                    <input
+                      type={type}
+                      value={editForm[key]}
+                      onChange={e => setEditForm(f => ({ ...f, [key]: e.target.value }))}
+                      className="w-full text-sm rounded-xl border px-3 py-2 outline-none"
+                      style={{ borderColor:"#e8d5c4", color:"#3a2416" }} />
+                  </div>
+                ))}
+                {/* Role select */}
+                <div>
+                  <label style={{ color:"#7a5c4a" }} className="text-xs font-semibold block mb-1">Role</label>
+                  <select value={editForm.role}
+                    onChange={e => setEditForm(f => ({ ...f, role: e.target.value }))}
+                    className="w-full text-sm rounded-xl border px-3 py-2 outline-none cursor-pointer"
+                    style={{ borderColor:"#e8d5c4", color:"#3a2416" }}>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+                <div className="flex gap-2 pt-1">
+                  <button onClick={() => setEditing(false)}
+                    className="flex-1 py-2 rounded-full border text-sm font-semibold"
+                    style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                    Cancel
+                  </button>
+                  <button onClick={handleSave} disabled={saving}
+                    className="flex-1 py-2 rounded-full text-sm font-semibold text-white disabled:opacity-60"
+                    style={{ background:"#c97d5b" }}>
+                    {saving ? "Saving…" : "Save Changes"}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div className="bg-white rounded-3xl border flex flex-col items-center justify-center py-16 text-center"
             style={{ borderColor:"#e8d5c4" }}>
             <span className="text-4xl mb-3">👤</span>
-            <p style={{ color:"#4a3728" }} className="font-semibold">Select a customer</p>
-            <p style={{ color:"#9c7a62" }} className="text-sm mt-1">to view their profile & order history</p>
+            <p style={{ color:"#4a3728" }} className="font-semibold">Select a user</p>
+            <p style={{ color:"#9c7a62" }} className="text-sm mt-1">to view profile & manage account</p>
           </div>
         )}
       </div>

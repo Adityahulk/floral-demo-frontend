@@ -70,6 +70,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
 import AuthPage from "./pages/Auth/AuthPage";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
@@ -121,6 +122,8 @@ export default function App() {
 
         {/* 🔑 AUTH ROUTES */}
         <Route path="/login" element={<AuthPage />} />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
 
         {/* 🛑 ADMIN ROUTES (no header/footer) */}
         <Route

@@ -5,7 +5,7 @@ import {
   Package, Heart, LogOut, Camera, Shield,
   ChevronRight, Bell, Lock, Eye, EyeOff, Check
 } from "lucide-react";
-import { authFetch, clearAuth, getTokenPayload } from "../../utils/auth";
+import { authFetch, clearAuth, getTokenPayload, getToken } from "../../utils/auth";
 
 const BASE = "http://localhost:3001";
 const fmt  = n => "₹" + n.toLocaleString("en-IN");
@@ -28,27 +28,51 @@ const MENU = [
 // ─── PROFILE TAB ──────────────────────────────────────────────────────────────
 
 function ProfileTab({ user, onUpdate }) {
-  const [edit,    setEdit]    = useState(false);
-  const [draft,   setDraft]   = useState(user);
-  const [saving,  setSaving]  = useState(false);
-  const [msg,     setMsg]     = useState(null);
+  const [edit,      setEdit]      = useState(false);
+  const [draft,     setDraft]     = useState(user);
+  const [imgFile,   setImgFile]   = useState(null);   // selected File object
+  const [imgPreview,setImgPreview]= useState(null);   // local blob URL for preview
+  const [saving,    setSaving]    = useState(false);
+  const [msg,       setMsg]       = useState(null);
 
   useEffect(() => { setDraft(user); }, [user]);
+
+  function handleImgChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImgFile(file);
+    setImgPreview(URL.createObjectURL(file));
+  }
 
   async function handleSave() {
     setSaving(true);
     try {
-      const res  = await authFetch(`${BASE}/api/auth/profile`, {
-        method: "PUT",
-        body:   JSON.stringify({
-          name:          draft.name,
-          contactNumber: draft.phone,
-        }),
+      const fd = new FormData();
+      if (draft.name)  fd.append("name", draft.name);
+      if (draft.phone) fd.append("contactNumber", draft.phone);
+      if (imgFile)     fd.append("image", imgFile);
+
+      const token = getToken();
+      const res = await fetch(`${BASE}/api/auth/profile`, {
+        method:  "PUT",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body:    fd,
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Update failed");
-      onUpdate({ ...user, name: draft.name, phone: draft.phone });
+
+      const updated = data.user || data.data || {};
+      onUpdate({
+        ...user,
+        name:          updated.name          || draft.name,
+        phone:         updated.contactNumber || updated.phone || draft.phone,
+        profileImage:  updated.profileImage  || user.profileImage,
+        totalOrders:   data.totalOrders      ?? user.totalOrders,
+        totalSpent:    data.totalSpent       ?? user.totalSpent,
+      });
       setEdit(false);
+      setImgFile(null);
+      setImgPreview(null);
       setMsg({ type:"success", text:"Profile updated successfully!" });
     } catch (err) {
       setMsg({ type:"error", text: err.message });
@@ -58,7 +82,12 @@ function ProfileTab({ user, onUpdate }) {
     }
   }
 
-  function handleCancel() { setDraft(user); setEdit(false); }
+  function handleCancel() {
+    setDraft(user);
+    setImgFile(null);
+    setImgPreview(null);
+    setEdit(false);
+  }
 
   function field(label, key, type = "text", icon, readOnly = false) {
     return (
@@ -84,6 +113,8 @@ function ProfileTab({ user, onUpdate }) {
   const joinedDate = user.createdAt
     ? new Date(user.createdAt).toLocaleDateString("en-IN", { month:"long", year:"numeric" })
     : "—";
+
+  const avatarSrc = imgPreview || user.profileImage || null;
 
   return (
     <div>
@@ -124,15 +155,18 @@ function ProfileTab({ user, onUpdate }) {
       {/* Avatar */}
       <div className="flex items-center gap-5 mb-8 p-5 rounded-2xl" style={{ background:"#f5ede5" }}>
         <div className="relative">
-          <div style={{ background:"#c97d5b" }}
-            className="w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold">
-            {user.name?.charAt(0)?.toUpperCase() || "?"}
-          </div>
+          {avatarSrc
+            ? <img src={avatarSrc} alt="avatar" className="w-20 h-20 rounded-full object-cover border-2" style={{ borderColor:"#c97d5b" }}/>
+            : <div style={{ background:"#c97d5b" }} className="w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold">
+                {user.name?.charAt(0)?.toUpperCase() || "?"}
+              </div>
+          }
           {edit && (
-            <button style={{ background:"#4a3728" }}
-              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full flex items-center justify-center">
+            <label htmlFor="avatarInput" style={{ background:"#4a3728" }}
+              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:opacity-80">
               <Camera size={13} className="text-white"/>
-            </button>
+              <input id="avatarInput" type="file" accept="image/*" className="hidden" onChange={handleImgChange}/>
+            </label>
           )}
         </div>
         <div>
@@ -148,8 +182,8 @@ function ProfileTab({ user, onUpdate }) {
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         {[
-          [user.orderCount ?? "—", "Total Orders"],
-          [user.totalSpent ? fmt(user.totalSpent) : "—", "Total Spent"],
+          [user.totalOrders ?? "—", "Total Orders"],
+          [user.totalSpent != null ? fmt(user.totalSpent) : "—", "Total Spent"],
         ].map(([n, l]) => (
           <div key={l} className="text-center p-4 rounded-2xl border" style={{ borderColor:"#e8d5c4", background:"white" }}>
             <p style={{ fontFamily:"Georgia, serif", color:"#c97d5b" }} className="text-2xl font-bold">{n}</p>
@@ -269,9 +303,9 @@ function SecurityTab() {
     }
     setSaving(true);
     try {
-      const res  = await authFetch(`${BASE}/api/auth/change-password`, {
+      const res  = await authFetch(`${BASE}/api/auth/profile`, {
         method: "PUT",
-        body:   JSON.stringify({ currentPassword: form.current, newPassword: form.newPass }),
+        body:   JSON.stringify({ password: form.newPass }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed");
@@ -402,14 +436,17 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    authFetch(`${BASE}/api/auth/userinfo`)
+    authFetch(`${BASE}/api/auth/me`)
       .then(r => r.json())
       .then(data => {
-        const u = data.data || data.user || data;
+        const u = data.user || data.data || data;
         if (u && (u.name || u.email)) {
           setUser({
             ...u,
-            phone: u.contactNumber || u.phone || "",
+            phone:        u.contactNumber || u.phone || "",
+            profileImage: u.profileImage  || null,
+            totalOrders:  data.totalOrders ?? 0,
+            totalSpent:   data.totalSpent  ?? 0,
           });
         }
       })
@@ -448,10 +485,15 @@ export default function ProfilePage() {
           <div className="lg:sticky lg:top-6">
             {/* User Card */}
             <div className="p-5 rounded-3xl mb-4 text-center" style={{ background:"#4a3728" }}>
-              <div style={{ background:"#c97d5b" }}
-                className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
-                {user?.name?.charAt(0)?.toUpperCase() || "?"}
-              </div>
+              {user?.profileImage
+                ? <img src={user.profileImage} alt="avatar"
+                    className="w-16 h-16 rounded-full object-cover border-2 mx-auto mb-3"
+                    style={{ borderColor:"#c97d5b" }}/>
+                : <div style={{ background:"#c97d5b" }}
+                    className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                    {user?.name?.charAt(0)?.toUpperCase() || "?"}
+                  </div>
+              }
               <p style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="font-bold text-lg truncate">
                 {user?.name || "User"}
               </p>

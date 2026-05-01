@@ -48,9 +48,10 @@ export default function AuthPage() {
   const from       = location.state?.from || "/";
 
   const [mode,      setMode]      = useState("login"); // "login" | "signup"
-  const [loading,   setLoading]   = useState(false);
-  const [apiError,  setApiError]  = useState(null);
-  const [showPass,  setShowPass]  = useState(false);
+  const [loading,    setLoading]    = useState(false);
+  const [apiError,   setApiError]   = useState(null);
+  const [apiSuccess, setApiSuccess] = useState(null);
+  const [showPass,   setShowPass]   = useState(false);
 
   const [form, setForm] = useState({
     name: "", email: "", password: "", contactNumber: "",
@@ -61,6 +62,7 @@ export default function AuthPage() {
     setForm(f => ({ ...f, [key]: val }));
     if (errors[key]) setErrors(e => ({ ...e, [key]: null }));
     setApiError(null);
+    setApiSuccess(null);
   }
 
   function validate() {
@@ -87,6 +89,7 @@ export default function AuthPage() {
 
     setLoading(true);
     setApiError(null);
+    setApiSuccess(null);
     try {
       const endpoint = mode === "login" ? `${API}/login` : `${API}/register`;
       const body     = mode === "login"
@@ -102,11 +105,17 @@ export default function AuthPage() {
 
       if (!res.ok) throw new Error(data.message || "Something went wrong");
 
-      const token = data.token ?? data.data?.token;
+      const token = data.token ?? data.data?.token ?? data.accessToken;
       const role  = data.user?.role ?? data.data?.user?.role ?? data.role ?? "user";
 
-      setAuth({ token, role });
+      if (!token) {
+        // Registration succeeded but no token — show success and switch to login
+        setApiSuccess(data.message || "Account created! Please sign in.");
+        setTimeout(() => { switchMode("login"); setApiSuccess(null); }, 1800);
+        return;
+      }
 
+      setAuth({ token, role });
       if (role === "admin") navigate("/admin", { replace: true });
       else navigate(from, { replace: true });
 
@@ -121,6 +130,7 @@ export default function AuthPage() {
     setMode(m);
     setErrors({});
     setApiError(null);
+    setApiSuccess(null);
     setForm({ name: "", email: "", password: "", contactNumber: "" });
   }
 
@@ -233,10 +243,19 @@ export default function AuthPage() {
                 error={errors.contactNumber} icon={Phone} />
             )}
 
-            {/* API Error */}
+            {/* Success message */}
+            {apiSuccess && (
+              <div className="flex items-center gap-2 p-3 rounded-xl text-sm"
+                style={{ background: "#dcfce7", color: "#16a34a", border: "1px solid #bbf7d0" }}>
+                <span>✅</span>
+                <span>{apiSuccess}</span>
+              </div>
+            )}
+
+            {/* Error message */}
             {apiError && (
               <div className="flex items-start gap-2 p-3 rounded-xl text-sm"
-                style={{ background: "#fee2e2", color: "#dc2626" }}>
+                style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca" }}>
                 <span className="mt-0.5">⚠️</span>
                 <span>{apiError}</span>
               </div>
