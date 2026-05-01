@@ -9,22 +9,23 @@ import { authFetch } from "../utils/auth";
 const BASE = "http://localhost:3001";
 
 const STATUS_CONFIG = {
-  Pending:    { bg:"#dbeafe", color:"#2563eb", icon:<Clock size={13}/>  },
-  Processing: { bg:"#dbeafe", color:"#2563eb", icon:<Clock size={13}/>  },
-  Shipped:    { bg:"#fef9c3", color:"#ca8a04", icon:<Truck size={13}/>  },
-  Delivered:  { bg:"#dcfce7", color:"#16a34a", icon:<Check size={13}/>  },
-  Cancelled:  { bg:"#fee2e2", color:"#dc2626", icon:<X size={13}/>      },
+  pending:    { bg:"#dbeafe", color:"#2563eb", icon:<Clock size={13}/>, label:"Pending"    },
+  processing: { bg:"#dbeafe", color:"#2563eb", icon:<Clock size={13}/>, label:"Processing" },
+  shipped:    { bg:"#fef9c3", color:"#ca8a04", icon:<Truck size={13}/>, label:"Shipped"    },
+  delivered:  { bg:"#dcfce7", color:"#16a34a", icon:<Check size={13}/>, label:"Delivered"  },
+  cancelled:  { bg:"#fee2e2", color:"#dc2626", icon:<X size={13}/>,     label:"Cancelled"  },
 };
 
-const FILTER_LABELS = ["All", "Pending", "Processing", "Shipped", "Delivered", "Cancelled"];
+const FILTER_LABELS = ["All", "pending", "processing", "shipped", "delivered", "cancelled"];
+const FILTER_DISPLAY = { All:"All", pending:"Pending", processing:"Processing", shipped:"Shipped", delivered:"Delivered", cancelled:"Cancelled" };
 const fmt = n => "₹" + n.toLocaleString("en-IN");
 
 function Badge({ status }) {
-  const s = STATUS_CONFIG[status] || STATUS_CONFIG.Processing;
+  const s = STATUS_CONFIG[(status || "").toLowerCase()] || STATUS_CONFIG.pending;
   return (
     <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full"
       style={{ background: s.bg, color: s.color }}>
-      {s.icon} {status}
+      {s.icon} {s.label}
     </span>
   );
 }
@@ -32,7 +33,7 @@ function Badge({ status }) {
 function OrderCard({ order, onCancel }) {
   const [expanded, setExpanded] = useState(false);
   const [cancelling, setCancelling] = useState(false);
-  const canCancel = order.status !== "Cancelled" && order.status !== "Delivered";
+  const canCancel = !["cancelled","delivered"].includes((order.status || "").toLowerCase());
   const addr = order.shippingAddress || {};
   const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric" }) : "";
 
@@ -68,7 +69,7 @@ function OrderCard({ order, onCancel }) {
         </div>
         <div className="flex items-center gap-3">
           <Badge status={order.status} />
-          <span style={{ color:"#c97d5b" }} className="font-bold">{fmt(order.totalPrice || 0)}</span>
+          <span style={{ color:"#c97d5b" }} className="font-bold">{fmt(order.totalAmount || order.totalPrice || 0)}</span>
           <button onClick={() => setExpanded(e => !e)}
             className="p-1.5 rounded-full hover:opacity-70 transition-opacity"
             style={{ background:"#f5ede5" }}>
@@ -170,7 +171,7 @@ export default function OrdersPage() {
   }
 
   const filtered = orders.filter(o => {
-    const matchFilter = filter === "All" || o.status === filter;
+    const matchFilter = filter === "All" || (o.status || "").toLowerCase() === filter;
     const matchSearch = search === "" ||
       o._id.toLowerCase().includes(search.toLowerCase()) ||
       o.items.some(i => (i.product?.name || "").toLowerCase().includes(search.toLowerCase()));
@@ -178,7 +179,7 @@ export default function OrdersPage() {
   });
 
   const counts = FILTER_LABELS.reduce((acc, f) => {
-    acc[f] = f === "All" ? orders.length : orders.filter(o => o.status === f).length;
+    acc[f] = f === "All" ? orders.length : orders.filter(o => (o.status || "").toLowerCase() === f).length;
     return acc;
   }, {});
 
@@ -224,7 +225,7 @@ export default function OrdersPage() {
               style={filter === f
                 ? { background:"#4a3728", borderColor:"#4a3728", color:"white" }
                 : { borderColor:"#e8d5c4", color:"#7a5c4a" }}>
-              {f}
+              {FILTER_DISPLAY[f] || f}
               {counts[f] > 0 && (
                 <span className="w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold"
                   style={{

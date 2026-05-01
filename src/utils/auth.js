@@ -49,6 +49,16 @@ export function isAdmin() {
   return decrypt(enc) === "admin";
 }
 
+export function getTokenPayload() {
+  const token = getToken();
+  if (!token) return null;
+  try {
+    return JSON.parse(atob(token.split(".")[1]));
+  } catch {
+    return null;
+  }
+}
+
 export function authFetch(url, options = {}) {
   const token = getToken();
   const { headers, ...rest } = options;

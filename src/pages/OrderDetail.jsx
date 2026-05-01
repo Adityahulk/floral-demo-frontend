@@ -11,12 +11,21 @@ const BASE = "http://localhost:3001";
 const fmt  = n => "₹" + n.toLocaleString("en-IN");
 
 const STATUS_CONFIG = {
-  Pending:    { bg:"#dbeafe", color:"#2563eb", label:"Pending"    },
-  Processing: { bg:"#dbeafe", color:"#2563eb", label:"Processing" },
-  Shipped:    { bg:"#fef9c3", color:"#ca8a04", label:"Shipped"    },
-  Delivered:  { bg:"#dcfce7", color:"#16a34a", label:"Delivered"  },
-  Cancelled:  { bg:"#fee2e2", color:"#dc2626", label:"Cancelled"  },
+  pending:    { bg:"#dbeafe", color:"#2563eb", label:"Pending"    },
+  processing: { bg:"#dbeafe", color:"#2563eb", label:"Processing" },
+  shipped:    { bg:"#fef9c3", color:"#ca8a04", label:"Shipped"    },
+  delivered:  { bg:"#dcfce7", color:"#16a34a", label:"Delivered"  },
+  cancelled:  { bg:"#fee2e2", color:"#dc2626", label:"Cancelled"  },
 };
+
+const PAYMENT_STATUS = {
+  pending:   { bg:"#fef9c3", color:"#ca8a04", label:"Payment Pending" },
+  paid:      { bg:"#dcfce7", color:"#16a34a", label:"Paid"            },
+  failed:    { bg:"#fee2e2", color:"#dc2626", label:"Payment Failed"  },
+  refunded:  { bg:"#f3e8ff", color:"#7c3aed", label:"Refunded"        },
+};
+
+function normalizeStatus(s) { return (s || "").toLowerCase(); }
 
 function Section({ title, icon, children }) {
   return (
@@ -93,11 +102,15 @@ export default function OrderDetail() {
     );
   }
 
-  const s      = STATUS_CONFIG[order.status] || STATUS_CONFIG.Processing;
-  const addr   = order.shippingAddress || {};
-  const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleString("en-IN", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" }) : "";
-  const shortId = order._id.slice(-8).toUpperCase();
-  const canCancel = order.status !== "Cancelled" && order.status !== "Delivered";
+  const statusKey  = normalizeStatus(order.status);
+  const s          = STATUS_CONFIG[statusKey] || STATUS_CONFIG.pending;
+  const pmKey      = normalizeStatus(order.paymentStatus);
+  const pm         = PAYMENT_STATUS[pmKey] || PAYMENT_STATUS.pending;
+  const addr       = order.shippingAddress || {};
+  const dateStr    = order.createdAt ? new Date(order.createdAt).toLocaleString("en-IN", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" }) : "";
+  const shortId    = order._id.slice(-8).toUpperCase();
+  const totalAmt   = order.totalAmount || order.totalPrice || 0;
+  const canCancel  = !["delivered","cancelled"].includes(statusKey);
 
   return (
     <div style={{ fontFamily:"system-ui, sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
@@ -153,7 +166,7 @@ export default function OrderDetail() {
           </div>
         </div>
 
-        {order.status === "Delivered" && (
+        {statusKey === "delivered" && (
           <div className="mb-6 p-4 rounded-2xl flex items-center gap-3"
             style={{ background:"#dcfce7", border:"1px solid #bbf7d0" }}>
             <Check size={20} style={{ color:"#16a34a" }} className="shrink-0"/>
@@ -217,11 +230,40 @@ export default function OrderDetail() {
           </div>
 
           <div className="space-y-5">
-            <Section title="Price Summary" icon={<CreditCard size={16}/>}>
+            <Section title="Order Summary" icon={<CreditCard size={16}/>}>
               <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span style={{ color:"#9c7a62" }}>Total Paid</span>
-                  <span style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }} className="font-bold">{fmt(order.totalPrice || 0)}</span>
+
+                {/* Delivery Status */}
+                <div className="flex items-center justify-between">
+                  <span style={{ color:"#9c7a62" }}>Delivery Status</span>
+                  <span className="text-xs font-bold px-2.5 py-1 rounded-full"
+                    style={{ background: s.bg, color: s.color }}>
+                    {s.label}
+                  </span>
+                </div>
+
+                {/* Payment Status */}
+                <div className="flex items-center justify-between">
+                  <span style={{ color:"#9c7a62" }}>Payment Status</span>
+                  <span className="text-xs font-bold px-2.5 py-1 rounded-full"
+                    style={{ background: pm.bg, color: pm.color }}>
+                    {pm.label}
+                  </span>
+                </div>
+
+                {/* Payment Mode */}
+                {order.paymentMethod && (
+                  <div className="flex justify-between">
+                    <span style={{ color:"#9c7a62" }}>Payment Mode</span>
+                    <span style={{ color:"#4a3728" }} className="font-medium capitalize">{order.paymentMethod}</span>
+                  </div>
+                )}
+
+                <div className="border-t pt-3" style={{ borderColor:"#f0e4d8" }}>
+                  <div className="flex justify-between font-bold text-base">
+                    <span style={{ color:"#3a2416" }}>Total Payable</span>
+                    <span style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }}>{fmt(totalAmt)}</span>
+                  </div>
                 </div>
               </div>
             </Section>
