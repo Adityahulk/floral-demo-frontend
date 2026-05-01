@@ -133,7 +133,7 @@ export default function App() {
             </AdminRoute>
           }
         >
-          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/admin/*" element={<AdminPanel />} />
         </Route>
 
       </Routes>
