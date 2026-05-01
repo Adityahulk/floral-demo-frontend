@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import { authFetch } from "../../utils/auth";
 import {
-  LayoutDashboard, Users, BarChart2, Package, Settings,
-  TrendingUp, TrendingDown, ShoppingBag, IndianRupee,
+  LayoutDashboard, Users, BarChart2, Package,
+  TrendingUp, ShoppingBag, IndianRupee,
   Bell, Search, Menu, X, ChevronRight, Eye, Star,
-  ArrowUpRight, ArrowDownRight, Filter, Download,
+  ArrowUpRight, ArrowDownRight, Download,
   ChevronUp, ChevronDown, LogOut, Home, Edit2, Trash2, ToggleLeft, ToggleRight,
   RefreshCw, LayoutGrid, List,
 } from "lucide-react";
@@ -977,6 +978,163 @@ function ProductsTab({ onEdit }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
+// ORDERS TAB
+// ══════════════════════════════════════════════════════════════════════════════
+
+const ORDER_BASE = "http://localhost:3001";
+
+const ORDER_STATUSES = ["Pending","Processing","Shipped","Delivered","Cancelled"];
+
+const ORDER_STATUS_CFG = {
+  Pending:    { bg:"#dbeafe", color:"#2563eb" },
+  Processing: { bg:"#dbeafe", color:"#2563eb" },
+  Shipped:    { bg:"#fef9c3", color:"#ca8a04" },
+  Delivered:  { bg:"#dcfce7", color:"#16a34a" },
+  Cancelled:  { bg:"#fee2e2", color:"#dc2626" },
+};
+
+function AdminOrdersTab() {
+  const [orders,  setOrders]  = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter,  setFilter]  = useState("All");
+  const [search,  setSearch]  = useState("");
+  const [updating, setUpdating] = useState(null);
+
+  useEffect(() => {
+    authFetch(`${ORDER_BASE}/api/admin/orders`)
+      .then(r => r.json())
+      .then(data => { setOrders(data.data || data.orders || []); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+
+  async function updateStatus(orderId, status) {
+    setUpdating(orderId);
+    try {
+      const res  = await authFetch(`${ORDER_BASE}/api/admin/orders/${orderId}/status`, {
+        method: "PATCH",
+        body:   JSON.stringify({ status }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed");
+      setOrders(prev => prev.map(o => o._id === orderId ? { ...o, status } : o));
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setUpdating(null);
+    }
+  }
+
+  const filtered = orders.filter(o => {
+    const matchFilter = filter === "All" || o.status === filter;
+    const matchSearch = search === "" ||
+      o._id.toLowerCase().includes(search.toLowerCase()) ||
+      (o.shippingAddress?.name || "").toLowerCase().includes(search.toLowerCase());
+    return matchFilter && matchSearch;
+  });
+
+  const counts = ["All", ...ORDER_STATUSES].reduce((acc, f) => {
+    acc[f] = f === "All" ? orders.length : orders.filter(o => o.status === f).length;
+    return acc;
+  }, {});
+
+  return (
+    <div>
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold">Orders</h2>
+          <p style={{ color:"#9c7a62" }} className="text-sm mt-0.5">{orders.length} total orders</p>
+        </div>
+        <div className="relative">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"#9c7a62" }} />
+          <input value={search} onChange={e => setSearch(e.target.value)}
+            placeholder="Search by ID or customer..."
+            className="pl-9 pr-4 py-2 rounded-full border text-sm outline-none w-64"
+            style={{ borderColor:"#e8d5c4", background:"white", color:"#3a2416" }} />
+        </div>
+      </div>
+
+      {/* Status filter */}
+      <div className="flex gap-2 flex-wrap mb-6">
+        {["All", ...ORDER_STATUSES].filter(f => f === "All" || counts[f] > 0).map(f => (
+          <button key={f} onClick={() => setFilter(f)}
+            className="px-3 py-1.5 rounded-full text-xs font-semibold border-2 transition-all"
+            style={filter === f
+              ? { background:"#4a3728", borderColor:"#4a3728", color:"white" }
+              : { borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+            {f} {counts[f] > 0 ? `(${counts[f]})` : ""}
+          </button>
+        ))}
+      </div>
+
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="w-7 h-7 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-20">
+          <span className="text-4xl block mb-3">📦</span>
+          <p style={{ color:"#9c7a62" }}>No orders found</p>
+        </div>
+      ) : (
+        <div className="rounded-2xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+          {/* Table header */}
+          <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-4 px-5 py-3 text-xs font-bold uppercase tracking-wide"
+            style={{ background:"#fdf8f3", color:"#9c7a62", borderBottom:"1px solid #f0e4d8" }}>
+            <span>Order ID</span>
+            <span>Customer</span>
+            <span>Amount</span>
+            <span>Status</span>
+            <span>Update</span>
+          </div>
+          {filtered.map(order => {
+            const cfg  = ORDER_STATUS_CFG[order.status] || ORDER_STATUS_CFG.Pending;
+            const addr = order.shippingAddress || {};
+            const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString("en-IN", { day:"2-digit", month:"short" }) : "";
+            return (
+              <div key={order._id}
+                className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-4 px-5 py-4 items-center border-b"
+                style={{ borderColor:"#f0e4d8", background:"white" }}>
+
+                <div>
+                  <p style={{ color:"#3a2416" }} className="text-xs font-bold">#{order._id.slice(-8).toUpperCase()}</p>
+                  <p style={{ color:"#9c7a62" }} className="text-xs">{date}</p>
+                </div>
+
+                <div className="min-w-0">
+                  <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{addr.name || "—"}</p>
+                  <p style={{ color:"#9c7a62" }} className="text-xs truncate">{addr.city || ""}</p>
+                </div>
+
+                <span style={{ color:"#c97d5b" }} className="font-bold text-sm whitespace-nowrap">
+                  {fmt(order.totalPrice || 0)}
+                </span>
+
+                <span className="text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap"
+                  style={{ background: cfg.bg, color: cfg.color }}>
+                  {order.status}
+                </span>
+
+                <select
+                  value={order.status}
+                  disabled={updating === order._id}
+                  onChange={e => updateStatus(order._id, e.target.value)}
+                  className="text-xs rounded-lg border px-2 py-1.5 outline-none cursor-pointer"
+                  style={{ borderColor:"#e8d5c4", color:"#4a3728", background:"white" }}>
+                  {ORDER_STATUSES.map(s => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
 // ADMIN LAYOUT (SIDEBAR + MAIN)
 // ══════════════════════════════════════════════════════════════════════════════
 
@@ -1007,7 +1165,7 @@ export default function AdminPanel() {
     dashboard:     <Dashboard />,
     customers:     <CustomersTab />,
     analytics:     <AnalyticsTab />,
-    orders:        <div className="flex flex-col items-center justify-center h-64 text-center"><span className="text-5xl mb-4">📦</span><p style={{ color:"#9c7a62" }}>Full Orders page coming soon!</p></div>,
+    orders:        <AdminOrdersTab />,
     products:      <ProductsTab onEdit={handleEdit} />,
     "add-product": <AddProductForm key={editingProduct?._id ?? "new"} initialData={editingProduct} onSuccess={handleEditSuccess} />,
   };

@@ -2,16 +2,20 @@ import { useState } from "react";
 import { ShoppingCart, Heart, Search, Menu, X,User  } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import FloralLogo from "../assets/floral-logo.png";
+import { isAuthenticated, isAdmin } from "../utils/auth";
 
 export default function Header({ cartCount, wishCount, onCartOpen }) {
   const [open,setOpen]=useState(false);
   const [search,setSearch]=useState(false);
   const navigate = useNavigate();
-  const links=[{title:"Home",path:"/",public:true},
-    {title:"Category",path:"/category",public:true},
-    {title:"Admin",path:"/admin",public:false},
-    {title:"About",path:"/about",public:true},
-    {title:"Contact",path:"/contact",public:true}];
+  const showAdmin = isAuthenticated() && isAdmin();
+  const links=[
+    {title:"Home",    path:"/"},
+    {title:"Category",path:"/category"},
+    ...(showAdmin ? [{title:"Admin", path:"/admin"}] : []),
+    {title:"About",   path:"/about"},
+    {title:"Contact", path:"/contact"},
+  ];
   return (
     <header style={{background:"#fdf8f3"}} className="sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4">

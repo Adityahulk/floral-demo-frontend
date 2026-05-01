@@ -6,6 +6,7 @@ import {
 import Breadcrumb from "../../components/Breadcrumb";
 import { useParams } from "react-router-dom";
 import ProductDetailSkeleton from "./ProductSkeletons/ProductDetailSkeleton";
+import { useCart } from "../../context/CartContext";
 
 
 const PRODUCT = {
@@ -62,6 +63,7 @@ function Stars({ n, size = 14 }) {
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 
 export default function ProductDetail() {
+  const { addToCart } = useCart();
    const [product, setProduct] = useState(null);
   const [activeImg, setActiveImg]   = useState(0);
   const [qty, setQty]               = useState(1);
@@ -79,6 +81,7 @@ export default function ProductDetail() {
     {id:3,name:'Rose Bliss Bouquet',path:'/rose-bliss-bouquet'}]
 
   function handleAddToCart() {
+    addToCart(product, qty, selectedSize, selectedColor ? [selectedColor] : []);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   }
@@ -93,9 +96,11 @@ export default function ProductDetail() {
     fetch(`http://localhost:3001/api/products/${productId}`)
      .then(res => res.json())
      .then(data => {
-      setProduct(data?.data);
-      setColor(data?.data?.colors?.[0]);
-      setSize(data?.data?.sizes?.[1]);
+      const p = data?.data;
+      setProduct(p);
+      const firstColor = p?.colors?.[0];
+      setColor(Array.isArray(firstColor) ? firstColor[0] : (firstColor || ""));
+      setSize(p?.sizes?.[0] || "");
      })
   };
   useEffect(()=>{
@@ -187,20 +192,28 @@ export default function ProductDetail() {
             </div>}
 
             {/* Color */}
-            <div className="mb-6">
-              <p style={{ color: "#4a3728" }} className="text-sm font-bold mb-2">Color — <span style={{ color: "#c97d5b" }}>{selectedColor}</span></p>
-              <div className="flex gap-2">
-                {[["Red","#e53e3e"],["Pink","#ed64a6"],["White","#e2e8f0"],["Mixed","linear-gradient(135deg,#e53e3e,#ed64a6,#e2e8f0)"]].map(([name, bg]) => (
-                  <button key={name} onClick={() => setColor(name)} title={name}
-                    className="w-9 h-9 rounded-full border-4 transition-all hover:scale-110"
-                    style={{
-                      background: bg,
-                      borderColor: selectedColor === name ? "#4a3728" : "transparent",
-                      boxShadow: selectedColor === name ? "0 0 0 2px #4a3728" : "none"
-                    }} />
-                ))}
+            {product.colors?.length > 0 && (
+              <div className="mb-6">
+                <p style={{ color: "#4a3728" }} className="text-sm font-bold mb-2">
+                  Color — <span style={{ color: "#c97d5b" }}>{selectedColor}</span>
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                  {product.colors.map(c => {
+                    const name = Array.isArray(c) ? c[0] : c;
+                    const hex  = Array.isArray(c) ? c[1] : "#c97d5b";
+                    return (
+                      <button key={name} onClick={() => setColor(name)} title={name}
+                        className="w-9 h-9 rounded-full border-4 transition-all hover:scale-110"
+                        style={{
+                          background: hex,
+                          borderColor: selectedColor === name ? "#4a3728" : "transparent",
+                          boxShadow: selectedColor === name ? "0 0 0 2px #4a3728" : "none"
+                        }} />
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Qty + Add to Cart */}
             <div className="flex items-center gap-4 mb-5">

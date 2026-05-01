@@ -1,19 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ArrowLeft, Check, ChevronDown, ChevronUp,
   CreditCard, Truck, Tag, ShieldCheck, MapPin
 } from "lucide-react";
-
-// ─── MOCK CART DATA ───────────────────────────────────────────────────────────
-
-const CART_ITEMS = [
-  { id:1, name:"Rose Bliss Bouquet",       price:1299, qty:1, img:"https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=200&q=80" },
-  { id:2, name:"Pastel Dream Arrangement", price:1899, qty:2, img:"https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=200&q=80" },
-];
+import { useNavigate, Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { isAuthenticated, authFetch } from "../utils/auth";
 
 const fmt = n => "₹" + n.toLocaleString("en-IN");
-
 const STEPS = ["Delivery", "Payment", "Confirmation"];
+const BASE = "http://localhost:3001";
 
 // ─── STEP INDICATOR ───────────────────────────────────────────────────────────
 
@@ -46,33 +42,34 @@ function StepBar({ step }) {
 
 // ─── ORDER SUMMARY ────────────────────────────────────────────────────────────
 
-function OrderSummary({ coupon, setCoupon, couponApplied, onApplyCoupon }) {
+function OrderSummary({ items, coupon, setCoupon, couponApplied, onApplyCoupon }) {
   const [open, setOpen] = useState(true);
-  const subtotal  = CART_ITEMS.reduce((s, i) => s + i.price * i.qty, 0);
+  const subtotal  = items.reduce((s, i) => s + i.price * i.qty, 0);
   const delivery  = subtotal >= 999 ? 0 : 99;
   const discount  = couponApplied ? Math.round(subtotal * 0.15) : 0;
   const total     = subtotal + delivery - discount;
 
   return (
     <div className="rounded-3xl overflow-hidden border" style={{ borderColor: "#e8d5c4", background: "white" }}>
-      {/* Header */}
       <button onClick={() => setOpen(o => !o)}
         className="w-full flex items-center justify-between p-5 border-b"
         style={{ borderColor: "#f0e4d8", background: "#fdf8f3" }}>
         <span style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="font-bold text-lg">
-          Order Summary ({CART_ITEMS.length} items)
+          Order Summary ({items.length} items)
         </span>
         {open ? <ChevronUp size={18} style={{ color: "#c97d5b" }} /> : <ChevronDown size={18} style={{ color: "#9c7a62" }} />}
       </button>
 
       {open && (
         <div className="p-5">
-          {/* Items */}
           <div className="space-y-4 mb-5">
-            {CART_ITEMS.map(item => (
-              <div key={item.id} className="flex gap-3">
+            {items.map(item => (
+              <div key={item.key} className="flex gap-3">
                 <div className="relative shrink-0">
-                  <img src={item.img} alt={item.name} className="w-16 h-16 object-cover rounded-xl" />
+                  {item.img
+                    ? <img src={item.img} alt={item.name} className="w-16 h-16 object-cover rounded-xl" />
+                    : <div className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl" style={{ background: "#f5ede5" }}>🌸</div>
+                  }
                   <span style={{ background: "#c97d5b" }}
                     className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold">
                     {item.qty}
@@ -80,6 +77,7 @@ function OrderSummary({ coupon, setCoupon, couponApplied, onApplyCoupon }) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p style={{ color: "#3a2416" }} className="text-sm font-semibold truncate">{item.name}</p>
+                  {item.size && <p style={{ color: "#9c7a62" }} className="text-xs">{item.size}</p>}
                   <p style={{ color: "#9c7a62" }} className="text-xs mt-0.5">Qty: {item.qty}</p>
                 </div>
                 <p style={{ color: "#4a3728" }} className="font-semibold text-sm shrink-0">{fmt(item.price * item.qty)}</p>
@@ -87,7 +85,6 @@ function OrderSummary({ coupon, setCoupon, couponApplied, onApplyCoupon }) {
             ))}
           </div>
 
-          {/* Coupon */}
           <div className="flex gap-2 mb-5 p-3 rounded-2xl" style={{ background: "#fdf8f3", border: "1px solid #e8d5c4" }}>
             <Tag size={16} style={{ color: "#c97d5b" }} className="shrink-0 mt-2.5" />
             <input value={coupon} onChange={e => setCoupon(e.target.value.toUpperCase())}
@@ -103,7 +100,6 @@ function OrderSummary({ coupon, setCoupon, couponApplied, onApplyCoupon }) {
             </button>
           </div>
 
-          {/* Price Breakdown */}
           <div className="space-y-2.5 text-sm border-t pt-4" style={{ borderColor: "#f0e4d8" }}>
             <div className="flex justify-between" style={{ color: "#7a5c4a" }}>
               <span>Subtotal</span><span>{fmt(subtotal)}</span>
@@ -127,7 +123,6 @@ function OrderSummary({ coupon, setCoupon, couponApplied, onApplyCoupon }) {
         </div>
       )}
 
-      {/* Trust */}
       <div className="px-5 py-3 border-t flex items-center gap-2" style={{ borderColor: "#f0e4d8", background: "#fdf8f3" }}>
         <ShieldCheck size={14} style={{ color: "#22c55e" }} />
         <p className="text-xs" style={{ color: "#7a5c4a" }}>100% secure checkout. Your data is protected.</p>
@@ -138,18 +133,32 @@ function OrderSummary({ coupon, setCoupon, couponApplied, onApplyCoupon }) {
 
 // ─── DELIVERY FORM ────────────────────────────────────────────────────────────
 
-function DeliveryForm({ data, onChange }) {
-  const field = (label, key, type = "text", placeholder = "") => (
-    <div>
-      <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">{label}</label>
-      <input type={type} value={data[key]} onChange={e => onChange(key, e.target.value)}
-        placeholder={placeholder}
-        className="w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all"
-        style={{ borderColor: "#e8d5c4", background: "white", color: "#3a2416" }}
-        onFocus={e => e.target.style.borderColor = "#c97d5b"}
-        onBlur={e => e.target.style.borderColor = "#e8d5c4"} />
-    </div>
-  );
+const REQUIRED_FIELDS = ["fullName", "phone", "address1", "city", "state", "pincode"];
+
+function DeliveryForm({ data, onChange, touched }) {
+  function field(label, key, type = "text", placeholder = "") {
+    const isRequired = REQUIRED_FIELDS.includes(key);
+    const isEmpty    = isRequired && touched && !data[key]?.trim();
+    return (
+      <div>
+        <label className="block text-sm font-semibold mb-1.5"
+          style={{ color: isEmpty ? "#dc2626" : "#4a3728" }}>
+          {label}{isRequired && <span style={{ color:"#dc2626" }}> *</span>}
+        </label>
+        <input type={type} value={data[key]} onChange={e => onChange(key, e.target.value)}
+          placeholder={placeholder}
+          className="w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all"
+          style={{
+            borderColor: isEmpty ? "#dc2626" : "#e8d5c4",
+            background: isEmpty ? "#fff5f5" : "white",
+            color: "#3a2416"
+          }}
+          onFocus={e => e.target.style.borderColor = isEmpty ? "#dc2626" : "#c97d5b"}
+          onBlur={e => e.target.style.borderColor = isEmpty ? "#dc2626" : "#e8d5c4"} />
+        {isEmpty && <p className="text-xs mt-1" style={{ color:"#dc2626" }}>This field is required</p>}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-5">
@@ -158,21 +167,17 @@ function DeliveryForm({ data, onChange }) {
         <p style={{ color: "#9c7a62" }} className="text-sm">Where should we deliver your flowers?</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        {field("First Name", "firstName", "text", "Priya")}
-        {field("Last Name",  "lastName",  "text", "Sharma")}
-      </div>
-      {field("Email Address", "email", "email", "priya@example.com")}
-      {field("Phone Number",  "phone", "tel",   "+91 98765 43210")}
+      {field("Full Name", "fullName", "text", "Priya Sharma")}
+      {field("Phone Number", "phone", "tel", "+91 98765 43210")}
       {field("Address Line 1", "address1", "text", "123 MG Road")}
       {field("Address Line 2 (Optional)", "address2", "text", "Apartment, suite, etc.")}
 
       <div className="grid grid-cols-2 gap-4">
-        {field("City",    "city",    "text", "Lucknow")}
-        {field("Pincode", "pincode", "text", "226001")}
+        {field("City",  "city",  "text", "Lucknow")}
+        {field("State", "state", "text", "Uttar Pradesh")}
       </div>
+      {field("Pincode", "pincode", "text", "226001")}
 
-      {/* Gift Note */}
       <div>
         <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">
           Gift Note <span style={{ color: "#9c7a62" }} className="font-normal">(optional)</span>
@@ -185,7 +190,6 @@ function DeliveryForm({ data, onChange }) {
           onBlur={e => e.target.style.borderColor = "#e8d5c4"} />
       </div>
 
-      {/* Delivery Slot */}
       <div>
         <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-2">Preferred Delivery Time</label>
         <div className="grid grid-cols-3 gap-3">
@@ -243,7 +247,6 @@ function PaymentForm({ method, setMethod }) {
         ))}
       </div>
 
-      {/* Card Fields */}
       {method === "card" && (
         <div className="p-5 rounded-2xl space-y-4" style={{ background: "#fdf8f3", border: "1px solid #e8d5c4" }}>
           <div>
@@ -279,7 +282,7 @@ function PaymentForm({ method, setMethod }) {
 
 // ─── CONFIRMATION ─────────────────────────────────────────────────────────────
 
-function Confirmation() {
+function Confirmation({ orderId, form }) {
   return (
     <div className="text-center py-10">
       <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
@@ -289,26 +292,31 @@ function Confirmation() {
       <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-3xl font-bold mb-3">
         Order Confirmed! 🌸
       </h2>
-      <p style={{ color: "#7a5c4a" }} className="mb-2">Your order <strong style={{ color: "#c97d5b" }}>#FS-20250428</strong> has been placed.</p>
-      <p style={{ color: "#9c7a62" }} className="text-sm mb-8">You'll receive a confirmation email shortly. Expected delivery: <strong>Today, 5PM–9PM</strong></p>
+      <p style={{ color: "#7a5c4a" }} className="mb-2">
+        Your order <strong style={{ color: "#c97d5b" }}>#{orderId}</strong> has been placed.
+      </p>
+      <p style={{ color: "#9c7a62" }} className="text-sm mb-8">
+        We'll start preparing your flowers right away!
+      </p>
 
       <div className="p-6 rounded-2xl mb-8 text-left" style={{ background: "#fdf8f3", border: "1px solid #e8d5c4" }}>
         <div className="flex items-center gap-3 mb-4">
           <MapPin size={18} style={{ color: "#c97d5b" }} />
           <p style={{ color: "#4a3728" }} className="font-bold">Delivery Address</p>
         </div>
-        <p style={{ color: "#7a5c4a" }} className="text-sm">Priya Sharma</p>
-        <p style={{ color: "#7a5c4a" }} className="text-sm">123 MG Road, Lucknow, UP 226001</p>
+        <p style={{ color: "#7a5c4a" }} className="text-sm">{form.fullName}</p>
+        <p style={{ color: "#7a5c4a" }} className="text-sm">{form.address1}{form.address2 ? `, ${form.address2}` : ""}</p>
+        <p style={{ color: "#7a5c4a" }} className="text-sm">{form.city}{form.state ? `, ${form.state}` : ""} {form.pincode}</p>
       </div>
 
       <div className="flex gap-4 justify-center">
-        <button style={{ background: "#c97d5b" }} className="text-white px-7 py-3 rounded-full font-bold hover:opacity-90">
-          Track Order
-        </button>
-        <a href="/" style={{ border: "2px solid #c97d5b", color: "#c97d5b" }}
+        <Link to="/orders" style={{ background: "#c97d5b" }} className="text-white px-7 py-3 rounded-full font-bold hover:opacity-90">
+          View Orders
+        </Link>
+        <Link to="/" style={{ border: "2px solid #c97d5b", color: "#c97d5b" }}
           className="px-7 py-3 rounded-full font-bold hover:opacity-70">
           Continue Shopping
-        </a>
+        </Link>
       </div>
     </div>
   );
@@ -317,40 +325,91 @@ function Confirmation() {
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 
 export default function CheckoutPage() {
+  const { cart, clearCart } = useCart();
+  const navigate = useNavigate();
   const [step, setStep]     = useState(0);
   const [method, setMethod] = useState("card");
   const [coupon, setCoupon] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
-  const [form, setForm]     = useState({
-    firstName:"", lastName:"", email:"", phone:"",
-    address1:"", address2:"", city:"", pincode:"",
+  const [placing, setPlacing] = useState(false);
+  const [error, setError]     = useState("");
+  const [orderId, setOrderId] = useState("");
+  const [touched, setTouched] = useState(false);
+  const [form, setForm] = useState({
+    fullName:"", phone:"",
+    address1:"", address2:"", city:"", state:"", pincode:"",
     note:"", slot:"Morning"
   });
 
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate("/login", { state: { from: "/cart" } });
+    }
+  }, [navigate]);
+
   function onChange(key, val) { setForm(f => ({ ...f, [key]: val })); }
 
-  function applyCopon() {
+  function applyCoupon() {
     if (coupon === "BLOOM15") setCouponApplied(true);
     else alert("Invalid coupon code. Try BLOOM15");
   }
 
+  function validateDelivery() {
+    return REQUIRED_FIELDS.every(k => form[k]?.trim() !== "");
+  }
+
+  async function placeOrder() {
+    if (!validateDelivery()) {
+      setError("Please fill in all required delivery fields.");
+      return;
+    }
+    setError("");
+    setPlacing(true);
+    try {
+      const shippingAddress = {
+        name:    form.fullName.trim(),
+        street:  [form.address1, form.address2].filter(Boolean).join(", "),
+        city:    form.city,
+        state:   form.state,
+        pincode: form.pincode,
+        phone:   form.phone,
+      };
+      const items = cart.map(i => ({
+        product:  i.product,
+        quantity: i.qty,
+        size:     i.size,
+        color:    i.color,
+      }));
+      const res  = await authFetch(`${BASE}/api/orders`, {
+        method: "POST",
+        body:   JSON.stringify({ items, shippingAddress }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Order failed");
+      setOrderId(data.data?._id || data._id || "");
+      clearCart();
+      setStep(2);
+    } catch (err) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setPlacing(false);
+    }
+  }
+
+  if (cart.length === 0 && step < 2) {
+    return (
+      <div style={{ background: "#fdf8f3", minHeight: "100vh" }} className="flex flex-col items-center justify-center gap-4">
+        <span className="text-5xl">🛒</span>
+        <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold">Your cart is empty</h2>
+        <Link to="/" style={{ background: "#c97d5b" }} className="text-white px-7 py-3 rounded-full font-bold hover:opacity-90">
+          Start Shopping
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", background: "#fdf8f3", minHeight: "100vh" }}>
-
-      {/* Header */}
-      {/* <div style={{ background: "#4a3728" }} className="py-4">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">🌸</span>
-            <span style={{ fontFamily: "Georgia, serif", color: "#f5e6d3" }} className="font-bold text-xl">Floral Studio</span>
-          </div>
-          <div className="flex items-center gap-2" style={{ color: "#f5c8a8" }}>
-            <ShieldCheck size={16} />
-            <span className="text-sm">Secure Checkout</span>
-          </div>
-        </div>
-      </div> */}
-
       <div className="max-w-6xl mx-auto px-4 py-10">
 
         {step < 2 && (
@@ -365,33 +424,43 @@ export default function CheckoutPage() {
 
         {step === 2 ? (
           <div className="max-w-lg mx-auto">
-            <Confirmation />
+            <Confirmation orderId={orderId} form={form} />
           </div>
         ) : (
           <div className="grid lg:grid-cols-[1fr_400px] gap-8 items-start">
 
-            {/* Left — Forms */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border" style={{ borderColor: "#e8d5c4" }}>
               {step === 0
-                ? <DeliveryForm data={form} onChange={onChange} />
+                ? <DeliveryForm data={form} onChange={onChange} touched={touched} />
                 : <PaymentForm method={method} setMethod={setMethod} />
               }
 
-              <button onClick={() => setStep(s => s + 1)}
-                className="w-full mt-8 py-4 rounded-full font-bold text-white text-base flex items-center justify-center gap-2 transition-all hover:opacity-90 hover:-translate-y-0.5"
+              {error && step === 1 && (
+                <p className="mt-4 text-sm font-medium" style={{ color:"#dc2626" }}>{error}</p>
+              )}
+
+              <button
+                onClick={step === 0
+                  ? () => { setTouched(true); if (validateDelivery()) { setError(""); setTouched(false); setStep(1); } }
+                  : placeOrder
+                }
+                disabled={placing}
+                className="w-full mt-8 py-4 rounded-full font-bold text-white text-base flex items-center justify-center gap-2 transition-all hover:opacity-90 hover:-translate-y-0.5 disabled:opacity-60"
                 style={{ background: "#c97d5b" }}>
                 {step === 0
                   ? <><Truck size={18} /> Continue to Payment</>
-                  : <><CreditCard size={18} /> Place Order</>
+                  : placing
+                    ? "Placing Order..."
+                    : <><CreditCard size={18} /> Place Order</>
                 }
               </button>
             </div>
 
-            {/* Right — Summary */}
             <div className="lg:sticky lg:top-6">
               <OrderSummary
+                items={cart}
                 coupon={coupon} setCoupon={setCoupon}
-                couponApplied={couponApplied} onApplyCoupon={applyCopon}
+                couponApplied={couponApplied} onApplyCoupon={applyCoupon}
               />
             </div>
           </div>
