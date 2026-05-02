@@ -20,7 +20,7 @@ const STATUS_STYLE = {
 
 const MENU = [
   { id:"profile",  path:"/profile",       icon:<User size={18}/>,    label:"My Profile"    },
-  { id:"orders",   path:"/orders",        icon:<Package size={18}/>,  label:"My Orders"     },
+  { id:"orders",   path:"/profile/orders", icon:<Package size={18}/>,  label:"My Orders"     },
   { id:"security", path:"/password",      icon:<Lock size={18}/>,     label:"Password"      },
   { id:"notif",    path:"/notifications", icon:<Bell size={18}/>,     label:"Notifications" },
 ];
