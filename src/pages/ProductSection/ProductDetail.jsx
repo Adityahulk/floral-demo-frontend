@@ -26,7 +26,7 @@ function Stars({ n, size = 14 }) {
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 
 export default function ProductDetail() {
-  const { addToCart } = useCart();
+  const { addToCart, cart } = useCart();
   const navigate = useNavigate();
   const [recommendations, setRecommendations] = useState([]);
    const [product, setProduct] = useState(null);
@@ -215,7 +215,13 @@ export default function ProductDetail() {
             </div>
 
             <button
-              onClick={() => { addToCart(product, qty, selectedSize, selectedColor ? [selectedColor] : []); navigate("/cart"); }}
+              onClick={() => {
+                const key = `${product._id}-${selectedSize}-${JSON.stringify(selectedColor ? [selectedColor] : [])}`;
+                if (!cart.some(i => i.key === key)) {
+                  addToCart(product, qty, selectedSize, selectedColor ? [selectedColor] : []);
+                }
+                navigate("/cart");
+              }}
               className="w-full py-3 rounded-full font-bold border-2 mb-6 transition-all hover:opacity-80"
               style={{ borderColor: "#4a3728", color: "#4a3728" }}>
               Buy Now
