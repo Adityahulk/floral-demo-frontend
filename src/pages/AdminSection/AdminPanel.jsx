@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { getTokenPayload } from "../../utils/auth";
 import {
   LayoutDashboard, Users, BarChart2, Package, Eye,
-  Star, Bell, Menu, Home, LogOut, Image, Sparkles, Crown, Mail,
+  Star, Bell, Menu, Home, LogOut, Image, Sparkles, Crown, Mail, Megaphone,
 } from "lucide-react";
 import FloralLogo from "../../assets/floral-logo.png";
 import AddProductForm from "./AddProductForm";
@@ -17,6 +17,7 @@ import BannersTab from "./AdminTabs/BannersTab";
 import TodaysPickTab from "./AdminTabs/TodaysPickTab";
 import RecommendationsTab from "./AdminTabs/RecommendationsTab";
 import ContactsTab from "./AdminTabs/ContactsTab";
+import AnnouncementTab from "./AdminTabs/AnnouncementTab";
 
 const NAV = [
   { id:"dashboard",      icon:<LayoutDashboard size={18}/>, label:"Dashboard"     },
@@ -29,6 +30,7 @@ const NAV = [
   { id:"todayspick",     icon:<Crown size={18}/>,           label:"Today's Pick"  },
   { id:"recommendations", icon:<Sparkles size={18}/>,       label:"Recommendations" },
   { id:"contacts",        icon:<Mail size={18}/>,            label:"Contacts"        },
+  { id:"announcement",    icon:<Megaphone size={18}/>,       label:"Announcement"    },
 ];
 
 export default function AdminPanel() {
@@ -84,6 +86,7 @@ export default function AdminPanel() {
     todayspick:      <TodaysPickTab />,
     recommendations: <RecommendationsTab />,
     contacts:        <ContactsTab />,
+    announcement:    <AnnouncementTab />,
     "add-product":   <AddProductForm key={editingProduct?._id ?? "new"} initialData={editingProduct} onSuccess={handleEditSuccess} />,
   };
 
