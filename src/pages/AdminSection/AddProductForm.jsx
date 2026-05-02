@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { api } from "../../api/client";
+import { api, BASE } from "../../api/client";
 import { API } from "../../api/endpoints";
 import {
   ArrowLeft, Upload, X, Plus, Check, AlertCircle,
@@ -332,7 +332,7 @@ function ImageUploader({ images, setImages }) {
     const formData = new FormData();
     formData.append("image", file);
     try {
-      const res = await fetch("http://localhost:3001/api/upload", {
+      const res = await fetch(`${BASE}/api/upload`, {
         method: "POST",
         body: formData,
       });
@@ -685,7 +685,7 @@ export default function AddProductForm({ onBack, initialData, onSuccess }) {
 
     setSaving(true);
     try {
-      const url    = isEdit ? `http://localhost:3001/api/products/${initialData._id}` : "http://localhost:3001/api/product";
+      const url    = isEdit ? `${BASE}/api/products/${initialData._id}` : `${BASE}/api/product`;
       const method = isEdit ? "PUT" : "POST";
       const res = await fetch(url, {
         method,

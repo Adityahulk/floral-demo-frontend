@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
 import { setAuth } from "../../utils/auth";
+import { BASE } from "../../api/client";
 import FloralLogo from "../../assets/floral-logo.png";
 
-const API = "http://localhost:3001/api/auth";
+const API = `${BASE}/api/auth`;
 
 // ─── FIELD ────────────────────────────────────────────────────────────────────
 
