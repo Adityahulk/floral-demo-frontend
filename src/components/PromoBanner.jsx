@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 const BASE = "http://localhost:3001";
 
 export default function PromoBanner() {
+  const navigate = useNavigate();
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -48,13 +50,13 @@ export default function PromoBanner() {
               <h3 style={{ fontFamily: "Georgia,serif" }} className="text-white text-2xl font-bold mb-4">
                 {banner.name}
               </h3>
-              <a
-                href="#"
+              <button
+                onClick={() => navigate(`/category/${banner._id}`)}
                 className="inline-flex items-center gap-2 bg-white px-5 py-2 rounded-full text-sm font-semibold w-fit hover:opacity-90 transition-opacity"
                 style={{ color: "#4a3728" }}
               >
                 Explore <ArrowRight size={14} />
-              </a>
+              </button>
             </div>
           </div>
         ))}

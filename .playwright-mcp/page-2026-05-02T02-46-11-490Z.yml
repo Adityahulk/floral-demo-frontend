@@ -1,0 +1,191 @@
+- generic [ref=e2]:
+  - generic [ref=e3]: 🌸 Free delivery on orders above ₹999
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - generic [ref=e7] [cursor=pointer]:
+        - img "Floral Studio" [ref=e8]
+        - generic [ref=e9]:
+          - paragraph [ref=e10]: Floral
+          - paragraph [ref=e11]: Studio
+      - generic [ref=e12]:
+        - button [ref=e13] [cursor=pointer]:
+          - img [ref=e14]
+        - button [ref=e17] [cursor=pointer]:
+          - img [ref=e18]
+        - button [ref=e20] [cursor=pointer]:
+          - img [ref=e21]
+        - button [ref=e25] [cursor=pointer]:
+          - img [ref=e26]
+        - button [ref=e29] [cursor=pointer]:
+          - img [ref=e30]
+  - generic [ref=e31]:
+    - generic [ref=e34]:
+      - generic [ref=e35]:
+        - generic [ref=e36]: ✨ New Collection 2025
+        - heading "Flowers That Tell Your Story" [level=1] [ref=e37]:
+          - text: Flowers That
+          - text: Tell Your
+          - text: Story
+        - paragraph [ref=e38]: Handcrafted bouquets & floral arrangements delivered fresh to your doorstep. Because every moment deserves beauty.
+        - generic [ref=e39]:
+          - link "Shop Now" [ref=e40] [cursor=pointer]:
+            - /url: "#shop"
+            - text: Shop Now
+            - img [ref=e41]
+          - link "Our Collections" [ref=e43] [cursor=pointer]:
+            - /url: "#collections"
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - paragraph [ref=e46]: 2K+
+            - paragraph [ref=e47]: Happy Customers
+          - generic [ref=e48]:
+            - paragraph [ref=e49]: 500+
+            - paragraph [ref=e50]: Flower Varieties
+          - generic [ref=e51]:
+            - paragraph [ref=e52]: 4.9★
+            - paragraph [ref=e53]: Avg Rating
+      - generic [ref=e55]:
+        - img "Bouquet" [ref=e57]
+        - generic [ref=e58]:
+          - paragraph [ref=e59]: Today's Pick
+          - paragraph [ref=e60]: —
+          - paragraph
+        - generic [ref=e61]:
+          - generic [ref=e62]: 🚚
+          - generic [ref=e63]:
+            - paragraph [ref=e64]: Same Day
+            - paragraph [ref=e65]: Free Delivery
+    - generic [ref=e67]:
+      - generic [ref=e68]:
+        - img [ref=e70]
+        - generic [ref=e75]:
+          - paragraph [ref=e76]: Free Delivery
+          - paragraph [ref=e77]: On orders above ₹999
+      - generic [ref=e78]:
+        - img [ref=e80]
+        - generic [ref=e85]:
+          - paragraph [ref=e86]: Easy Returns
+          - paragraph [ref=e87]: 7-day return policy
+      - generic [ref=e88]:
+        - img [ref=e90]
+        - generic [ref=e93]:
+          - paragraph [ref=e94]: 100% Fresh
+          - paragraph [ref=e95]: Quality guaranteed
+      - generic [ref=e96]:
+        - img [ref=e98]
+        - generic [ref=e102]:
+          - paragraph [ref=e103]: Gift Wrapping
+          - paragraph [ref=e104]: Complimentary service
+    - generic [ref=e107]:
+      - paragraph [ref=e108]: Browse By Type
+      - heading "Our Collections" [level=2] [ref=e109]
+    - generic [ref=e117]:
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - paragraph [ref=e120]: Hand-Picked For You
+          - heading "Featured Flowers" [level=2] [ref=e121]
+        - generic [ref=e122] [cursor=pointer]:
+          - text: View All
+          - img [ref=e123]
+      - button "All" [ref=e126] [cursor=pointer]
+    - generic [ref=e189]:
+      - paragraph [ref=e190]: Testimonials
+      - heading "What Our Customers Say" [level=2] [ref=e191]
+    - generic [ref=e195]:
+      - generic [ref=e196]: 💌
+      - heading "Stay In Bloom" [level=2] [ref=e197]
+      - paragraph [ref=e198]: Subscribe for seasonal offers & floral inspiration. Get 10% off your first order.
+      - generic [ref=e199]:
+        - textbox "Enter your email address" [ref=e200]
+        - button "Subscribe Now" [ref=e201] [cursor=pointer]
+    - generic [ref=e202]:
+      - generic [ref=e203]:
+        - heading "Your Cart (0)" [level=2] [ref=e204]
+        - button [ref=e205] [cursor=pointer]:
+          - img [ref=e206]
+      - generic [ref=e210]:
+        - generic [ref=e211]: 🛒
+        - text: Your cart is empty
+  - contentinfo [ref=e212]:
+    - generic [ref=e213]:
+      - generic [ref=e214]:
+        - generic [ref=e215]:
+          - generic [ref=e216] [cursor=pointer]:
+            - img "Floral Studio" [ref=e217]
+            - generic [ref=e218]: Floral Studio
+          - paragraph [ref=e219]: Bringing nature's beauty to your doorstep, one bloom at a time.
+          - generic [ref=e220]:
+            - link [ref=e221] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e222]
+            - link [ref=e225] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e226]
+            - link [ref=e228] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e229]
+            - link [ref=e231] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e232]
+        - generic [ref=e235]:
+          - heading "Quick Links" [level=3] [ref=e236]
+          - list [ref=e237]:
+            - listitem [ref=e238]:
+              - link "Home" [ref=e239] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e240]:
+              - link "Shop" [ref=e241] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e242]:
+              - link "Collections" [ref=e243] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e244]:
+              - link "About Us" [ref=e245] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e246]:
+              - link "Blog" [ref=e247] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e248]:
+          - heading "Support" [level=3] [ref=e249]
+          - list [ref=e250]:
+            - listitem [ref=e251]:
+              - link "FAQ" [ref=e252] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e253]:
+              - link "Shipping Info" [ref=e254] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e255]:
+              - link "Returns" [ref=e256] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e257]:
+              - link "Track Order" [ref=e258] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e259]:
+              - link "Contact Us" [ref=e260] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e261]:
+          - heading "Contact Us" [level=3] [ref=e262]
+          - list [ref=e263]:
+            - listitem [ref=e264]:
+              - img [ref=e265]
+              - text: 123 Garden Lane, Lucknow, UP 226001
+            - listitem [ref=e268]:
+              - img [ref=e269]
+              - text: +91 98765 43210
+            - listitem [ref=e271]:
+              - img [ref=e272]
+              - text: hello@floralstudio.in
+      - generic [ref=e275]:
+        - paragraph [ref=e276]: © 2025 Floral Studio. All rights reserved.
+        - generic [ref=e277]:
+          - generic [ref=e278] [cursor=pointer]: Privacy Policy
+          - generic [ref=e279] [cursor=pointer]: Terms of Service
+          - generic [ref=e280] [cursor=pointer]: Cookie Policy
+  - generic [ref=e281]:
+    - generic [ref=e282]:
+      - heading "Your Cart (0)" [level=2] [ref=e283]
+      - button [ref=e284] [cursor=pointer]:
+        - img [ref=e285]
+    - generic [ref=e289]:
+      - generic [ref=e290]: 🛒
+      - text: Your cart is empty

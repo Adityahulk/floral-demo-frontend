@@ -1,0 +1,84 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img "Floral Studio" [ref=e6]
+      - generic [ref=e7]:
+        - paragraph [ref=e8]: Floral Studio
+        - paragraph [ref=e9]: Admin Panel
+    - navigation [ref=e10]:
+      - button "Dashboard" [ref=e11] [cursor=pointer]:
+        - img [ref=e13]
+        - text: Dashboard
+      - button "Customers" [ref=e18] [cursor=pointer]:
+        - img [ref=e20]
+        - text: Customers
+      - button "Analytics" [ref=e25] [cursor=pointer]:
+        - img [ref=e27]
+        - text: Analytics
+      - button "Orders" [ref=e28] [cursor=pointer]:
+        - img [ref=e30]
+        - text: Orders
+      - button "Products" [ref=e34] [cursor=pointer]:
+        - img [ref=e36]
+        - text: Products
+      - button "Reviews" [ref=e39] [cursor=pointer]:
+        - img [ref=e41]
+        - text: Reviews
+      - button "Banners" [active] [ref=e43] [cursor=pointer]:
+        - img [ref=e45]
+        - text: Banners
+    - generic [ref=e49]:
+      - generic [ref=e50]:
+        - generic [ref=e51]: A
+        - generic [ref=e52]:
+          - paragraph [ref=e53]: akash@mail.com
+          - paragraph [ref=e54]: Admin
+      - button "Sign Out" [ref=e55] [cursor=pointer]:
+        - img [ref=e56]
+        - text: Sign Out
+  - generic [ref=e59]:
+    - banner [ref=e60]:
+      - generic [ref=e61]:
+        - button [ref=e62] [cursor=pointer]:
+          - img [ref=e63]
+        - generic [ref=e64]:
+          - heading "Banners" [level=1] [ref=e177]
+          - paragraph [ref=e66]: Saturday, 2 May 2026
+      - generic [ref=e67]:
+        - button [ref=e68] [cursor=pointer]:
+          - img [ref=e69]
+        - link "View Store" [ref=e73] [cursor=pointer]:
+          - /url: /
+          - img [ref=e74]
+          - text: View Store
+    - main [ref=e77]:
+      - generic [ref=e179]:
+        - generic [ref=e180]:
+          - img [ref=e182]
+          - generic [ref=e186]:
+            - heading "Banner Collection" [level=2] [ref=e187]
+            - paragraph [ref=e188]: Choose 2 categories to feature on the home page
+        - generic [ref=e189]:
+          - generic [ref=e190]:
+            - generic [ref=e191]: Banner 1
+            - combobox [ref=e192]:
+              - option "— Select a category —"
+              - option "Arrangements"
+              - option "Fresh Bouquets" [selected]
+              - option "Dried Flowers"
+              - option "Plants"
+              - option "Gift Hampers"
+              - option "Wreaths"
+          - generic [ref=e193]:
+            - generic [ref=e194]: Banner 2
+            - combobox [ref=e195]:
+              - option "— Select a category —"
+              - option "Arrangements" [selected]
+              - option "Fresh Bouquets"
+              - option "Dried Flowers"
+              - option "Plants"
+              - option "Gift Hampers"
+              - option "Wreaths"
+        - button "Save Banners" [ref=e196] [cursor=pointer]:
+          - img [ref=e197]
+          - text: Save Banners
