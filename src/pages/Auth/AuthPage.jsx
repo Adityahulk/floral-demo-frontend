@@ -699,33 +699,28 @@ export default function AuthPage() {
                       </div>
                     )}
 
-                    {/* Rest of signup form — unlocked after email verified */}
-                    {signupOtpVerified && (
-                      <>
-                        <Field label="Full Name" placeholder="Ananya Mehta" value={form.name}
-                          onChange={v => set("name", v)} error={errors.name} icon={User} />
+                    <Field label="Full Name" placeholder="Ananya Mehta" value={form.name}
+                      onChange={v => set("name", v)} error={errors.name} icon={User} />
 
-                        <Field
-                          label="Password"
-                          type={showPass ? "text" : "password"}
-                          placeholder="Min. 6 characters"
-                          value={form.password}
-                          onChange={v => set("password", v)}
-                          error={errors.password}
-                          icon={Lock}
-                          rightEl={
-                            <button type="button" onClick={() => setShowPass(s => !s)}
-                              className="hover:opacity-70" style={{ color: "#9c7a62" }}>
-                              {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
-                            </button>
-                          }
-                        />
+                    <Field
+                      label="Password"
+                      type={showPass ? "text" : "password"}
+                      placeholder="Min. 6 characters"
+                      value={form.password}
+                      onChange={v => set("password", v)}
+                      error={errors.password}
+                      icon={Lock}
+                      rightEl={
+                        <button type="button" onClick={() => setShowPass(s => !s)}
+                          className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                          {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                        </button>
+                      }
+                    />
 
-                        <Field label="Contact Number" placeholder="+91 98765 43210"
-                          value={form.contactNumber} onChange={v => set("contactNumber", v)}
-                          error={errors.contactNumber} icon={Phone} />
-                      </>
-                    )}
+                    <Field label="Contact Number" placeholder="+91 98765 43210"
+                      value={form.contactNumber} onChange={v => set("contactNumber", v)}
+                      error={errors.contactNumber} icon={Phone} />
                   </>
                 )}
 
