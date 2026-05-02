@@ -27,10 +27,20 @@ export default function ContactPage() {
 
   function onChange(k, v) { setForm(f => ({ ...f, [k]: v })); }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!form.name || !form.email || !form.message) return;
     setLoad(true);
-    setTimeout(() => { setLoad(false); setSent(true); }, 1500);
+    try {
+      const res = await fetch("http://localhost:3001/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (data.success) setSent(true);
+    } finally {
+      setLoad(false);
+    }
   }
 
   const inputCls = "w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all";
