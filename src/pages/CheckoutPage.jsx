@@ -213,69 +213,52 @@ function DeliveryForm({ data, onChange, touched }) {
 // ─── PAYMENT FORM ─────────────────────────────────────────────────────────────
 
 function PaymentForm({ method, setMethod }) {
-  const methods = [
-    { id:"card",   icon:"💳", label:"Credit / Debit Card" },
-    { id:"upi",    icon:"📱", label:"UPI" },
-    { id:"cod",    icon:"💵", label:"Cash on Delivery" },
-    { id:"wallet", icon:"👜", label:"Wallets (Paytm, PhonePe)" },
+  const options = [
+    {
+      id: "razorpay",
+      icon: "💳",
+      label: "Pay Online",
+      sub: "Card, UPI, Netbanking, Wallets — powered by Razorpay",
+    },
+    {
+      id: "cod",
+      icon: "🚚",
+      label: "Cash on Delivery",
+      sub: "Pay when your flowers arrive",
+    },
   ];
 
   return (
     <div className="space-y-5">
       <div>
-        <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold mb-1">Payment Method</h2>
+        <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold mb-1">
+          Payment Method
+        </h2>
         <p style={{ color: "#9c7a62" }} className="text-sm">Select how you'd like to pay</p>
       </div>
 
       <div className="space-y-3">
-        {methods.map(m => (
-          <button key={m.id} onClick={() => setMethod(m.id)}
+        {options.map(o => (
+          <button key={o.id} onClick={() => setMethod(o.id)}
             className="w-full flex items-center gap-4 p-4 rounded-2xl border-2 text-left transition-all"
-            style={method === m.id
+            style={method === o.id
               ? { borderColor: "#c97d5b", background: "#fdf8f3" }
               : { borderColor: "#e8d5c4", background: "white" }}>
             <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl"
-              style={{ background: method === m.id ? "#f5ede5" : "#f9f6f3" }}>
-              {m.icon}
+              style={{ background: method === o.id ? "#f5ede5" : "#f9f6f3" }}>
+              {o.icon}
             </div>
-            <span style={{ color: "#3a2416" }} className="font-semibold">{m.label}</span>
-            <div className="ml-auto w-5 h-5 rounded-full border-2 flex items-center justify-center"
-              style={{ borderColor: method === m.id ? "#c97d5b" : "#e8d5c4" }}>
-              {method === m.id && <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#c97d5b" }} />}
+            <div className="flex-1 min-w-0">
+              <p style={{ color: "#3a2416" }} className="font-semibold">{o.label}</p>
+              <p style={{ color: "#9c7a62" }} className="text-xs mt-0.5">{o.sub}</p>
+            </div>
+            <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0"
+              style={{ borderColor: method === o.id ? "#c97d5b" : "#e8d5c4" }}>
+              {method === o.id && <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#c97d5b" }} />}
             </div>
           </button>
         ))}
       </div>
-
-      {method === "card" && (
-        <div className="p-5 rounded-2xl space-y-4" style={{ background: "#fdf8f3", border: "1px solid #e8d5c4" }}>
-          <div>
-            <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">Card Number</label>
-            <input placeholder="1234 5678 9012 3456" className="w-full px-4 py-3 rounded-xl border text-sm outline-none" style={{ borderColor: "#e8d5c4" }} />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">Expiry Date</label>
-              <input placeholder="MM / YY" className="w-full px-4 py-3 rounded-xl border text-sm outline-none" style={{ borderColor: "#e8d5c4" }} />
-            </div>
-            <div>
-              <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">CVV</label>
-              <input placeholder="•••" className="w-full px-4 py-3 rounded-xl border text-sm outline-none" style={{ borderColor: "#e8d5c4" }} />
-            </div>
-          </div>
-          <div>
-            <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">Name on Card</label>
-            <input placeholder="Priya Sharma" className="w-full px-4 py-3 rounded-xl border text-sm outline-none" style={{ borderColor: "#e8d5c4" }} />
-          </div>
-        </div>
-      )}
-
-      {method === "upi" && (
-        <div className="p-5 rounded-2xl" style={{ background: "#fdf8f3", border: "1px solid #e8d5c4" }}>
-          <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">UPI ID</label>
-          <input placeholder="yourname@upi" className="w-full px-4 py-3 rounded-xl border text-sm outline-none" style={{ borderColor: "#e8d5c4" }} />
-        </div>
-      )}
     </div>
   );
 }
@@ -322,13 +305,26 @@ function Confirmation({ orderId, form }) {
   );
 }
 
+// ─── RAZORPAY SCRIPT LOADER ────────────────────────────────────────────────────
+
+function loadRazorpayScript() {
+  return new Promise(resolve => {
+    if (window.Razorpay) { resolve(true); return; }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload  = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 
 export default function CheckoutPage() {
   const { cart, clearCart } = useCart();
   const navigate = useNavigate();
   const [step, setStep]     = useState(0);
-  const [method, setMethod] = useState("card");
+  const [method, setMethod] = useState("razorpay");
   const [coupon, setCoupon] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
   const [placing, setPlacing] = useState(false);
@@ -365,35 +361,106 @@ export default function CheckoutPage() {
     }
     setError("");
     setPlacing(true);
+
+    const shippingAddress = {
+      street:  [form.address1, form.address2].filter(Boolean).join(", "),
+      city:    form.city,
+      state:   form.state,
+      pincode: form.pincode,
+      phone:   form.phone,
+    };
+    const items = cart.map(i => ({
+      product:  i.product,
+      quantity: i.qty,
+      size:     i.size  || "",
+      color:    i.color || [],
+    }));
+
+    if (method === "cod") {
+      try {
+        const res  = await authFetch(`${BASE}/api/orders`, {
+          method: "POST",
+          body:   JSON.stringify({ items, shippingAddress, paymentMethod: "cod" }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Order failed");
+        setOrderId(data.orderId || "");
+        clearCart();
+        setStep(2);
+      } catch (err) {
+        setError(err.message || "Something went wrong. Please try again.");
+      } finally {
+        setPlacing(false);
+      }
+      return;
+    }
+
+    // ── Razorpay flow ──
+    const scriptLoaded = await loadRazorpayScript();
+    if (!scriptLoaded) {
+      setError("Failed to load payment gateway. Please refresh and try again.");
+      setPlacing(false);
+      return;
+    }
+
+    let initiateData;
     try {
-      const shippingAddress = {
-        name:    form.fullName.trim(),
-        street:  [form.address1, form.address2].filter(Boolean).join(", "),
-        city:    form.city,
-        state:   form.state,
-        pincode: form.pincode,
-        phone:   form.phone,
-      };
-      const items = cart.map(i => ({
-        product:  i.product,
-        quantity: i.qty,
-        size:     i.size,
-        color:    i.color,
-      }));
-      const res  = await authFetch(`${BASE}/api/orders`, {
+      const res  = await authFetch(`${BASE}/api/orders/initiate`, {
         method: "POST",
-        body:   JSON.stringify({ items, shippingAddress }),
+        body:   JSON.stringify({ items }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Order failed");
-      setOrderId(data.data?._id || data._id || "");
-      clearCart();
-      setStep(2);
+      if (!res.ok) throw new Error(data.message || "Could not initiate payment");
+      initiateData = data;
     } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
-    } finally {
+      setError(err.message || "Could not initiate payment. Please try again.");
       setPlacing(false);
+      return;
     }
+
+    const { razorpayOrderId, amount, currency, keyId } = initiateData;
+
+    const options = {
+      key:       keyId,
+      amount:    Math.round(amount * 100),
+      currency,
+      order_id:  razorpayOrderId,
+      name:      "Floral Studio",
+      description: "Order Payment",
+      theme:     { color: "#c97d5b" },
+      handler: async ({ razorpay_payment_id, razorpay_order_id, razorpay_signature }) => {
+        try {
+          const res  = await authFetch(`${BASE}/api/orders/confirm`, {
+            method: "POST",
+            body:   JSON.stringify({
+              razorpayOrderId:   razorpay_order_id,
+              razorpayPaymentId: razorpay_payment_id,
+              razorpaySignature: razorpay_signature,
+              items,
+              shippingAddress,
+            }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || "Payment confirmation failed");
+          setOrderId(data.orderId || "");
+          clearCart();
+          setStep(2);
+        } catch (err) {
+          setError(err.message || "Payment confirmation failed. Contact support if amount was deducted.");
+        } finally {
+          setPlacing(false);
+        }
+      },
+      modal: {
+        ondismiss: () => {
+          setError("Payment cancelled. Your order was not placed.");
+          setPlacing(false);
+        },
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   }
 
   if (cart.length === 0 && step < 2) {
