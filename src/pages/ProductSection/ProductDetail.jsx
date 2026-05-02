@@ -64,7 +64,8 @@ export default function ProductDetail() {
   const [selectedColor, setColor]   = useState('');
   const [added, setAdded]           = useState(false);
   const [faqOpen, setFaqOpen]       = useState(null);
-  const {productId} = useParams();
+  const { productId, id } = useParams();
+  const currentProductId = productId ?? id;
  
   const disc = product?.originalPrice ? Math.round((1 - product?.price / product?.originalPrice) * 100) : 0;
 
@@ -85,7 +86,7 @@ export default function ProductDetail() {
   ];
 
   const getProductData = () =>{
-    fetch(`http://localhost:3001/api/products/${productId}`)
+    fetch(`http://localhost:3001/api/products/${currentProductId}`)
      .then(res => res.json())
      .then(data => {
       const p = data?.data;
@@ -101,7 +102,7 @@ export default function ProductDetail() {
       .then(r => r.json())
       .then(res => setRecommendations(Array.isArray(res.data) ? res.data : []))
       .catch(() => setRecommendations([]));
-  },[productId])
+  },[currentProductId])
 
   return (
     !product || Object.keys(product).length === 0 ? <ProductDetailSkeleton /> :
@@ -280,7 +281,7 @@ export default function ProductDetail() {
         </div>
 
         {/* Reviews */}
-        <ReviewsSection productId={productId} />
+        <ReviewsSection productId={currentProductId} />
 
         {/* FAQ */}
         <div className="mb-16">
@@ -305,17 +306,17 @@ export default function ProductDetail() {
         </div>
 
         {/* Related Products */}
-        {recommendations.filter(p => p._id !== productId).length > 0 && (
+        {recommendations.filter(p => p._id !== currentProductId).length > 0 && (
           <div>
             <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-3xl font-bold mb-8">You May Also Like</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
               {recommendations
-                .filter(p => p._id !== productId)
+                .filter(p => p._id !== currentProductId)
                 .slice(0, 3)
                 .map(p => (
                   <div
                     key={p._id}
-                    onClick={() => navigate(`/product/${p._id}`)}
+                    onClick={() => navigate(`/category/${p.category}/${p._id}`)}
                     className="group bg-white rounded-2xl overflow-hidden border hover:shadow-lg transition-shadow cursor-pointer"
                     style={{ borderColor: "#f0e4d8" }}
                   >
