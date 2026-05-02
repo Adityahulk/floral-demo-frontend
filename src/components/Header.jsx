@@ -46,7 +46,7 @@ export default function Header({ cartCount, wishCount, onCartOpen }) {
           </div>
         </div>
         {search&&<div className="pb-3"><div className="relative"><Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"/><input autoFocus type="text" placeholder="Search flowers, bouquets..." className="w-full pl-9 pr-4 py-2 rounded-full border text-sm outline-none" style={{borderColor:"#e8d5c4"}}/></div></div>}
-        {open&&<div className="lg:hidden pb-3 border-t" style={{borderColor:"#e8d5c4"}}>{links.map(l=><a key={l} href="#" style={{color:"#5c4033"}} className="block py-2 px-2 text-sm font-medium border-b" >{l}</a>)}</div>}
+        {open&&<div className="lg:hidden pb-3 border-t" style={{borderColor:"#e8d5c4"}}>{links.map(l=><p key={l.path} onClick={()=>{navigate(l.path);setOpen(false);}} style={{color:"#5c4033"}} className="block py-2 px-2 text-sm font-medium border-b cursor-pointer">{l.title}</p>)}</div>}
       </div>
     </header>
   );
