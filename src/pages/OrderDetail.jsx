@@ -37,7 +37,7 @@ function Section({ title, icon, children }) {
         </div>
         <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold">{title}</h2>
       </div>
-      <div className="p-6">{children}</div>
+      <div className="p-4 sm:p-6">{children}</div>
     </div>
   );
 }
@@ -121,18 +121,18 @@ export default function OrderDetail() {
         { id: 4, name: `#${shortId}`,   path: `/${id}` },
       ]} />
 
-      <div className="max-w-7xl mx-auto px-4 py-10">
+      <div className="max-w-7xl mx-auto px-4 py-6 sm:py-10">
 
         <button onClick={() => window.history.back()}
-          className="flex items-center gap-2 mb-6 text-sm font-medium hover:opacity-70"
+          className="flex items-center gap-2 mb-5 text-sm font-medium hover:opacity-70"
           style={{ color:"#c97d5b" }}>
           <ArrowLeft size={16}/> Back to Orders
         </button>
 
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-6">
           <div>
-            <div className="flex items-center gap-3 flex-wrap">
-              <h1 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-3xl font-bold">Order Details</h1>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl sm:text-3xl font-bold">Order Details</h1>
               <span className="text-xs font-bold px-3 py-1 rounded-full"
                 style={{ background: s.bg, color: s.color }}>
                 ● {s.label}
@@ -185,15 +185,21 @@ export default function OrderDetail() {
                   const price = (p && p.price)   ? p.price : 0;
                   return (
                     <div key={i}>
-                      {i > 0 && <div className="border-t mb-5" style={{ borderColor:"#f0e4d8" }} />}
-                      <div className="flex gap-4">
+                      {i > 0 && <div className="border-t mb-4" style={{ borderColor:"#f0e4d8" }} />}
+                      <div className="flex gap-3">
                         {img
-                          ? <img src={img} alt={name} className="w-20 h-20 object-cover rounded-2xl shrink-0" />
-                          : <div className="w-20 h-20 rounded-2xl shrink-0 flex items-center justify-center text-3xl" style={{ background:"#f5ede5" }}>🌸</div>
+                          ? <img src={img} alt={name} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-2xl shrink-0" />
+                          : <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl shrink-0 flex items-center justify-center text-2xl" style={{ background:"#f5ede5" }}>🌸</div>
                         }
                         <div className="flex-1 min-w-0">
-                          <p style={{ color:"#3a2416" }} className="font-bold truncate">{name}</p>
-                          <div className="flex flex-wrap gap-2 mt-1">
+                          <div className="flex items-start justify-between gap-2">
+                            <p style={{ color:"#3a2416" }} className="font-bold leading-snug">{name}</p>
+                            {price > 0 && (
+                              <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }}
+                                className="font-bold shrink-0 text-sm sm:text-base">{fmt(price * item.quantity)}</p>
+                            )}
+                          </div>
+                          <div className="flex flex-wrap gap-1.5 mt-1">
                             {item.size && (
                               <span style={{ background:"#f5ede5", color:"#9c7a62" }}
                                 className="text-xs px-2 py-0.5 rounded-full">{item.size}</span>
@@ -205,10 +211,6 @@ export default function OrderDetail() {
                           </div>
                           <p style={{ color:"#9c7a62" }} className="text-xs mt-1">Qty: {item.quantity}</p>
                         </div>
-                        {price > 0 && (
-                          <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }}
-                            className="font-bold shrink-0">{fmt(price * item.quantity)}</p>
-                        )}
                       </div>
                     </div>
                   );

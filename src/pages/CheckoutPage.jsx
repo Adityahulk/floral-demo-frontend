@@ -16,23 +16,23 @@ const STEPS = ["Delivery", "Payment", "Confirmation"];
 
 function StepBar({ step }) {
   return (
-    <div className="flex items-center justify-center gap-0 mb-10">
+    <div className="flex items-center justify-center gap-0 mb-6 sm:mb-10">
       {STEPS.map((s, i) => (
         <div key={s} className="flex items-center">
           <div className="flex flex-col items-center">
-            <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all"
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all"
               style={i < step
                 ? { background: "#22c55e", borderColor: "#22c55e", color: "white" }
                 : i === step
                   ? { background: "#c97d5b", borderColor: "#c97d5b", color: "white" }
                   : { background: "white", borderColor: "#e8d5c4", color: "#9c7a62" }}>
-              {i < step ? <Check size={16} /> : i + 1}
+              {i < step ? <Check size={14} /> : i + 1}
             </div>
             <p className="text-xs mt-1 font-medium"
               style={{ color: i === step ? "#c97d5b" : i < step ? "#22c55e" : "#9c7a62" }}>{s}</p>
           </div>
           {i < STEPS.length - 1 && (
-            <div className="w-20 sm:w-32 h-0.5 mx-2 mb-5"
+            <div className="w-10 sm:w-24 h-0.5 mx-1 sm:mx-2 mb-5"
               style={{ background: i < step ? "#22c55e" : "#e8d5c4" }} />
           )}
         </div>
@@ -74,7 +74,7 @@ function OrderSummary({ items, coupon, setCoupon, couponApplied, onApplyCoupon, 
                 </Link>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <Link to={`/product/${item.product}`} style={{ color: "#3a2416" }} className="text-sm font-semibold truncate hover:underline">{item.name}</Link>
+                    <Link to={`/product/${item.product}`} style={{ color: "#3a2416" }} className="text-sm font-semibold leading-snug hover:underline">{item.name}</Link>
                     <button onClick={() => onRemove(item.key)} className="shrink-0 hover:opacity-70 transition-opacity mt-0.5">
                       <Trash2 size={13} style={{ color: "#dc2626" }} />
                     </button>
@@ -234,12 +234,12 @@ function PaymentForm({ method, setMethod }) {
       label: "Pay Online",
       sub: "Card, UPI, Netbanking, Wallets — powered by Razorpay",
     },
-    {
-      id: "cod",
-      icon: "🚚",
-      label: "Cash on Delivery",
-      sub: "Pay when your flowers arrive",
-    },
+    // {
+    //   id: "cod",
+    //   icon: "🚚",
+    //   label: "Cash on Delivery",
+    //   sub: "Pay when your flowers arrive",
+    // },
   ];
 
   return (
@@ -306,12 +306,12 @@ function Confirmation({ orderId, form }) {
         <p style={{ color: "#7a5c4a" }} className="text-sm">{form.city}{form.state ? `, ${form.state}` : ""} {form.pincode}</p>
       </div>
 
-      <div className="flex gap-4 justify-center">
-        <Link to="/orders" style={{ background: "#c97d5b" }} className="text-white px-7 py-3 rounded-full font-bold hover:opacity-90">
+      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <Link to="/orders" style={{ background: "#c97d5b" }} className="text-white px-7 py-3 rounded-full font-bold hover:opacity-90 text-center">
           View Orders
         </Link>
         <Link to="/" style={{ border: "2px solid #c97d5b", color: "#c97d5b" }}
-          className="px-7 py-3 rounded-full font-bold hover:opacity-70">
+          className="px-7 py-3 rounded-full font-bold hover:opacity-70 text-center">
           Continue Shopping
         </Link>
       </div>
@@ -496,7 +496,7 @@ export default function CheckoutPage() {
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", background: "#fdf8f3", minHeight: "100vh" }}>
-      <div className="max-w-6xl mx-auto px-4 py-10">
+      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-10">
 {/* 
         {step < 2 && (
           <button onClick={() => step > 0 ? setStep(s => s - 1) : window.history.back()}
@@ -513,9 +513,9 @@ export default function CheckoutPage() {
             <Confirmation orderId={orderId} form={form} />
           </div>
         ) : (
-          <div className="grid lg:grid-cols-[1fr_400px] gap-8 items-start">
+          <div className="grid lg:grid-cols-[1fr_400px] gap-6 items-start">
 
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border" style={{ borderColor: "#e8d5c4" }}>
+            <div className="order-2 lg:order-1 bg-white rounded-3xl p-5 sm:p-8 border" style={{ borderColor: "#e8d5c4" }}>
               {step === 0
                 ? <DeliveryForm data={form} onChange={onChange} touched={touched} />
                 : <PaymentForm method={method} setMethod={setMethod} />
@@ -531,7 +531,7 @@ export default function CheckoutPage() {
                   : placeOrder
                 }
                 disabled={placing}
-                className="w-full mt-8 py-4 rounded-full font-bold text-white text-base flex items-center justify-center gap-2 transition-all hover:opacity-90 hover:-translate-y-0.5 disabled:opacity-60"
+                className="w-full mt-6 py-4 rounded-full font-bold text-white text-base flex items-center justify-center gap-2 transition-all hover:opacity-90 hover:-translate-y-0.5 disabled:opacity-60"
                 style={{ background: "#c97d5b" }}>
                 {step === 0
                   ? <><Truck size={18} /> Continue to Payment</>
@@ -542,7 +542,7 @@ export default function CheckoutPage() {
               </button>
             </div>
 
-            <div className="lg:sticky lg:top-6">
+            <div className="order-1 lg:order-2 lg:sticky lg:top-6">
               <OrderSummary
                 items={cart}
                 coupon={coupon} setCoupon={setCoupon}
