@@ -287,6 +287,36 @@ function OrdersTab() {
 
 const AUTH_API = "http://localhost:3001/api/auth";
 
+function SecurityErrorBox({ error }) {
+  if (!error) return null;
+  return (
+    <div className="flex items-start gap-2 px-4 py-3 rounded-2xl text-sm"
+      style={{ background:"#fee2e2", color:"#dc2626", border:"1px solid #fecaca" }}>
+      <span className="mt-0.5">⚠️</span><span>{error}</span>
+    </div>
+  );
+}
+
+function SecurityPwInput({ label, value, onChange, show, onToggle, onClearError }) {
+  return (
+    <div>
+      <label style={{ color:"#4a3728" }} className="block text-sm font-semibold mb-1.5">{label}</label>
+      <div className="relative">
+        <input type={show ? "text" : "password"} value={value}
+          onChange={e => { onChange(e.target.value); onClearError(); }}
+          placeholder="••••••••"
+          className="w-full px-4 py-3 pr-11 rounded-xl border text-sm outline-none"
+          style={{ borderColor:"#e8d5c4", background:"#fdf8f3", color:"#3a2416" }} />
+        <button type="button" onClick={onToggle}
+          className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-60"
+          style={{ color:"#9c7a62" }}>
+          {show ? <EyeOff size={16}/> : <Eye size={16}/>}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function SecurityTab({ email }) {
   const [step,        setStep]        = useState("send"); // "send" | "otp" | "password" | "done"
   const [otpToken,    setOtpToken]    = useState("");
@@ -360,36 +390,6 @@ function SecurityTab({ email }) {
     setOtp(""); setNewPass(""); setConfirm(""); setError(null);
   }
 
-  function ErrorBox() {
-    if (!error) return null;
-    return (
-      <div className="flex items-start gap-2 px-4 py-3 rounded-2xl text-sm"
-        style={{ background:"#fee2e2", color:"#dc2626", border:"1px solid #fecaca" }}>
-        <span className="mt-0.5">⚠️</span><span>{error}</span>
-      </div>
-    );
-  }
-
-  function PwInput({ label, value, onChange, show, onToggle }) {
-    return (
-      <div>
-        <label style={{ color:"#4a3728" }} className="block text-sm font-semibold mb-1.5">{label}</label>
-        <div className="relative">
-          <input type={show ? "text" : "password"} value={value}
-            onChange={e => { onChange(e.target.value); setError(null); }}
-            placeholder="••••••••"
-            className="w-full px-4 py-3 pr-11 rounded-xl border text-sm outline-none"
-            style={{ borderColor:"#e8d5c4", background:"#fdf8f3", color:"#3a2416" }} />
-          <button type="button" onClick={onToggle}
-            className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-60"
-            style={{ color:"#9c7a62" }}>
-            {show ? <EyeOff size={16}/> : <Eye size={16}/>}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   const stepLabel = { send:"Verify Identity", otp:"Enter OTP", password:"New Password" }[step] || "";
 
   return (
@@ -425,7 +425,7 @@ function SecurityTab({ email }) {
               <p style={{ color:"#9c7a62" }} className="text-xs mb-1">OTP will be sent to</p>
               <p style={{ color:"#3a2416" }} className="font-semibold text-sm">{email || "your registered email"}</p>
             </div>
-            <ErrorBox />
+            <SecurityErrorBox error={error} />
             <button onClick={handleSendOtp} disabled={loading}
               style={{ background:"#c97d5b" }}
               className="w-full py-3 rounded-full text-white font-bold hover:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2">
@@ -461,7 +461,7 @@ function SecurityTab({ email }) {
                 Resend OTP
               </button>
             </p>
-            <ErrorBox />
+            <SecurityErrorBox error={error} />
             <div className="flex gap-3">
               <button onClick={() => { setStep("send"); setError(null); }}
                 className="flex-1 py-3 rounded-full font-bold text-sm border hover:opacity-70"
@@ -483,11 +483,11 @@ function SecurityTab({ email }) {
         {/* Step 3: New Password */}
         {step === "password" && (
           <>
-            <PwInput label="New Password" value={newPass} onChange={setNewPass}
-              show={showPass} onToggle={() => setShowPass(s => !s)} />
-            <PwInput label="Confirm New Password" value={confirm} onChange={setConfirm}
-              show={showConfirm} onToggle={() => setShowConfirm(s => !s)} />
-            <ErrorBox />
+            <SecurityPwInput label="New Password" value={newPass} onChange={setNewPass}
+              show={showPass} onToggle={() => setShowPass(s => !s)} onClearError={() => setError(null)} />
+            <SecurityPwInput label="Confirm New Password" value={confirm} onChange={setConfirm}
+              show={showConfirm} onToggle={() => setShowConfirm(s => !s)} onClearError={() => setError(null)} />
+            <SecurityErrorBox error={error} />
             <div className="flex gap-3">
               <button onClick={() => { setStep("otp"); setError(null); }}
                 className="flex-1 py-3 rounded-full font-bold text-sm border hover:opacity-70"
