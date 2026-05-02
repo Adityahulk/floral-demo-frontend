@@ -4,13 +4,25 @@ import {
   ToggleLeft, ToggleRight, RefreshCw, LayoutGrid, List,
 } from "lucide-react";
 import AddProductForm from "../AddProductForm";
+import { authFetch } from "../../../utils/auth";
 import { BASE } from "./shared";
 
 async function fetchAllProducts() {
-  const r = await fetch(`${BASE}/api/products`);
+  const r = await authFetch(`${BASE}/api/products/admin/all`);
   if (!r.ok) throw new Error("Failed to fetch products");
   const json = await r.json();
   return Array.isArray(json) ? json : (json.data ?? json.products ?? []);
+}
+
+async function fetchProtectedIds() {
+  const [pickRes, recRes] = await Promise.all([
+    fetch(`${BASE}/api/todayspick`).then(r => r.json()).catch(() => ({})),
+    fetch(`${BASE}/api/recommendations`).then(r => r.json()).catch(() => ({})),
+  ]);
+  const ids = new Set();
+  if (pickRes?.data?._id) ids.add(pickRes.data._id);
+  (recRes?.data ?? []).forEach(p => ids.add(p._id));
+  return ids;
 }
 
 export default function ProductsTab({ onEdit }) {
@@ -24,10 +36,17 @@ export default function ProductsTab({ onEdit }) {
   const [deleting,      setDeleting]      = useState(false);
   const [toggling,      setToggling]      = useState(null);
   const [view,          setView]          = useState("table");
+  const [protectedIds,  setProtectedIds]  = useState(new Set());
+  const [toast,         setToast]         = useState(null);
+
+  function showToast(msg) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 4000);
+  }
 
   useEffect(() => {
-    fetchAllProducts()
-      .then(list => { setProducts(list); setLoading(false); })
+    Promise.all([fetchAllProducts(), fetchProtectedIds()])
+      .then(([list, ids]) => { setProducts(list); setProtectedIds(ids); setLoading(false); })
       .catch(e => { setError(e.message); setLoading(false); });
   }, []);
 
@@ -39,8 +58,8 @@ export default function ProductsTab({ onEdit }) {
   function refresh() {
     setLoading(true);
     setError(null);
-    fetchAllProducts()
-      .then(list => { setProducts(list); setLoading(false); })
+    Promise.all([fetchAllProducts(), fetchProtectedIds()])
+      .then(([list, ids]) => { setProducts(list); setProtectedIds(ids); setLoading(false); })
       .catch(e => { setError(e.message); setLoading(false); });
   }
 
@@ -59,6 +78,11 @@ export default function ProductsTab({ onEdit }) {
   }
 
   async function handleToggleActive(p) {
+    const goingInactive = p.active !== false;
+    if (goingInactive && protectedIds.has(p._id)) {
+      showToast("⚠️ This product is in Today's Pick or Recommendations. Remove it from there first before deactivating.");
+      return;
+    }
     setToggling(p._id);
     try {
       const res = await fetch(`${BASE}/api/products/${p._id}`, {
@@ -69,7 +93,7 @@ export default function ProductsTab({ onEdit }) {
       if (!res.ok) throw new Error("Update failed");
       setProducts(prev => prev.map(prod => prod._id === p._id ? { ...prod, active: !prod.active } : prod));
     } catch (e) {
-      alert(e.message);
+      showToast("Failed to update product status.");
     } finally {
       setToggling(null);
     }
@@ -81,6 +105,16 @@ export default function ProductsTab({ onEdit }) {
 
   return (
     <div className="space-y-5">
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 max-w-sm px-5 py-3.5 rounded-2xl shadow-xl text-sm font-medium flex items-start gap-3"
+          style={{ background:"#4a3728", color:"#f5e6d3" }}>
+          <span className="leading-snug">{toast}</span>
+          <button onClick={() => setToast(null)} className="shrink-0 opacity-60 hover:opacity-100 mt-0.5 text-lg leading-none">×</button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
