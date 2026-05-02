@@ -11,11 +11,8 @@ const QUICK_LINKS = [
 ];
 
 const SUPPORT_LINKS = [
-  { label: "Track Order",   to: "/orders" },
-  { label: "Contact Us",    to: "/contact" },
-  { label: "FAQ",           to: "/contact" },
-  { label: "Shipping Info", to: "/contact" },
-  { label: "Returns",       to: "/contact" },
+  { label: "Track Order", to: "/orders"  },
+  { label: "Contact Us",  to: "/contact" },
 ];
 
 const SOCIAL = [
