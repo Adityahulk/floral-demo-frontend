@@ -1,7 +1,9 @@
 import { ArrowRight } from "lucide-react";
 import { fmt } from "../constants/StaticVariables";
+import { useNavigate } from "react-router-dom";
 
 export default function Hero({ todaysPick = null }) {
+  const navigate = useNavigate();
   return (
     <section style={{ background: "#fdf8f3" }} className="overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
@@ -25,13 +27,16 @@ export default function Hero({ todaysPick = null }) {
               Handcrafted bouquets & floral arrangements delivered fresh to your doorstep. Because every moment deserves beauty.
             </p>
             <div className="flex flex-wrap gap-4 mb-10">
-              <a
-                href="#shop"
+              <button
+                onClick={() => todaysPick?.category
+                  ? navigate(`/category/${todaysPick.category}/${todaysPick._id}`)
+                  : navigate("/products")
+                }
                 style={{ background: "#c97d5b" }}
                 className="inline-flex items-center gap-2 text-white px-7 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity"
               >
                 Shop Now <ArrowRight size={16} />
-              </a>
+              </button>
               <a
                 href="#collections"
                 style={{ border: "2px solid #c97d5b", color: "#c97d5b" }}
