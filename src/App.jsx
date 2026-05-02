@@ -103,14 +103,6 @@ export default function App() {
             }
           />
           <Route
-            path="/profile/orders"
-            element={
-              <ProtectedRoute>
-                <ProfilePage initialTab="orders" />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/password"
             element={
               <ProtectedRoute>
@@ -130,7 +122,7 @@ export default function App() {
             path="/orders"
             element={
               <ProtectedRoute>
-                <OrdersPage />
+                <ProfilePage initialTab="orders" />
               </ProtectedRoute>
             }
           />

@@ -20,7 +20,7 @@ const STATUS_STYLE = {
 
 const MENU = [
   { id:"profile",  path:"/profile",       icon:<User size={18}/>,    label:"My Profile"    },
-  { id:"orders",   path:"/profile/orders", icon:<Package size={18}/>,  label:"My Orders"     },
+  { id:"orders",   path:"/orders",         icon:<Package size={18}/>,  label:"My Orders"     },
   { id:"security", path:"/password",      icon:<Lock size={18}/>,     label:"Password"      },
   { id:"notif",    path:"/notifications", icon:<Bell size={18}/>,     label:"Notifications" },
 ];
@@ -217,11 +217,8 @@ function OrdersTab() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-2">
+      <div className="mb-2">
         <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold">My Orders</h2>
-        <Link to="/orders" style={{ color:"#c97d5b" }} className="text-sm font-semibold hover:opacity-70 flex items-center gap-1">
-          View All <ChevronRight size={14}/>
-        </Link>
       </div>
       <p style={{ color:"#9c7a62" }} className="text-sm mb-8">Your recent orders</p>
 
