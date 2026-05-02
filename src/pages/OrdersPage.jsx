@@ -4,9 +4,8 @@ import {
   ChevronDown, ChevronUp, Search, Filter,
   Star, MapPin, Phone, ArrowLeft, MessageCircle
 } from "lucide-react";
-import { authFetch } from "../utils/auth";
-
-const BASE = "http://localhost:3001";
+import { api } from "../api/client";
+import { API } from "../api/endpoints";
 
 const STATUS_CONFIG = {
   pending:    { bg:"#dbeafe", color:"#2563eb", icon:<Clock size={13}/>, label:"Pending"    },
@@ -41,9 +40,8 @@ function OrderCard({ order, onCancel }) {
     if (!window.confirm("Cancel this order?")) return;
     setCancelling(true);
     try {
-      const res = await authFetch(`${BASE}/api/orders/${order._id}/cancel`, { method: "PATCH" });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to cancel");
+      const data = await api(API.orders.cancel(order._id), { method: "PATCH" });
+      if (!data.success) throw new Error(data.message || "Failed to cancel");
       onCancel(order._id);
     } catch (err) {
       alert(err.message);
@@ -157,8 +155,7 @@ export default function OrdersPage() {
   const [search,  setSearch]  = useState("");
 
   useEffect(() => {
-    authFetch(`${BASE}/api/orders/user`)
-      .then(r => r.json())
+    api(API.orders.userOrders)
       .then(data => {
         setOrders(data.data || data.orders || []);
         setLoading(false);

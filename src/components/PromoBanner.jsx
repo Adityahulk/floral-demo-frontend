@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-
-const BASE = "http://localhost:3001";
+import { api } from "../api/client";
+import { API } from "../api/endpoints";
 
 export default function PromoBanner() {
   const navigate = useNavigate();
@@ -11,8 +11,7 @@ export default function PromoBanner() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`${BASE}/api/banners`, { signal: controller.signal })
-      .then(r => r.json())
+    api(API.banners.get, { signal: controller.signal })
       .then(res => setBanners(Array.isArray(res.data) ? res.data : []))
       .catch(err => { if (err.name !== "AbortError") setBanners([]); })
       .finally(() => setLoading(false));

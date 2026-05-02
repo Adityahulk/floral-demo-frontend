@@ -13,7 +13,7 @@ export default function Hero({ todaysPick = null }) {
               style={{ background: "#f5e6d3", color: "#c97d5b" }}
               className="inline-block text-xs uppercase tracking-widest font-semibold px-3 py-1 rounded-full mb-5"
             >
-              ✨ New Collection 2025
+              ✨ New Collection {new Date().getFullYear()}
             </span>
             <h1
               style={{ fontFamily: "Georgia,serif", color: "#3a2416" }}

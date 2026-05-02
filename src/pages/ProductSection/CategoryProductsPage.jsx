@@ -12,6 +12,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CategoryPageSkeleton from "./ProductSkeletons/CategoryPageSkeleton";
 import Breadcrumb from "../../components/Breadcrumb";
 import { useCart } from "../../context/CartContext";
+import { api } from "../../api/client";
+import { API } from "../../api/endpoints";
 const ALL_PRODUCTS = [
   { id:1,  cat:"bouquets",     
     name:"Rose Bliss Bouquet",         
@@ -116,8 +118,7 @@ export default function CategoryProductsPage() {
     });
 
   const getProducts = (cat_id) => {
-    fetch(`http://localhost:3001/api/products/category/${cat_id}`)
-      .then(res => res.json())
+    api(API.products.byCategory(cat_id))
       .then(data => { setProducts(data?.data || []); setLoading(false); })
       .catch(() => setLoading(false));
   };
@@ -127,8 +128,7 @@ export default function CategoryProductsPage() {
       setCategory(location.state.data);
       getProducts(categoryId);
     } else {
-      fetch(`http://localhost:3001/api/categories/${categoryId}`)
-        .then(res => res.json())
+      api(API.categories.detail(categoryId))
         .then(data => {
           if (data?.data) { setCategory(data.data); getProducts(categoryId); }
           else setLoading(false);

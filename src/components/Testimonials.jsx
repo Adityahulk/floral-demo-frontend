@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
-
-const BASE = "http://localhost:3001";
+import { api } from "../api/client";
+import { API } from "../api/endpoints";
 
 function Stars({ n, size = 14 }) {
   return (
@@ -19,32 +19,24 @@ export default function Testimonials() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Fetch all products
-    fetch(`${BASE}/api/products`)
-      .then(r => r.json())
+    api(API.products.list)
       .then(data => {
         const allProducts = Array.isArray(data) ? data : (data.data ?? data.products ?? []);
 
-        // 2. Pick products that have at least 1 review, sorted by most reviewed
         const withReviews = allProducts
           .filter(p => (p.rating?.total ?? 0) > 0)
           .sort((a, b) => (b.rating?.total ?? 0) - (a.rating?.total ?? 0))
-          .slice(0, 4); // top 4 most-reviewed products
+          .slice(0, 4);
 
         if (withReviews.length === 0) {
           setLoading(false);
           return;
         }
 
-        // 3. Fetch reviews for each product in parallel
         return Promise.all(
           withReviews.map(p =>
-            fetch(`${BASE}/api/products/${p._id}/reviews`)
-              .then(r => r.json())
-              .then(d => {
-                const list = d.reviews ?? [];
-                return list;
-              })
+            api(API.reviews.list(p._id))
+              .then(d => d.reviews ?? [])
               .catch(() => [])
           )
         ).then(results => {

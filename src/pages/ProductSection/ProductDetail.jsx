@@ -8,6 +8,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import ProductDetailSkeleton from "./ProductSkeletons/ProductDetailSkeleton";
 import { useCart } from "../../context/CartContext";
 import ReviewsSection from "./ReviewsSection";
+import { api } from "../../api/client";
+import { API } from "../../api/endpoints";
 
 
 const PRODUCT = {
@@ -93,29 +95,26 @@ export default function ProductDetail() {
     { q:"Is gift wrapping included?",          a:"All bouquets come beautifully wrapped. You can also add a premium gift box at checkout." },
   ];
 
-  const getProductData = () =>{
-    fetch(`http://localhost:3001/api/products/${currentProductId}`)
-     .then(res => res.json())
-     .then(data => {
-      const p = data?.data;
-      setProduct(p);
-      const firstColor = p?.colors?.[0];
-      setColor(Array.isArray(firstColor) ? firstColor[0] : (firstColor || ""));
-      setSize(p?.sizes?.[0] || "");
-     })
+  const getProductData = () => {
+    api(API.products.detail(currentProductId))
+      .then(data => {
+        const p = data?.data;
+        setProduct(p);
+        const firstColor = p?.colors?.[0];
+        setColor(Array.isArray(firstColor) ? firstColor[0] : (firstColor || ""));
+        setSize(p?.sizes?.[0] || "");
+      });
   };
-  useEffect(()=>{
+  useEffect(() => {
     getProductData();
     if (categoryId) {
-      fetch(`http://localhost:3001/api/categories/${categoryId}`)
-        .then(r => r.json())
-        .then(data => setCategoryName(data?.data?.name || ''));
+      api(API.categories.detail(categoryId))
+        .then(data => setCategoryName(data?.data?.name || ""));
     }
-    fetch("http://localhost:3001/api/recommendations")
-      .then(r => r.json())
+    api(API.recommendations.get)
       .then(res => setRecommendations(Array.isArray(res.data) ? res.data : []))
       .catch(() => setRecommendations([]));
-  },[currentProductId])
+  }, [currentProductId]);
 
   return (
     !product || Object.keys(product).length === 0 ? <ProductDetailSkeleton /> :

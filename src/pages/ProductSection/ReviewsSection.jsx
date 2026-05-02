@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
-import { authFetch, isAuthenticated, isAdmin, getTokenPayload } from "../../utils/auth";
-
-const BASE = "http://localhost:3001";
+import { isAuthenticated, isAdmin, getTokenPayload } from "../../utils/auth";
+import { api } from "../../api/client";
+import { API } from "../../api/endpoints";
 
 function Stars({ n, size = 14 }) {
   return (
@@ -117,8 +117,7 @@ export default function ReviewsSection({ productId }) {
 
   function fetchReviews(showSpinner = false) {
     if (showSpinner) setLoading(true);
-    fetch(`${BASE}/api/products/${productId}/reviews`)
-      .then(r => r.json())
+    api(API.reviews.list(productId))
       .then(d => { setData(d); setLoading(false); })
       .catch(() => setLoading(false));
   }
@@ -126,8 +125,7 @@ export default function ReviewsSection({ productId }) {
   useEffect(() => {
     if (!productId) return;
     const controller = new AbortController();
-    fetch(`${BASE}/api/products/${productId}/reviews`, { signal: controller.signal })
-      .then(r => r.json())
+    api(API.reviews.list(productId), { signal: controller.signal })
       .then(d => { setData(d); setLoading(false); })
       .catch(err => { if (err.name !== "AbortError") setLoading(false); });
     return () => controller.abort();
@@ -170,15 +168,12 @@ export default function ReviewsSection({ productId }) {
     setSubmitting(true);
     setError("");
     try {
-      const url = editingId
-        ? `${BASE}/api/reviews/${editingId}`
-        : `${BASE}/api/products/${productId}/reviews`;
-      const res = await authFetch(url, {
+      const endpoint = editingId ? API.reviews.update(editingId) : API.reviews.create(productId);
+      const json = await api(endpoint, {
         method: editingId ? "PUT" : "POST",
-        body: JSON.stringify({ rating, comment }),
+        body: { rating, comment },
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.message || "Submission failed");
+      if (!json.success) throw new Error(json.message || "Submission failed");
       fetchReviews(true);
       setShowForm(false);
       setEditingId(null);
@@ -193,8 +188,8 @@ export default function ReviewsSection({ productId }) {
     if (!window.confirm("Delete this review?")) return;
     setDeletingId(rid);
     try {
-      const res = await authFetch(`${BASE}/api/reviews/${rid}`, { method: "DELETE" });
-      if (!res.ok) { const j = await res.json(); throw new Error(j.message || "Delete failed"); }
+      const res = await api(API.reviews.delete(rid), { method: "DELETE" });
+      if (!res.success) throw new Error(res.message || "Delete failed");
       fetchReviews(true);
     } catch (err) {
       alert(err.message);

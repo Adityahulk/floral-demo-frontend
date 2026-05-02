@@ -3,8 +3,9 @@ import { ShoppingCart, Search, Menu, X, User, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import FloralLogo from "../assets/floral-logo.png";
 import { isAuthenticated, isAdmin } from "../utils/auth";
+import { api } from "../api/client";
+import { API } from "../api/endpoints";
 
-const BASE = "http://localhost:3001";
 const fmt  = n => "₹" + n.toLocaleString("en-IN");
 
 function Stars({ n }) {
@@ -38,8 +39,7 @@ function SearchBar({ onClose }) {
     let cancelled = false;
     Promise.resolve()
       .then(() => { if (!cancelled) setLoading(true); })
-      .then(() => fetch(`${BASE}/api/search?q=${encodeURIComponent(debounced)}&limit=8`))
-      .then(r => r.json())
+      .then(() => api(API.search.query, { params: { q: debounced, limit: 8 } }))
       .then(d => { if (!cancelled) setResults(d.data ?? []); })
       .catch(() => { if (!cancelled) setResults([]); })
       .finally(() => { if (!cancelled) setLoading(false); });

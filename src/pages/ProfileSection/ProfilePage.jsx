@@ -6,9 +6,10 @@ import {
   Package, Heart, LogOut, Camera, Shield,
   ChevronRight, Bell, Lock, Eye, EyeOff, Check
 } from "lucide-react";
-import { authFetch, clearAuth, getTokenPayload, getToken } from "../../utils/auth";
+import { clearAuth, getTokenPayload } from "../../utils/auth";
+import { api } from "../../api/client";
+import { API } from "../../api/endpoints";
 
-const BASE = "http://localhost:3001";
 const fmt  = n => "₹" + n.toLocaleString("en-IN");
 
 const STATUS_STYLE = {
@@ -53,14 +54,8 @@ function ProfileTab({ user, onUpdate }) {
       if (draft.phone) fd.append("contactNumber", draft.phone);
       if (imgFile)     fd.append("image", imgFile);
 
-      const token = getToken();
-      const res = await fetch(`${BASE}/api/auth/profile`, {
-        method:  "PUT",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-        body:    fd,
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Update failed");
+      const data = await api(API.auth.profile, { method: "PUT", body: fd, multipart: true });
+      if (!data.success) throw new Error(data.message || "Update failed");
 
       const updated = data.user || data.data || {};
       onUpdate({
@@ -210,8 +205,7 @@ function OrdersTab() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    authFetch(`${BASE}/api/orders/user`)
-      .then(r => r.json())
+    api(API.orders.userOrders)
       .then(data => { setOrders((data.data || data.orders || []).slice(0, 5)); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
@@ -283,7 +277,6 @@ function OrdersTab() {
 
 // ─── SECURITY TAB ─────────────────────────────────────────────────────────────
 
-const AUTH_API = "http://localhost:3001/api/auth";
 
 function SecurityErrorBox({ error }) {
   if (!error) return null;
@@ -330,12 +323,8 @@ function SecurityTab({ email }) {
   async function handleSendOtp() {
     setLoading(true); setError(null);
     try {
-      const res  = await fetch(`${AUTH_API}/forgot-password`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to send OTP");
+      const data = await api(API.auth.forgotPassword, { method: "POST", body: { email } });
+      if (!data.success) throw new Error(data.message || "Failed to send OTP");
       setOtpToken(data.otpToken);
       setStep("otp");
     } catch (err) {
@@ -349,12 +338,8 @@ function SecurityTab({ email }) {
     if (!/^\d{6}$/.test(otp)) return setError("Enter the 6-digit OTP");
     setLoading(true); setError(null);
     try {
-      const res  = await fetch(`${AUTH_API}/verify-otp`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ otp, otpToken }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "OTP verification failed");
+      const data = await api(API.auth.verifyOtp, { method: "POST", body: { otp, otpToken } });
+      if (!data.success) throw new Error(data.message || "OTP verification failed");
       setResetToken(data.resetToken);
       setStep("password");
     } catch (err) {
@@ -369,12 +354,8 @@ function SecurityTab({ email }) {
     if (newPass !== confirm) return setError("Passwords do not match");
     setLoading(true); setError(null);
     try {
-      const res  = await fetch(`${AUTH_API}/reset-password`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: newPass, resetToken }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Password update failed");
+      const data = await api(API.auth.resetPassword, { method: "POST", body: { password: newPass, resetToken } });
+      if (!data.success) throw new Error(data.message || "Password update failed");
       setStep("done");
     } catch (err) {
       setError(err.message);
@@ -597,8 +578,7 @@ export default function ProfilePage({ initialTab = "profile" }) {
   });
 
   useEffect(() => {
-    authFetch(`${BASE}/api/auth/me`)
-      .then(r => r.json())
+    api(API.auth.me)
       .then(data => {
         const u = data.user || data.data || data;
         if (u && (u.name || u.email)) {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-
-const BASE = "http://localhost:3001";
+import { api } from "../api/client";
+import { API } from "../api/endpoints";
 
 const FALLBACK = {
   messages: [
@@ -17,8 +17,7 @@ export default function AnnouncementBar() {
   const [idx, setIdx]       = useState(0);
 
   useEffect(() => {
-    fetch(`${BASE}/api/announcement`)
-      .then(r => r.json())
+    api(API.announcement.get)
       .then(d => { if (d.success && d.data) setConfig(d.data); })
       .catch(() => {});
   }, []);

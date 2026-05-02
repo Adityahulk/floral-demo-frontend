@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { api } from "../api/client";
+import { API } from "../api/endpoints";
 import {
   Phone, Mail, MapPin, Clock, Send, Check,
   MessageCircle, ChevronDown, ChevronUp
@@ -31,12 +33,7 @@ export default function ContactPage() {
     if (!form.name || !form.email || !form.message) return;
     setLoad(true);
     try {
-      const res = await fetch("http://localhost:3001/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
+      const data = await api(API.contact.submit, { method: "POST", body: form });
       if (data.success) setSent(true);
     } finally {
       setLoad(false);

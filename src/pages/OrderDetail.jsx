@@ -6,9 +6,9 @@ import {
   MapPin, CreditCard, Phone, Copy, CheckCheck,
   AlertCircle
 } from "lucide-react";
-import { authFetch } from "../utils/auth";
+import { api } from "../api/client";
+import { API } from "../api/endpoints";
 
-const BASE = "http://localhost:3001";
 const fmt  = n => "₹" + n.toLocaleString("en-IN");
 
 const STATUS_CONFIG = {
@@ -52,8 +52,7 @@ export default function OrderDetail() {
 
   useEffect(() => {
     if (!id) return;
-    authFetch(`${BASE}/api/orders/${id}`)
-      .then(r => r.json())
+    api(API.orders.detail(id))
       .then(data => {
         setOrder(data.data || data.order || data);
         setLoading(false);
@@ -71,9 +70,8 @@ export default function OrderDetail() {
     if (!window.confirm("Cancel this order?")) return;
     setCancelling(true);
     try {
-      const res  = await authFetch(`${BASE}/api/orders/${order._id}/cancel`, { method: "PATCH" });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to cancel");
+      const data = await api(API.orders.cancel(order._id), { method: "PATCH" });
+      if (!data.success) throw new Error(data.message || "Failed to cancel");
       setOrder(o => ({ ...o, status: "Cancelled" }));
     } catch (err) {
       alert(err.message);

@@ -5,11 +5,12 @@ import {
 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { isAuthenticated, authFetch } from "../utils/auth";
+import { isAuthenticated } from "../utils/auth";
+import { api } from "../api/client";
+import { API } from "../api/endpoints";
 
 const fmt = n => "₹" + n.toLocaleString("en-IN");
 const STEPS = ["Delivery", "Payment", "Confirmation"];
-const BASE = "http://localhost:3001";
 
 // ─── STEP INDICATOR ───────────────────────────────────────────────────────────
 
@@ -387,12 +388,11 @@ export default function CheckoutPage() {
 
     if (method === "cod") {
       try {
-        const res  = await authFetch(`${BASE}/api/orders`, {
+        const data = await api(API.orders.create, {
           method: "POST",
-          body:   JSON.stringify({ items, shippingAddress, paymentMethod: "cod" }),
+          body:   { items, shippingAddress, paymentMethod: "cod" },
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Order failed");
+        if (!data.success) throw new Error(data.message || "Order failed");
         setOrderId(data.orderId || "");
         clearCart();
         setStep(2);
@@ -414,12 +414,11 @@ export default function CheckoutPage() {
 
     let initiateData;
     try {
-      const res  = await authFetch(`${BASE}/api/orders/initiate`, {
+      const data = await api(API.orders.initiate, {
         method: "POST",
-        body:   JSON.stringify({ items }),
+        body:   { items },
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Could not initiate payment");
+      if (!data.success) throw new Error(data.message || "Could not initiate payment");
       initiateData = data;
     } catch (err) {
       setError(err.message || "Could not initiate payment. Please try again.");
@@ -445,18 +444,17 @@ export default function CheckoutPage() {
       theme:     { color: "#c97d5b" },
       handler: async ({ razorpay_payment_id, razorpay_order_id, razorpay_signature }) => {
         try {
-          const res  = await authFetch(`${BASE}/api/orders/confirm`, {
+          const data = await api(API.orders.confirm, {
             method: "POST",
-            body:   JSON.stringify({
+            body: {
               razorpayOrderId:   razorpay_order_id,
               razorpayPaymentId: razorpay_payment_id,
               razorpaySignature: razorpay_signature,
               items,
               shippingAddress,
-            }),
+            },
           });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || "Payment confirmation failed");
+          if (!data.success) throw new Error(data.message || "Payment confirmation failed");
           setOrderId(data.orderId || "");
           clearCart();
           setStep(2);

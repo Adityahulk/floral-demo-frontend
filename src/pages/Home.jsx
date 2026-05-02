@@ -8,8 +8,8 @@ import Categories from "../components/Categories";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import PromoBanner from "../components/PromoBanner";
-
-const BASE = "http://localhost:3001";
+import { api } from "../api/client";
+import { API } from "../api/endpoints";
 
 function FeaturesBar() {
   const items = [
@@ -146,9 +146,9 @@ export default function Home() {
   useEffect(() => {
     const controller = new AbortController();
     Promise.all([
-      fetch(`${BASE}/api/recommendations`, { signal: controller.signal }).then(r => r.json()),
-      fetch(`${BASE}/api/categories`, { signal: controller.signal }).then(r => r.json()),
-      fetch(`${BASE}/api/todayspick`, { signal: controller.signal }).then(r => r.json()),
+      api(API.recommendations.get, { signal: controller.signal }),
+      api(API.categories.list,     { signal: controller.signal }),
+      api(API.todaysPick.get,      { signal: controller.signal }),
     ])
       .then(([recRes, categoriesRes, pickRes]) => {
         setRecommendations(Array.isArray(recRes.data) ? recRes.data : []);
