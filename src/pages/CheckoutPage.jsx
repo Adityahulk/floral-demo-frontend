@@ -355,10 +355,6 @@ export default function CheckoutPage() {
   }
 
   async function placeOrder() {
-    if (!validateDelivery()) {
-      setError("Please fill in all required delivery fields.");
-      return;
-    }
     setError("");
     setPlacing(true);
 
@@ -419,6 +415,12 @@ export default function CheckoutPage() {
     }
 
     const { razorpayOrderId, amount, currency, keyId } = initiateData;
+
+    if (!keyId || !razorpayOrderId) {
+      setError("Payment configuration error. Please refresh and try again.");
+      setPlacing(false);
+      return;
+    }
 
     const options = {
       key:       keyId,
