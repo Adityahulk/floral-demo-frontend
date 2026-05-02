@@ -644,6 +644,8 @@ export default function AddProductForm({ onBack, initialData, onSuccess }) {
     if (!form.description.trim())    e.description = "Description is required";
     if (!form.price)                 e.price       = "Price is required";
     if (isNaN(Number(form.price)))   e.price       = "Enter a valid price";
+    if (form.originalPrice && !isNaN(Number(form.originalPrice)) && Number(form.price) >= Number(form.originalPrice))
+                                     e.originalPrice = "Original price must be greater than selling price";
     if (!form.quantity)              e.quantity    = "Stock quantity is required";
     const uploadedImages = images.filter(i => i.cloudUrl);
     if (uploadedImages.length === 0) e.images      = "Please add at least one image";
@@ -718,11 +720,11 @@ export default function AddProductForm({ onBack, initialData, onSuccess }) {
       <div className="sticky top-0 z-30 border-b" style={{ background:"white", borderColor:"#e8d5c4" }}>
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <button onClick={onBack || (() => window.history.back())}
+            {/* <button onClick={onBack || (() => window.history.back())}
               style={{ background:"#f5ede5", color:"#c97d5b" }}
               className="p-2 rounded-xl hover:opacity-80 transition-opacity">
               <ArrowLeft size={18}/>
-            </button>
+            </button> */}
             <div>
               <h1 style={{ fontFamily:"Georgia,serif", color:"#3a2416" }} className="font-bold text-lg">{isEdit ? "Edit Product" : "Add New Product"}</h1>
               <p style={{ color:"#9c7a62" }} className="text-xs">{isEdit ? "Update the product details below" : "Fill in the details to list a new product"}</p>
@@ -864,20 +866,29 @@ export default function AddProductForm({ onBack, initialData, onSuccess }) {
                 <div>
                   <Label hint="Optional">Original Price (MRP)</Label>
                   <Input value={form.originalPrice} onChange={v => update("originalPrice", v)}
-                    type="number" prefix="₹" placeholder="1599"/>
+                    type="number" prefix="₹" placeholder="1599" error={errors.originalPrice}/>
                 </div>
               </div>
 
-              {/* Discount Preview */}
+              {/* Discount / Price validation feedback */}
               {(() => {
-                const disc = form.price && form.originalPrice
-                  ? Math.round((1 - Number(form.price) / Number(form.originalPrice)) * 100)
-                  : null;
-                return disc && disc > 0 ? (
+                const p  = Number(form.price);
+                const op = Number(form.originalPrice);
+                if (!form.price || !form.originalPrice || isNaN(p) || isNaN(op)) return null;
+                if (p >= op) return (
+                  <div className="flex items-center gap-2 p-3 rounded-xl" style={{ background:"#fee2e2" }}>
+                    <AlertCircle size={14} style={{ color:"#dc2626" }}/>
+                    <p style={{ color:"#b91c1c" }} className="text-sm font-semibold">
+                      Original price must be greater than selling price to show a discount
+                    </p>
+                  </div>
+                );
+                const disc = Math.round((1 - p / op) * 100);
+                return disc > 0 ? (
                   <div className="flex items-center gap-2 p-3 rounded-xl" style={{ background:"#dcfce7" }}>
                     <Check size={14} style={{ color:"#16a34a" }}/>
                     <p style={{ color:"#15803d" }} className="text-sm font-semibold">
-                      Customer saves ₹{(Number(form.originalPrice) - Number(form.price)).toLocaleString("en-IN")} ({disc}% off)
+                      Customer saves ₹{(op - p).toLocaleString("en-IN")} ({disc}% off)
                     </p>
                   </div>
                 ) : null;
