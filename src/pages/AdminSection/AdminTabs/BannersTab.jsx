@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Image, Save } from "lucide-react";
 import { BASE } from "./shared";
+import { authFetch } from "../../../utils/auth";
 
 export default function BannersTab() {
   const [categories, setCategories] = useState([]);
@@ -10,6 +11,7 @@ export default function BannersTab() {
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const successTimerRef = useRef(null);
 
   useEffect(() => {
     Promise.all([
@@ -25,6 +27,10 @@ export default function BannersTab() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    return () => clearTimeout(successTimerRef.current);
+  }, []);
+
   const isDuplicate = banner1 && banner2 && banner1 === banner2;
 
   async function handleSave() {
@@ -37,15 +43,15 @@ export default function BannersTab() {
     setError("");
     setSuccess(false);
     try {
-      const res = await fetch(`${BASE}/api/banners`, {
+      const res = await authFetch(`${BASE}/api/banners`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ banners: [banner1, banner2] }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.message || "Save failed");
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
+      clearTimeout(successTimerRef.current);
+      successTimerRef.current = setTimeout(() => setSuccess(false), 3000);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -87,7 +93,7 @@ export default function BannersTab() {
               </label>
               <select
                 value={value}
-                onChange={e => onChange(e.target.value)}
+                onChange={e => { onChange(e.target.value); setError(""); }}
                 className="w-full px-4 py-2.5 rounded-xl border text-sm outline-none"
                 style={{ borderColor: "#e8d5c4", color: "#3a2416", background: "#fdf8f3" }}
               >
@@ -101,7 +107,7 @@ export default function BannersTab() {
         </div>
 
         {isDuplicate && (
-          <p className="mt-3 text-xs font-medium" style={{ color: "#c97d5b" }}>
+          <p className="mt-3 text-xs font-medium" style={{ color: "#dc2626" }}>
             Please select two different categories
           </p>
         )}
