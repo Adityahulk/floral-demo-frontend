@@ -1,6 +1,8 @@
 import { getToken } from "../utils/auth";
 
-const BASE = import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "http://localhost:3001";
+const BASE = import.meta.env.VITE_API_URL !== undefined
+  ? import.meta.env.VITE_API_URL.replace(/\/$/, "")
+  : "http://localhost:3001";
 
 export async function api(endpoint, { method = "GET", body, params, multipart = false, signal } = {}) {
   let url = BASE + endpoint;
