@@ -3,12 +3,10 @@ import { useState } from "react";
 import {
   Shield, FileText, Cookie, ChevronDown, ChevronUp,
   Mail, Phone, CheckCircle, AlertCircle,
-   RefreshCw, Globe, ChevronRight,
-   Settings
+  RefreshCw, Globe, ChevronRight, Settings
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import PrivacyPolicy from "./PrivacyPolicy";
-import TermsConditions from "./TermsConditions";
+
 // ─── SHARED COMPONENTS ────────────────────────────────────────────────────────
 
 function PageHero({ icon, tag, title, subtitle, updated }) {
@@ -125,71 +123,66 @@ function ContactCard() {
   );
 }
 
-
-
-// ══════════════════════════════════════════════════════════════════════════════
-// COOKIE POLICY
-// ══════════════════════════════════════════════════════════════════════════════
+// ─── COOKIE DATA ──────────────────────────────────────────────────────────────
 
 const COOKIE_TYPES = [
   {
     name:"Essential Cookies",
     icon:"🔒",
     canDisable: false,
-    color:"#16a34a",
     desc:"These cookies are strictly necessary for the website to function and cannot be switched off. They are usually set in response to actions you take, such as logging in or filling in forms.",
     examples:[
-      { name:"session_id",        purpose:"Maintains your login session",                   duration:"Session"  },
-      { name:"cart_token",        purpose:"Remembers your shopping cart contents",           duration:"7 days"   },
-      { name:"csrf_token",        purpose:"Protects against cross-site request forgery",     duration:"Session"  },
-      { name:"cookie_consent",    purpose:"Remembers your cookie preferences",               duration:"1 year"   },
+      { name:"session_id",     purpose:"Maintains your login session",               duration:"Session" },
+      { name:"cart_token",     purpose:"Remembers your shopping cart contents",       duration:"7 days"  },
+      { name:"csrf_token",     purpose:"Protects against cross-site request forgery", duration:"Session" },
+      { name:"cookie_consent", purpose:"Remembers your cookie preferences",           duration:"1 year"  },
     ]
   },
   {
     name:"Analytics Cookies",
     icon:"📊",
     canDisable: true,
-    color:"#2563eb",
     desc:"These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site. All information is aggregated and anonymous.",
     examples:[
-      { name:"_ga",               purpose:"Google Analytics — distinguishes users",          duration:"2 years"  },
-      { name:"_gid",              purpose:"Google Analytics — distinguishes users",          duration:"24 hours" },
-      { name:"_gat",              purpose:"Google Analytics — throttles request rate",        duration:"1 minute" },
+      { name:"_ga",  purpose:"Google Analytics — distinguishes users",       duration:"2 years"  },
+      { name:"_gid", purpose:"Google Analytics — distinguishes users",       duration:"24 hours" },
+      { name:"_gat", purpose:"Google Analytics — throttles request rate",    duration:"1 minute" },
     ]
   },
   {
     name:"Functional Cookies",
     icon:"⚙️",
     canDisable: true,
-    color:"#7c3aed",
-    desc:"These cookies enable the website to provide enhanced functionality and personalisation, such as remembering your preferences and language settings.",
+    desc:"These cookies enable the website to provide enhanced functionality and personalisation, such as remembering your preferences.",
     examples:[
-      { name:"preferred_city",    purpose:"Remembers your selected delivery city",           duration:"30 days"  },
-      { name:"wishlist_id",       purpose:"Persists your wishlist when not logged in",        duration:"90 days"  },
-      { name:"recently_viewed",   purpose:"Tracks recently viewed products",                  duration:"7 days"   },
-    ]
-  },
-  {
-    name:"Marketing Cookies",
-    icon:"📢",
-    canDisable: true,
-    color:"#c97d5b",
-    desc:"These cookies may be set through our site by our advertising partners to build a profile of your interests and show you relevant advertisements on other sites.",
-    examples:[
-      { name:"_fbp",              purpose:"Facebook Pixel — tracks ad conversions",          duration:"90 days"  },
-      { name:"_gcl_au",           purpose:"Google Ads — conversion tracking",                duration:"90 days"  },
+      { name:"recently_viewed", purpose:"Tracks recently viewed products",            duration:"7 days"  },
+      { name:"wishlist_id",     purpose:"Persists your wishlist when not logged in",  duration:"90 days" },
     ]
   },
 ];
 
+// ══════════════════════════════════════════════════════════════════════════════
+// COOKIE POLICY
+// ══════════════════════════════════════════════════════════════════════════════
+
+const PREF_KEYS = { "Analytics Cookies":"analytics", "Functional Cookies":"functional" };
+
+const SAVED_PREFS_KEY = "fs_cookie_prefs";
+
 function CookiePolicyComponent() {
-  const [prefs, setPrefs] = useState({ analytics: true, functional: true, marketing: false });
+  const [prefs, setPrefs] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(SAVED_PREFS_KEY)) || { analytics: true, functional: true }; }
+    catch { return { analytics: true, functional: true }; }
+  });
   const [saved, setSaved] = useState(false);
 
   function toggle(key) { setPrefs(p => ({ ...p, [key]: !p[key] })); setSaved(false); }
-  function savePrefs() { setSaved(true); setTimeout(() => setSaved(false), 3000); }
 
-  const keyMap = { "Analytics Cookies":"analytics", "Functional Cookies":"functional", "Marketing Cookies":"marketing" };
+  function savePrefs() {
+    localStorage.setItem(SAVED_PREFS_KEY, JSON.stringify(prefs));
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  }
 
   return (
     <div>
@@ -223,7 +216,7 @@ function CookiePolicyComponent() {
             )}
             <div className="space-y-4">
               {COOKIE_TYPES.map(ct => {
-                const key = keyMap[ct.name];
+                const key = PREF_KEYS[ct.name];
                 const isOn = ct.canDisable ? (key ? prefs[key] : false) : true;
                 return (
                   <div key={ct.name} className="flex items-start justify-between gap-4 p-4 rounded-2xl border"
@@ -290,10 +283,7 @@ function CookiePolicyComponent() {
           <p>Some cookies on our website are set by third-party services we use. These include:</p>
           <BulletList items={[
             "Google Analytics — website traffic analysis (privacy.google.com)",
-            "Facebook Pixel — advertising and conversion tracking (facebook.com/privacy)",
             "Razorpay — payment processing (razorpay.com/privacy)",
-            "Intercom — customer support chat (intercom.com/terms)",
-            "YouTube — embedded video content (policies.google.com)",
           ]} />
           <p className="mt-3">We do not control these third-party cookies. Please refer to the respective privacy policies of these providers for more information.</p>
         </Section>
@@ -326,32 +316,27 @@ function CookiePolicyComponent() {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// MAIN — Tab switcher
+// MAIN
 // ══════════════════════════════════════════════════════════════════════════════
 
 const TABS = [
-  { id:"/privacy-policy", label:"Privacy Policy",    icon:<Shield size={16}/>,   page:<PrivacyPolicy />   },
-  { id:"/terms-conditions",   label:"Terms of Service",  icon:<FileText size={16}/>, page:<TermsConditions />  },
-  { id:"/cookie-policy", label:"Cookie Policy",     icon:<Cookie size={16}/>,   page:<CookiePolicy />    },
+  { id:"/privacy-policy",   label:"Privacy Policy",   icon:<Shield size={16}/>   },
+  { id:"/terms-conditions", label:"Terms of Service", icon:<FileText size={16}/> },
+  { id:"/cookie-policy",    label:"Cookie Policy",    icon:<Cookie size={16}/>   },
 ];
 
 export default function CookiePolicy() {
-  const active = "/cookie-policy";
   const navigate = useNavigate();
 
   return (
     <div style={{ fontFamily:"system-ui, sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
       <CookiePolicyComponent />
-      {/* Footer Links */}
       <div className="border-t py-8" style={{ borderColor:"#e8d5c4", background:"#f5ede5" }}>
         <div className="max-w-4xl mx-auto px-4 text-center">
           <p style={{ color:"#9c7a62" }} className="text-sm mb-4">Also read our other policies:</p>
           <div className="flex justify-center gap-4 flex-wrap">
-            {TABS.filter(t => t.id !== active).map(t => (
-              <button key={t.id} onClick={() => { 
-                navigate(`/${t.id}`);
-                window.scrollTo({ top:0, behavior:"smooth" });
-             }}
+            {TABS.filter(t => t.id !== "/cookie-policy").map(t => (
+              <button key={t.id} onClick={() => { navigate(t.id); window.scrollTo({ top:0, behavior:"smooth" }); }}
                 className="flex items-center gap-1.5 text-sm font-semibold hover:opacity-70 transition-opacity"
                 style={{ color:"#c97d5b" }}>
                 {t.icon} {t.label} <ChevronRight size={13}/>
