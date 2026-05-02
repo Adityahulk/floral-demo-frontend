@@ -54,8 +54,8 @@ export default function Hero({ todaysPick = null }) {
             <div className="relative w-72 h-80 sm:w-96 sm:h-[28rem]">
               <div style={{ background: "#f5e6d3" }} className="absolute inset-6 rounded-full" />
               <img
-                src="https://flowergiftkorea.com/wp-content/uploads/2016/05/ADB42A7F-D38F-4A75-80DE-6F10E4844B26.jpg"
-                alt="Bouquet"
+                src={todaysPick?.images?.[0] ?? "https://flowergiftkorea.com/wp-content/uploads/2016/05/ADB42A7F-D38F-4A75-80DE-6F10E4844B26.jpg"}
+                alt={todaysPick?.name ?? "Bouquet"}
                 className="relative z-10 w-full h-full object-cover"
                 style={{ borderRadius: "40% 60% 60% 40% / 50% 40% 60% 50%" }}
               />
