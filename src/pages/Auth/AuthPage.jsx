@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Eye, EyeOff, Mail, Lock, User, Phone, Flower } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
 import { setAuth } from "../../utils/auth";
 import FloralLogo from "../../assets/floral-logo.png";
 
@@ -47,7 +47,7 @@ export default function AuthPage() {
   const location   = useLocation();
   const from       = location.state?.from || "/";
 
-  const [mode,      setMode]      = useState("login"); // "login" | "signup"
+  const [mode,      setMode]      = useState("login");
   const [loading,    setLoading]    = useState(false);
   const [apiError,   setApiError]   = useState(null);
   const [apiSuccess, setApiSuccess] = useState(null);
@@ -57,6 +57,19 @@ export default function AuthPage() {
     name: "", email: "", password: "", contactNumber: "",
   });
   const [errors, setErrors] = useState({});
+
+  // ─── FORGOT PASSWORD STATE ────────────────────────────────────────────────
+  const [forgotStep,    setForgotStep]    = useState(null); // null | "email" | "otp" | "password" | "done"
+  const [otpToken,      setOtpToken]      = useState("");
+  const [resetToken,    setResetToken]    = useState("");
+  const [forgotEmail,   setForgotEmail]   = useState("");
+  const [forgotOtp,     setForgotOtp]     = useState("");
+  const [forgotPass,    setForgotPass]    = useState("");
+  const [forgotConfirm, setForgotConfirm] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotError,   setForgotError]   = useState(null);
+  const [showForgotPass,   setShowForgotPass]   = useState(false);
+  const [showForgotConfirm, setShowForgotConfirm] = useState(false);
 
   function set(key, val) {
     setForm(f => ({ ...f, [key]: val }));
@@ -109,7 +122,6 @@ export default function AuthPage() {
       const role  = data.user?.role ?? data.data?.user?.role ?? data.role ?? "user";
 
       if (!token) {
-        // Registration succeeded but no token — show success and switch to login
         setApiSuccess(data.message || "Account created! Please sign in.");
         setTimeout(() => { switchMode("login"); setApiSuccess(null); }, 1800);
         return;
@@ -134,6 +146,77 @@ export default function AuthPage() {
     setForm({ name: "", email: "", password: "", contactNumber: "" });
   }
 
+  // ─── FORGOT PASSWORD HANDLERS ─────────────────────────────────────────────
+
+  function resetForgot() {
+    setForgotStep(null);
+    setOtpToken(""); setResetToken("");
+    setForgotEmail(""); setForgotOtp("");
+    setForgotPass(""); setForgotConfirm("");
+    setForgotError(null);
+  }
+
+  async function handleSendOtp(e) {
+    e?.preventDefault();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(forgotEmail))
+      return setForgotError("Enter a valid email address");
+    setForgotLoading(true); setForgotError(null);
+    try {
+      const res  = await fetch(`${API}/forgot-password`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: forgotEmail }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to send OTP");
+      setOtpToken(data.otpToken);
+      setForgotStep("otp");
+    } catch (err) {
+      setForgotError(err.message);
+    } finally {
+      setForgotLoading(false);
+    }
+  }
+
+  async function handleVerifyOtp(e) {
+    e.preventDefault();
+    if (!/^\d{6}$/.test(forgotOtp)) return setForgotError("Enter the 6-digit OTP");
+    setForgotLoading(true); setForgotError(null);
+    try {
+      const res  = await fetch(`${API}/verify-otp`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ otp: forgotOtp, otpToken }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "OTP verification failed");
+      setResetToken(data.resetToken);
+      setForgotStep("password");
+    } catch (err) {
+      setForgotError(err.message);
+    } finally {
+      setForgotLoading(false);
+    }
+  }
+
+  async function handleResetPassword(e) {
+    e.preventDefault();
+    if (forgotPass.length < 6) return setForgotError("Password must be at least 6 characters");
+    if (forgotPass !== forgotConfirm) return setForgotError("Passwords do not match");
+    setForgotLoading(true); setForgotError(null);
+    try {
+      const res  = await fetch(`${API}/reset-password`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: forgotPass, resetToken }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Password reset failed");
+      setForgotStep("done");
+    } catch (err) {
+      setForgotError(err.message);
+    } finally {
+      setForgotLoading(false);
+    }
+  }
+
   return (
     <div className="min-h-screen flex" style={{ fontFamily: "system-ui, sans-serif", background: "#fdf8f3" }}>
 
@@ -141,7 +224,6 @@ export default function AuthPage() {
       <div className="hidden lg:flex lg:w-5/12 flex-col items-center justify-center p-12 relative overflow-hidden"
         style={{ background: "linear-gradient(145deg, #3a2416 0%, #5c3d2e 60%, #7a5c4a 100%)" }}>
 
-        {/* Decorative circles */}
         <div className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10"
           style={{ background: "#c97d5b", transform: "translate(30%, -30%)" }} />
         <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full opacity-10"
@@ -187,101 +269,321 @@ export default function AuthPage() {
             </span>
           </div>
 
-          {/* Tab toggle */}
-          <div className="flex rounded-2xl p-1 mb-8" style={{ background: "#f0e4d8" }}>
-            {["login", "signup"].map(m => (
-              <button key={m} onClick={() => switchMode(m)}
-                className="flex-1 py-2.5 rounded-xl text-sm font-bold capitalize transition-all"
-                style={mode === m
-                  ? { background: "white", color: "#3a2416", boxShadow: "0 1px 4px rgba(0,0,0,0.1)" }
-                  : { color: "#9c7a62" }}>
-                {m === "login" ? "Sign In" : "Create Account"}
+          {forgotStep !== null ? (
+            /* ── FORGOT PASSWORD STEPS ── */
+            <div>
+              {/* Back link */}
+              <button
+                onClick={() => {
+                  if (forgotStep === "email") resetForgot();
+                  else if (forgotStep === "otp") { setForgotStep("email"); setForgotError(null); }
+                  else if (forgotStep === "password") { setForgotStep("otp"); setForgotError(null); }
+                  else resetForgot();
+                }}
+                className="flex items-center gap-1 text-sm mb-6 hover:opacity-70 transition-opacity"
+                style={{ color: "#c97d5b" }}
+              >
+                ← {forgotStep === "email" ? "Back to Login" : "Back"}
               </button>
-            ))}
-          </div>
 
-          <div className="mb-6">
-            <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold">
-              {mode === "login" ? "Welcome back" : "Join us today"}
-            </h2>
-            <p style={{ color: "#9c7a62" }} className="text-sm mt-1">
-              {mode === "login"
-                ? "Sign in to your account to continue"
-                : "Create your account to get started"}
-            </p>
-          </div>
+              {/* Step: email */}
+              {forgotStep === "email" && (
+                <form onSubmit={handleSendOtp} className="space-y-4">
+                  <div className="mb-6">
+                    <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold">
+                      Forgot Password
+                    </h2>
+                    <p style={{ color: "#9c7a62" }} className="text-sm mt-1">
+                      Enter your email and we'll send you a reset OTP
+                    </p>
+                  </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {mode === "signup" && (
-              <Field label="Full Name" placeholder="Ananya Mehta" value={form.name}
-                onChange={v => set("name", v)} error={errors.name} icon={User} />
-            )}
+                  <Field
+                    label="Email Address"
+                    type="email"
+                    placeholder="you@example.com"
+                    value={forgotEmail}
+                    onChange={v => { setForgotEmail(v); setForgotError(null); }}
+                    icon={Mail}
+                  />
 
-            <Field label="Email Address" type="email" placeholder="you@example.com"
-              value={form.email} onChange={v => set("email", v)}
-              error={errors.email} icon={Mail} />
+                  {forgotError && (
+                    <div className="flex items-start gap-2 p-3 rounded-xl text-sm"
+                      style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca" }}>
+                      <span className="mt-0.5">⚠️</span><span>{forgotError}</span>
+                    </div>
+                  )}
 
-            <Field
-              label="Password"
-              type={showPass ? "text" : "password"}
-              placeholder="Min. 6 characters"
-              value={form.password}
-              onChange={v => set("password", v)}
-              error={errors.password}
-              icon={Lock}
-              rightEl={
-                <button type="button" onClick={() => setShowPass(s => !s)}
-                  className="hover:opacity-70" style={{ color: "#9c7a62" }}>
-                  {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                  <button type="submit" disabled={forgotLoading}
+                    className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 disabled:opacity-60"
+                    style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
+                    {forgotLoading
+                      ? <span className="flex items-center justify-center gap-2">
+                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Sending OTP...
+                        </span>
+                      : "Send OTP"
+                    }
+                  </button>
+                </form>
+              )}
+
+              {/* Step: otp */}
+              {forgotStep === "otp" && (
+                <form onSubmit={handleVerifyOtp} className="space-y-4">
+                  <div className="mb-6">
+                    <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold">
+                      Enter OTP
+                    </h2>
+                    <p style={{ color: "#9c7a62" }} className="text-sm mt-1">
+                      A 6-digit OTP was sent to <strong>{forgotEmail}</strong>
+                    </p>
+                  </div>
+
+                  <Field
+                    label="One-Time Password"
+                    placeholder="Enter 6-digit OTP"
+                    value={forgotOtp}
+                    onChange={v => { setForgotOtp(v.replace(/\D/g, "").slice(0, 6)); setForgotError(null); }}
+                  />
+
+                  <p className="text-sm" style={{ color: "#9c7a62" }}>
+                    Didn't receive it?{" "}
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setForgotOtp(""); setForgotError(null);
+                        await handleSendOtp();
+                      }}
+                      className="font-bold hover:opacity-70"
+                      style={{ color: "#c97d5b" }}
+                    >
+                      Resend OTP
+                    </button>
+                  </p>
+
+                  {forgotError && (
+                    <div className="flex items-start gap-2 p-3 rounded-xl text-sm"
+                      style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca" }}>
+                      <span className="mt-0.5">⚠️</span><span>{forgotError}</span>
+                    </div>
+                  )}
+
+                  <button type="submit" disabled={forgotLoading}
+                    className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 disabled:opacity-60"
+                    style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
+                    {forgotLoading
+                      ? <span className="flex items-center justify-center gap-2">
+                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Verifying...
+                        </span>
+                      : "Verify OTP"
+                    }
+                  </button>
+                </form>
+              )}
+
+              {/* Step: password */}
+              {forgotStep === "password" && (
+                <form onSubmit={handleResetPassword} className="space-y-4">
+                  <div className="mb-6">
+                    <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold">
+                      New Password
+                    </h2>
+                    <p style={{ color: "#9c7a62" }} className="text-sm mt-1">
+                      Choose a strong password for your account
+                    </p>
+                  </div>
+
+                  <Field
+                    label="New Password"
+                    type={showForgotPass ? "text" : "password"}
+                    placeholder="Min. 6 characters"
+                    value={forgotPass}
+                    onChange={v => { setForgotPass(v); setForgotError(null); }}
+                    icon={Lock}
+                    rightEl={
+                      <button type="button" onClick={() => setShowForgotPass(s => !s)}
+                        className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                        {showForgotPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                      </button>
+                    }
+                  />
+
+                  <Field
+                    label="Confirm Password"
+                    type={showForgotConfirm ? "text" : "password"}
+                    placeholder="Re-enter password"
+                    value={forgotConfirm}
+                    onChange={v => { setForgotConfirm(v); setForgotError(null); }}
+                    icon={Lock}
+                    rightEl={
+                      <button type="button" onClick={() => setShowForgotConfirm(s => !s)}
+                        className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                        {showForgotConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
+                      </button>
+                    }
+                  />
+
+                  {forgotError && (
+                    <div className="flex items-start gap-2 p-3 rounded-xl text-sm"
+                      style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca" }}>
+                      <span className="mt-0.5">⚠️</span><span>{forgotError}</span>
+                    </div>
+                  )}
+
+                  <button type="submit" disabled={forgotLoading}
+                    className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 disabled:opacity-60"
+                    style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
+                    {forgotLoading
+                      ? <span className="flex items-center justify-center gap-2">
+                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Resetting...
+                        </span>
+                      : "Reset Password"
+                    }
+                  </button>
+                </form>
+              )}
+
+              {/* Step: done */}
+              {forgotStep === "done" && (
+                <div className="text-center space-y-6">
+                  <div className="flex justify-center">
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl"
+                      style={{ background: "#dcfce7" }}>
+                      ✅
+                    </div>
+                  </div>
+                  <div>
+                    <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold mb-2">
+                      Password Reset!
+                    </h2>
+                    <p style={{ color: "#9c7a62" }} className="text-sm">
+                      Your password has been reset successfully. You can now sign in with your new password.
+                    </p>
+                  </div>
+                  <button
+                    onClick={resetForgot}
+                    className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90"
+                    style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
+                    Back to Login
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            /* ── NORMAL LOGIN / SIGNUP ── */
+            <>
+              {/* Tab toggle */}
+              <div className="flex rounded-2xl p-1 mb-8" style={{ background: "#f0e4d8" }}>
+                {["login", "signup"].map(m => (
+                  <button key={m} onClick={() => switchMode(m)}
+                    className="flex-1 py-2.5 rounded-xl text-sm font-bold capitalize transition-all"
+                    style={mode === m
+                      ? { background: "white", color: "#3a2416", boxShadow: "0 1px 4px rgba(0,0,0,0.1)" }
+                      : { color: "#9c7a62" }}>
+                    {m === "login" ? "Sign In" : "Create Account"}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mb-6">
+                <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold">
+                  {mode === "login" ? "Welcome back" : "Join us today"}
+                </h2>
+                <p style={{ color: "#9c7a62" }} className="text-sm mt-1">
+                  {mode === "login"
+                    ? "Sign in to your account to continue"
+                    : "Create your account to get started"}
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {mode === "signup" && (
+                  <Field label="Full Name" placeholder="Ananya Mehta" value={form.name}
+                    onChange={v => set("name", v)} error={errors.name} icon={User} />
+                )}
+
+                <Field label="Email Address" type="email" placeholder="you@example.com"
+                  value={form.email} onChange={v => set("email", v)}
+                  error={errors.email} icon={Mail} />
+
+                <div>
+                  <Field
+                    label="Password"
+                    type={showPass ? "text" : "password"}
+                    placeholder="Min. 6 characters"
+                    value={form.password}
+                    onChange={v => set("password", v)}
+                    error={errors.password}
+                    icon={Lock}
+                    rightEl={
+                      <button type="button" onClick={() => setShowPass(s => !s)}
+                        className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                        {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                      </button>
+                    }
+                  />
+                  {mode === "login" && (
+                    <div className="flex justify-end mt-1.5">
+                      <button
+                        type="button"
+                        onClick={() => { setForgotEmail(form.email); setForgotStep("email"); }}
+                        className="text-xs font-semibold hover:opacity-70 transition-opacity"
+                        style={{ color: "#c97d5b" }}
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {mode === "signup" && (
+                  <Field label="Contact Number" placeholder="+91 98765 43210"
+                    value={form.contactNumber} onChange={v => set("contactNumber", v)}
+                    error={errors.contactNumber} icon={Phone} />
+                )}
+
+                {apiSuccess && (
+                  <div className="flex items-center gap-2 p-3 rounded-xl text-sm"
+                    style={{ background: "#dcfce7", color: "#16a34a", border: "1px solid #bbf7d0" }}>
+                    <span>✅</span>
+                    <span>{apiSuccess}</span>
+                  </div>
+                )}
+
+                {apiError && (
+                  <div className="flex items-start gap-2 p-3 rounded-xl text-sm"
+                    style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca" }}>
+                    <span className="mt-0.5">⚠️</span>
+                    <span>{apiError}</span>
+                  </div>
+                )}
+
+                <button type="submit" disabled={loading}
+                  className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 disabled:opacity-60 mt-2"
+                  style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
+                  {loading
+                    ? <span className="flex items-center justify-center gap-2">
+                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        {mode === "login" ? "Signing in..." : "Creating account..."}
+                      </span>
+                    : mode === "login" ? "Sign In" : "Create Account"
+                  }
                 </button>
-              }
-            />
+              </form>
 
-            {mode === "signup" && (
-              <Field label="Contact Number" placeholder="+91 98765 43210"
-                value={form.contactNumber} onChange={v => set("contactNumber", v)}
-                error={errors.contactNumber} icon={Phone} />
-            )}
-
-            {/* Success message */}
-            {apiSuccess && (
-              <div className="flex items-center gap-2 p-3 rounded-xl text-sm"
-                style={{ background: "#dcfce7", color: "#16a34a", border: "1px solid #bbf7d0" }}>
-                <span>✅</span>
-                <span>{apiSuccess}</span>
-              </div>
-            )}
-
-            {/* Error message */}
-            {apiError && (
-              <div className="flex items-start gap-2 p-3 rounded-xl text-sm"
-                style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca" }}>
-                <span className="mt-0.5">⚠️</span>
-                <span>{apiError}</span>
-              </div>
-            )}
-
-            <button type="submit" disabled={loading}
-              className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 disabled:opacity-60 mt-2"
-              style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
-              {loading
-                ? <span className="flex items-center justify-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    {mode === "login" ? "Signing in..." : "Creating account..."}
-                  </span>
-                : mode === "login" ? "Sign In" : "Create Account"
-              }
-            </button>
-          </form>
-
-          <p className="text-center text-sm mt-6" style={{ color: "#9c7a62" }}>
-            {mode === "login" ? "Don't have an account? " : "Already have an account? "}
-            <button onClick={() => switchMode(mode === "login" ? "signup" : "login")}
-              className="font-bold hover:opacity-70"
-              style={{ color: "#c97d5b" }}>
-              {mode === "login" ? "Sign up" : "Sign in"}
-            </button>
-          </p>
+              <p className="text-center text-sm mt-6" style={{ color: "#9c7a62" }}>
+                {mode === "login" ? "Don't have an account? " : "Already have an account? "}
+                <button onClick={() => switchMode(mode === "login" ? "signup" : "login")}
+                  className="font-bold hover:opacity-70"
+                  style={{ color: "#c97d5b" }}>
+                  {mode === "login" ? "Sign up" : "Sign in"}
+                </button>
+              </p>
+            </>
+          )}
         </div>
       </div>
     </div>
