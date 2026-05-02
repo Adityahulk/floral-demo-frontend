@@ -285,82 +285,245 @@ function OrdersTab() {
 
 // ─── SECURITY TAB ─────────────────────────────────────────────────────────────
 
-function SecurityTab() {
-  const [form,    setForm]    = useState({ current:"", newPass:"", confirm:"" });
-  const [show,    setShow]    = useState({ current:false, newPass:false, confirm:false });
-  const [saving,  setSaving]  = useState(false);
-  const [msg,     setMsg]     = useState(null);
+const AUTH_API = "http://localhost:3001/api/auth";
 
-  async function handleSave() {
-    if (!form.current || !form.newPass || !form.confirm) {
-      setMsg({ type:"error", text:"Please fill all fields." }); return;
-    }
-    if (form.newPass !== form.confirm) {
-      setMsg({ type:"error", text:"New passwords do not match." }); return;
-    }
-    if (form.newPass.length < 6) {
-      setMsg({ type:"error", text:"Password must be at least 6 characters." }); return;
-    }
-    setSaving(true);
+function SecurityTab({ email }) {
+  const [step,        setStep]        = useState("send"); // "send" | "otp" | "password" | "done"
+  const [otpToken,    setOtpToken]    = useState("");
+  const [resetToken,  setResetToken]  = useState("");
+  const [otp,         setOtp]         = useState("");
+  const [newPass,     setNewPass]     = useState("");
+  const [confirm,     setConfirm]     = useState("");
+  const [showPass,    setShowPass]    = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [loading,     setLoading]     = useState(false);
+  const [error,       setError]       = useState(null);
+
+  async function handleSendOtp() {
+    setLoading(true); setError(null);
     try {
-      const res  = await authFetch(`${BASE}/api/auth/profile`, {
-        method: "PUT",
-        body:   JSON.stringify({ password: form.newPass }),
+      const res  = await fetch(`${AUTH_API}/forgot-password`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed");
-      setForm({ current:"", newPass:"", confirm:"" });
-      setMsg({ type:"success", text:"Password changed successfully!" });
+      if (!res.ok) throw new Error(data.message || "Failed to send OTP");
+      setOtpToken(data.otpToken);
+      setStep("otp");
     } catch (err) {
-      setMsg({ type:"error", text: err.message });
+      setError(err.message);
     } finally {
-      setSaving(false);
-      setTimeout(() => setMsg(null), 4000);
+      setLoading(false);
     }
   }
 
-  function pwField(label, key) {
+  async function handleVerifyOtp() {
+    if (!/^\d{6}$/.test(otp)) return setError("Enter the 6-digit OTP");
+    setLoading(true); setError(null);
+    try {
+      const res  = await fetch(`${AUTH_API}/verify-otp`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ otp, otpToken }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "OTP verification failed");
+      setResetToken(data.resetToken);
+      setStep("password");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleResetPassword() {
+    if (newPass.length < 6) return setError("Password must be at least 6 characters");
+    if (newPass !== confirm) return setError("Passwords do not match");
+    setLoading(true); setError(null);
+    try {
+      const res  = await fetch(`${AUTH_API}/reset-password`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: newPass, resetToken }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Password update failed");
+      setStep("done");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function reset() {
+    setStep("send"); setOtpToken(""); setResetToken("");
+    setOtp(""); setNewPass(""); setConfirm(""); setError(null);
+  }
+
+  function ErrorBox() {
+    if (!error) return null;
+    return (
+      <div className="flex items-start gap-2 px-4 py-3 rounded-2xl text-sm"
+        style={{ background:"#fee2e2", color:"#dc2626", border:"1px solid #fecaca" }}>
+        <span className="mt-0.5">⚠️</span><span>{error}</span>
+      </div>
+    );
+  }
+
+  function PwInput({ label, value, onChange, show, onToggle }) {
     return (
       <div>
         <label style={{ color:"#4a3728" }} className="block text-sm font-semibold mb-1.5">{label}</label>
         <div className="relative">
-          <input type={show[key] ? "text" : "password"} value={form[key]}
-            onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
+          <input type={show ? "text" : "password"} value={value}
+            onChange={e => { onChange(e.target.value); setError(null); }}
             placeholder="••••••••"
             className="w-full px-4 py-3 pr-11 rounded-xl border text-sm outline-none"
-            style={{ borderColor:"#e8d5c4", background:"#fdf8f3" }} />
-          <button type="button" onClick={() => setShow(s => ({ ...s, [key]: !s[key] }))}
+            style={{ borderColor:"#e8d5c4", background:"#fdf8f3", color:"#3a2416" }} />
+          <button type="button" onClick={onToggle}
             className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-60"
             style={{ color:"#9c7a62" }}>
-            {show[key] ? <EyeOff size={16}/> : <Eye size={16}/>}
+            {show ? <EyeOff size={16}/> : <Eye size={16}/>}
           </button>
         </div>
       </div>
     );
   }
 
+  const stepLabel = { send:"Verify Identity", otp:"Enter OTP", password:"New Password" }[step] || "";
+
   return (
     <div>
       <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold mb-2">Change Password</h2>
-      <p style={{ color:"#9c7a62" }} className="text-sm mb-8">Keep your account secure</p>
+      <p style={{ color:"#9c7a62" }} className="text-sm mb-8">Keep your account secure with OTP verification</p>
 
-      {msg && (
-        <div className="mb-6 px-4 py-3 rounded-2xl text-sm font-medium"
-          style={{ background: msg.type === "success" ? "#dcfce7" : "#fee2e2", color: msg.type === "success" ? "#16a34a" : "#dc2626" }}>
-          {msg.type === "success" ? "✅" : "⚠️"} {msg.text}
+      {/* Step indicator */}
+      {step !== "done" && (
+        <div className="flex items-center gap-2 mb-8">
+          {["send","otp","password"].map((s, i) => (
+            <div key={s} className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all"
+                style={{
+                  background: step === s ? "#c97d5b" : ["send","otp","password"].indexOf(step) > i ? "#dcfce7" : "#f0e4d8",
+                  color:      step === s ? "white"   : ["send","otp","password"].indexOf(step) > i ? "#16a34a" : "#9c7a62",
+                }}>
+                {["send","otp","password"].indexOf(step) > i ? "✓" : i + 1}
+              </div>
+              {i < 2 && <div className="w-8 h-0.5 rounded" style={{ background: ["send","otp","password"].indexOf(step) > i ? "#c97d5b" : "#e8d5c4" }}/>}
+            </div>
+          ))}
+          <span style={{ color:"#9c7a62" }} className="text-xs ml-2">{stepLabel}</span>
         </div>
       )}
 
       <div className="space-y-4 max-w-md">
-        {pwField("Current Password", "current")}
-        {pwField("New Password",     "newPass")}
-        {pwField("Confirm New Password", "confirm")}
 
-        <button onClick={handleSave} disabled={saving}
-          style={{ background:"#c97d5b" }}
-          className="w-full py-3 rounded-full text-white font-bold hover:opacity-90 disabled:opacity-60">
-          {saving ? "Updating…" : "Update Password"}
-        </button>
+        {/* Step 1: Send OTP */}
+        {step === "send" && (
+          <>
+            <div className="px-4 py-4 rounded-2xl" style={{ background:"#f5ede5" }}>
+              <p style={{ color:"#9c7a62" }} className="text-xs mb-1">OTP will be sent to</p>
+              <p style={{ color:"#3a2416" }} className="font-semibold text-sm">{email || "your registered email"}</p>
+            </div>
+            <ErrorBox />
+            <button onClick={handleSendOtp} disabled={loading}
+              style={{ background:"#c97d5b" }}
+              className="w-full py-3 rounded-full text-white font-bold hover:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2">
+              {loading
+                ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/>Sending...</>
+                : "Send OTP"
+              }
+            </button>
+          </>
+        )}
+
+        {/* Step 2: Verify OTP */}
+        {step === "otp" && (
+          <>
+            <div className="px-4 py-3 rounded-2xl text-sm" style={{ background:"#f5ede5", color:"#7a5c4a" }}>
+              OTP sent to <strong>{email}</strong>
+            </div>
+            <div>
+              <label style={{ color:"#4a3728" }} className="block text-sm font-semibold mb-1.5">One-Time Password</label>
+              <input
+                type="text" inputMode="numeric" maxLength={6}
+                value={otp}
+                onChange={e => { setOtp(e.target.value.replace(/\D/g, "").slice(0, 6)); setError(null); }}
+                placeholder="Enter 6-digit OTP"
+                className="w-full px-4 py-3 rounded-xl border text-sm outline-none tracking-widest"
+                style={{ borderColor:"#e8d5c4", background:"#fdf8f3", color:"#3a2416" }}
+              />
+            </div>
+            <p style={{ color:"#9c7a62" }} className="text-sm">
+              Didn't receive it?{" "}
+              <button type="button" onClick={async () => { setOtp(""); setError(null); await handleSendOtp(); }}
+                className="font-bold hover:opacity-70" style={{ color:"#c97d5b" }}>
+                Resend OTP
+              </button>
+            </p>
+            <ErrorBox />
+            <div className="flex gap-3">
+              <button onClick={() => { setStep("send"); setError(null); }}
+                className="flex-1 py-3 rounded-full font-bold text-sm border hover:opacity-70"
+                style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                Back
+              </button>
+              <button onClick={handleVerifyOtp} disabled={loading}
+                style={{ background:"#c97d5b" }}
+                className="flex-1 py-3 rounded-full text-white font-bold text-sm hover:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2">
+                {loading
+                  ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/>Verifying...</>
+                  : "Verify OTP"
+                }
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* Step 3: New Password */}
+        {step === "password" && (
+          <>
+            <PwInput label="New Password" value={newPass} onChange={setNewPass}
+              show={showPass} onToggle={() => setShowPass(s => !s)} />
+            <PwInput label="Confirm New Password" value={confirm} onChange={setConfirm}
+              show={showConfirm} onToggle={() => setShowConfirm(s => !s)} />
+            <ErrorBox />
+            <div className="flex gap-3">
+              <button onClick={() => { setStep("otp"); setError(null); }}
+                className="flex-1 py-3 rounded-full font-bold text-sm border hover:opacity-70"
+                style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                Back
+              </button>
+              <button onClick={handleResetPassword} disabled={loading}
+                style={{ background:"#c97d5b" }}
+                className="flex-1 py-3 rounded-full text-white font-bold text-sm hover:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2">
+                {loading
+                  ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/>Updating...</>
+                  : "Update Password"
+                }
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* Done */}
+        {step === "done" && (
+          <div className="text-center space-y-5 py-4">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto"
+              style={{ background:"#dcfce7" }}>
+              ✅
+            </div>
+            <div>
+              <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold mb-1">Password Updated!</p>
+              <p style={{ color:"#9c7a62" }} className="text-sm">Your password has been changed successfully.</p>
+            </div>
+            <button onClick={reset} style={{ background:"#c97d5b" }}
+              className="px-8 py-3 rounded-full text-white font-bold text-sm hover:opacity-90">
+              Done
+            </button>
+          </div>
+        )}
+
       </div>
     </div>
   );
@@ -463,7 +626,7 @@ export default function ProfilePage() {
       ? <ProfileTab user={user} onUpdate={setUser} />
       : <div className="text-center py-16"><p style={{ color:"#9c7a62" }}>Please log in to view your profile.</p></div>,
     orders:   <OrdersTab />,
-    security: <SecurityTab />,
+    security: <SecurityTab email={user?.email} />,
     notif:    <NotificationsTab />,
   };
 
