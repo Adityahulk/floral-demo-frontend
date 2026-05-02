@@ -19,10 +19,10 @@ const STATUS_STYLE = {
 };
 
 const MENU = [
-  { id:"profile",  icon:<User size={18}/>,    label:"My Profile"    },
-  { id:"orders",   icon:<Package size={18}/>,  label:"My Orders"     },
-  { id:"security", icon:<Lock size={18}/>,     label:"Password"      },
-  { id:"notif",    icon:<Bell size={18}/>,     label:"Notifications" },
+  { id:"profile",  path:"/profile",       icon:<User size={18}/>,    label:"My Profile"    },
+  { id:"orders",   path:"/orders",        icon:<Package size={18}/>,  label:"My Orders"     },
+  { id:"security", path:"/password",      icon:<Lock size={18}/>,     label:"Password"      },
+  { id:"notif",    path:"/notifications", icon:<Bell size={18}/>,     label:"Notifications" },
 ];
 
 // ─── PROFILE TAB ──────────────────────────────────────────────────────────────
@@ -665,8 +665,8 @@ export default function ProfilePage({ initialTab = "profile" }) {
 
             {/* Menu */}
             <div className="bg-white rounded-3xl overflow-hidden border" style={{ borderColor:"#e8d5c4" }}>
-              {MENU.map(({ id, icon, label }) => (
-                <button key={id} onClick={() => setActive(id)}
+              {MENU.map(({ id, path, icon, label }) => (
+                <button key={id} onClick={() => { setActive(id); navigate(path); }}
                   className="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-medium text-left transition-all border-b last:border-0"
                   style={{
                     borderColor:"#f0e4d8",
