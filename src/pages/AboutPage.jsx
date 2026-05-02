@@ -3,6 +3,7 @@ import {
    Award, Users, Star,
    ArrowRight
 } from "lucide-react";
+import Breadcrumb from "../components/Breadcrumb";
 import { Facebook, Instagram, Twitter } from "react-feather";
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
@@ -43,6 +44,11 @@ export default function AboutPage() {
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", background: "#fdf8f3", minHeight: "100vh" }}>
+
+      <Breadcrumb paths={[
+        { id: 1, name: "Home",  path: "/" },
+        { id: 2, name: "About", path: "/about" },
+      ]} />
 
       {/* ── HERO ── */}
       <section className="relative overflow-hidden" style={{ background: "#4a3728" }}>

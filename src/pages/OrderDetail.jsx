@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import Breadcrumb from "../components/Breadcrumb";
 import {
   ArrowLeft, Package, Truck, Check, X, Clock,
   MapPin, CreditCard, Phone, Copy, CheckCheck,
-  ChevronRight, AlertCircle
+  AlertCircle
 } from "lucide-react";
 import { authFetch } from "../utils/auth";
 
@@ -115,14 +116,12 @@ export default function OrderDetail() {
   return (
     <div style={{ fontFamily:"system-ui, sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
 
-      <div style={{ background:"#f5ede5", borderBottom:"1px solid #e8d5c4" }} className="py-3">
-        <div className="max-w-7xl mx-auto px-4 flex items-center gap-2 text-sm flex-wrap" style={{ color:"#9c7a62" }}>
-          <Link to="/" className="hover:underline">Home</Link><ChevronRight size={13}/>
-          <Link to="/profile" className="hover:underline">My Account</Link><ChevronRight size={13}/>
-          <Link to="/orders" className="hover:underline">My Orders</Link><ChevronRight size={13}/>
-          <span style={{ color:"#4a3728" }} className="font-medium">#{shortId}</span>
-        </div>
-      </div>
+      <Breadcrumb paths={[
+        { id: 1, name: "Home",          path: "/" },
+        { id: 2, name: "My Account",    path: "/profile" },
+        { id: 3, name: "My Orders",     path: "/orders" },
+        { id: 4, name: `#${shortId}`,   path: `/${id}` },
+      ]} />
 
       <div className="max-w-7xl mx-auto px-4 py-10">
 

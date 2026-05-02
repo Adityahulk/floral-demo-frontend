@@ -3,6 +3,7 @@ import {
   Phone, Mail, MapPin, Clock, Send, Check,
   MessageCircle, ChevronDown, ChevronUp
 } from "lucide-react";
+import Breadcrumb from "../components/Breadcrumb";
 import { Instagram, Facebook, Twitter, Youtube,} from "react-feather";
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
@@ -37,6 +38,11 @@ export default function ContactPage() {
 
   return (
     <div style={{ fontFamily:"system-ui, sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
+
+      <Breadcrumb paths={[
+        { id: 1, name: "Home",    path: "/" },
+        { id: 2, name: "Contact", path: "/contact" },
+      ]} />
 
       {/* ── HERO ── */}
       <section className="relative overflow-hidden py-20" style={{ background:"#4a3728" }}>

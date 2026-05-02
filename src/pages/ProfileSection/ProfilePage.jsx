@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import Breadcrumb from "../../components/Breadcrumb";
 import {
   User, Mail, Phone, MapPin, Edit2, Save, X,
   Package, Heart, LogOut, Camera, Shield,
@@ -630,13 +631,10 @@ export default function ProfilePage({ initialTab = "profile" }) {
   return (
     <div style={{ fontFamily:"system-ui, sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
 
-      <div style={{ background:"#f5ede5", borderBottom:"1px solid #e8d5c4" }} className="py-3">
-        <div className="max-w-6xl mx-auto px-4 flex items-center gap-2 text-sm" style={{ color:"#9c7a62" }}>
-          <Link to="/" className="hover:underline">Home</Link>
-          <span>/</span>
-          <span style={{ color:"#4a3728" }} className="font-medium">My Account</span>
-        </div>
-      </div>
+      <Breadcrumb paths={[
+        { id: 1, name: "Home", path: "/" },
+        { id: 2, name: MENU.find(m => m.id === active)?.label ?? "Profile", path: MENU.find(m => m.id === active)?.path ?? "/profile" },
+      ]} />
 
       <div className="max-w-6xl mx-auto px-4 py-10">
         <div className="grid lg:grid-cols-[280px_1fr] gap-8 items-start">
