@@ -72,9 +72,7 @@ export default function CategoryProductsPage() {
   const location = useLocation();
   const onBack = () => navigate("/category");
   const { categoryId } = useParams();
-  const category = location.state?.data;
-  console.log("CategoryProductsPage category:",location.state,categoryId);
-
+  const [category, setCategory] = useState(location.state?.data || null);
 
   const toggleWish = id => setWished(p => { const s = new Set(p); s.has(id)?s.delete(id):s.add(id); return s; });
 
@@ -87,33 +85,32 @@ export default function CategoryProductsPage() {
     setTimeout(() => setAdded(null), 1500);
   }
 
-  const [loading,setLoading]=useState(true);
-  const [products,setProducts]=useState([]);
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
   const cartCount = cart.reduce((s, i) => s + i.qty, 0);
   const activeFilters = [priceRange, ...badgeFilter, ratingFilter].filter(Boolean).length;
+
   const getProducts = (cat_id) => {
     fetch(`http://localhost:3001/api/products/category/${cat_id}`)
-    .then(res => res.json())
-    .then(data => {
-      console.log("Fetched products:", data?.data);
-      setProducts(data?.data);
-      setLoading(false);
-    })
-    .catch(err => console.error("Error fetching products:", err));
-  }
-    useEffect(()=>{
-    if(!location?.state?.data) {
-      fetch(`http://localhost:3001/api/categories/${categoryId}`).then(res=>res.json()).then(data=>{
-        console.log("Fetched category data:", data);
-        if(data?.data) {
-          location.state = { data:data.data };
-          getProducts(categoryId);
-        }
-      })
-    } else {
+      .then(res => res.json())
+      .then(data => { setProducts(data?.data || []); setLoading(false); })
+      .catch(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    if (location.state?.data) {
+      setCategory(location.state.data);
       getProducts(categoryId);
+    } else {
+      fetch(`http://localhost:3001/api/categories/${categoryId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data?.data) { setCategory(data.data); getProducts(categoryId); }
+          else setLoading(false);
+        })
+        .catch(() => setLoading(false));
     }
-  },[location.state?.data]);
+  }, [categoryId]);
 
   const debouncefunction = (func, delay) => {
     let timeoutId;
