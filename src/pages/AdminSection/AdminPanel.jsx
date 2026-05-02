@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getTokenPayload } from "../../utils/auth";
+import { getTokenPayload, clearAuth } from "../../utils/auth";
 import {
   LayoutDashboard, Users, BarChart2, Package, Eye,
   Star, Bell, Menu, Home, LogOut, Image, Sparkles, Crown, Mail, Megaphone, Layers,
@@ -139,7 +139,8 @@ export default function AdminPanel() {
               <p style={{ color:"#7a5c4a" }} className="text-xs">Admin</p>
             </div>
           </div>
-          <button className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium hover:opacity-70"
+          <button onClick={() => { clearAuth(); navigate("/login"); }}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium hover:opacity-70"
             style={{ color:"#9c7a62" }}>
             <LogOut size={14}/> Sign Out
           </button>
@@ -166,10 +167,10 @@ export default function AdminPanel() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button className="relative p-2 rounded-full hover:opacity-70" style={{ color:"#5c4033" }}>
+            {/* <button className="relative p-2 rounded-full hover:opacity-70" style={{ color:"#5c4033" }}>
               <Bell size={18}/>
               <span style={{ background:"#dc2626" }} className="absolute top-1 right-1 w-2 h-2 rounded-full" />
-            </button>
+            </button> */}
             <a href="/" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
               style={{ background:"#f5ede5", color:"#c97d5b" }}>
               <Home size={13}/> View Store

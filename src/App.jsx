@@ -118,14 +118,14 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/notifications"
             element={
               <ProtectedRoute>
                 <ProfilePage initialTab="notif" />
               </ProtectedRoute>
             }
-          />
+          /> */}
           <Route
             path="/orders"
             element={

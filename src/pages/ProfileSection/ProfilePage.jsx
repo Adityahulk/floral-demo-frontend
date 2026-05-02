@@ -24,7 +24,7 @@ const MENU = [
   { id:"profile",  path:"/profile",       icon:<User size={18}/>,    label:"My Profile"    },
   { id:"orders",   path:"/orders",         icon:<Package size={18}/>,  label:"My Orders"     },
   { id:"security", path:"/password",      icon:<Lock size={18}/>,     label:"Password"      },
-  { id:"notif",    path:"/notifications", icon:<Bell size={18}/>,     label:"Notifications" },
+  // { id:"notif",    path:"/notifications", icon:<Bell size={18}/>,     label:"Notifications" },
 ];
 
 // ─── PROFILE TAB ──────────────────────────────────────────────────────────────
@@ -605,7 +605,7 @@ export default function ProfilePage({ initialTab = "profile" }) {
       : <div className="text-center py-16"><p style={{ color:"#9c7a62" }}>Please log in to view your profile.</p></div>,
     orders:   <OrdersTab />,
     security: <SecurityTab email={user?.email} />,
-    notif:    <NotificationsTab />,
+    // notif:    <NotificationsTab />,
   };
 
   return (

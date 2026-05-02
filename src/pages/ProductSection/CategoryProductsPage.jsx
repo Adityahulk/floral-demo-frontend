@@ -7,43 +7,14 @@ import {
    Grid3x3,
    Stars
 } from "lucide-react";
-import { ChevronRight, List, RefreshCw, Search, X } from "react-feather";
+import { List, Search, X } from "react-feather";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CategoryPageSkeleton from "./ProductSkeletons/CategoryPageSkeleton";
 import Breadcrumb from "../../components/Breadcrumb";
 import { useCart } from "../../context/CartContext";
 import { api } from "../../api/client";
 import { API } from "../../api/endpoints";
-const ALL_PRODUCTS = [
-  { id:1,  cat:"bouquets",     
-    name:"Rose Bliss Bouquet",         
-    price:1299, 
-    original:1599,
-    rating:4.8, 
-    reviews:124, 
-    badge:"Sale",   
-    img:"https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=500&q=80", 
-    tags:["Romance","Birthday"], 
-    isNew:false, 
-    isBest:true,
 
-   },
-  { id:2,  cat:"arrangements", name:"Pastel Dream Arrangement",   price:1899, original:null, rating:4.9, reviews:87,  badge:"New",     img:"https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=500&q=80", tags:["Wedding","Gift"],    isNew:true,  isBest:false },
-  { id:3,  cat:"wreaths",      name:"Wildflower Wreath",          price:999,  original:1299, rating:4.7, reviews:56,  badge:"Sale",    img:"https://images.unsplash.com/photo-1491013516836-7db643ee125a?w=500&q=80", tags:["Door","Seasonal"],   isNew:false, isBest:false },
-  { id:4,  cat:"bouquets",     name:"Sunflower Garden Bundle",    price:1499, original:null, rating:4.6, reviews:203, badge:"Popular", img:"https://images.unsplash.com/photo-1543218024-57a70143c369?w=500&q=80", tags:["Birthday","Cheer"],  isNew:false, isBest:true  },
-  { id:5,  cat:"dried",        name:"Lavender & Eucalyptus",      price:849,  original:999,  rating:4.9, reviews:91,  badge:"New",     img:"https://images.unsplash.com/photo-1471086569966-db3eebc25a59?w=500&q=80", tags:["Boho","Gift"],       isNew:true,  isBest:false },
-  { id:6,  cat:"arrangements", name:"Orchid Elegance Set",        price:2199, original:null, rating:5.0, reviews:44,  badge:"Premium", img:"https://images.unsplash.com/photo-1566873535350-96e04c74fb1a?w=500&q=80", tags:["Luxury","Wedding"],  isNew:false, isBest:false },
-  { id:7,  cat:"bouquets",     name:"Dahlia Delight Box",         price:1699, original:1999, rating:4.8, reviews:78,  badge:"Sale",    img:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=500&q=80", tags:["Romance","Gift"],    isNew:false, isBest:false },
-  { id:8,  cat:"bouquets",     name:"Mixed Tulip Bunch",          price:749,  original:null, rating:4.5, reviews:162, badge:"Popular", img:"https://images.unsplash.com/photo-1520763185298-1b434c919102?w=500&q=80", tags:["Birthday","Spring"], isNew:false, isBest:true  },
-  { id:9,  cat:"plants",       name:"Peace Lily Plant",           price:599,  original:699,  rating:4.7, reviews:88,  badge:"Sale",    img:"https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=500&q=80", tags:["Indoor","Air"],      isNew:false, isBest:false },
-  { id:10, cat:"plants",       name:"Monstera Deliciosa",         price:1199, original:null, rating:4.8, reviews:134, badge:"Popular", img:"https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=500&q=80", tags:["Indoor","Gift"],     isNew:false, isBest:true  },
-  { id:11, cat:"gift-hampers", name:"Luxury Rose Hamper",         price:2999, original:3499, rating:4.9, reviews:39,  badge:"Sale",    img:"https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&q=80", tags:["Luxury","Birthday"], isNew:false, isBest:false },
-  { id:12, cat:"arrangements", name:"Sunflower Table Centrepiece",price:1349, original:null, rating:4.6, reviews:57,  badge:"New",     img:"https://images.unsplash.com/photo-1543218024-57a70143c369?w=500&q=80", tags:["Wedding","Table"],   isNew:true,  isBest:false },
-  { id:13, cat:"wreaths",      name:"Eucalyptus Door Wreath",     price:1149, original:1399, rating:4.8, reviews:72,  badge:"Sale",    img:"https://images.unsplash.com/photo-1606041011872-596597976b25?w=500&q=80", tags:["Door","Fresh"],      isNew:false, isBest:false },
-  { id:14, cat:"dried",        name:"Pampas Grass Bundle",        price:699,  original:null, rating:4.7, reviews:61,  badge:"New",     img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80", tags:["Boho","Wall Art"],   isNew:true,  isBest:false },
-  { id:15, cat:"bouquets",     name:"Peony Pink Bouquet",         price:1899, original:2199, rating:4.9, reviews:93,  badge:"Sale",    img:"https://images.unsplash.com/photo-1490750967868-88df5691cc3f?w=500&q=80", tags:["Romance","Luxury"],  isNew:false, isBest:true  },
-  { id:16, cat:"gift-hampers", name:"Birthday Bloom Box",         price:1799, original:null, rating:4.8, reviews:48,  badge:"New",     img:"https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=500&q=80", tags:["Birthday","Gift"],   isNew:true,  isBest:false },
-];
 
 const SORT_OPTIONS = [
   { value:"popular",    label:"Most Popular"    },
@@ -223,7 +194,7 @@ export default function CategoryProductsPage() {
           </button>
 
           {/* View Mode */}
-          <div className="flex rounded-full border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+          {/* <div className="flex rounded-full border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
             {[["grid",<Grid3x3 size={16}/>],["list",<List size={16}/>]].map(([m, ico]) => (
               <button key={m} onClick={() => setViewMode(m)}
                 className="px-3 py-2 transition-all"
@@ -231,7 +202,7 @@ export default function CategoryProductsPage() {
                 {ico}
               </button>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {/* Filter Panel */}
