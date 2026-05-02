@@ -64,14 +64,21 @@ export default function ProductDetail() {
   const [selectedColor, setColor]   = useState('');
   const [added, setAdded]           = useState(false);
   const [faqOpen, setFaqOpen]       = useState(null);
-  const { productId, id } = useParams();
+  const { productId, id, categoryId } = useParams();
   const currentProductId = productId ?? id;
- 
+
   const disc = product?.originalPrice ? Math.round((1 - product?.price / product?.originalPrice) * 100) : 0;
 
-  const paths = [{id:1,name:'Category',path:'/category'},
-    {id:2,name:'Bouquets',path:'/bouquets'},
-    {id:3,name:'Rose Bliss Bouquet',path:'/rose-bliss-bouquet'}]
+  const paths = [
+    { id: 1, name: 'Home',            path: '/'           },
+    { id: 2, name: 'Category',        path: '/category'   },
+    ...(product && categoryId
+      ? [{ id: 3, name: product.category, path: `/${categoryId}` }]
+      : []),
+    ...(product
+      ? [{ id: categoryId ? 4 : 3, name: product.name, path: `/${currentProductId}` }]
+      : []),
+  ];
 
   function handleAddToCart() {
     addToCart(product, qty, selectedSize, selectedColor ? [selectedColor] : []);

@@ -10,6 +10,7 @@ import {
 import { ChevronRight, List, RefreshCw, Search, X } from "react-feather";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CategoryPageSkeleton from "./ProductSkeletons/CategoryPageSkeleton";
+import Breadcrumb from "../../components/Breadcrumb";
 const ALL_PRODUCTS = [
   { id:1,  cat:"bouquets",     
     name:"Rose Bliss Bouquet",         
@@ -158,13 +159,11 @@ export default function CategoryProductsPage() {
       )}
 
       {/* Breadcrumb */}
-      <div style={{ background:"#f5ede5", borderBottom:"1px solid #e8d5c4" }} className="py-3">
-        <div className="max-w-7xl mx-auto px-4 flex items-center gap-2 text-sm flex-wrap" style={{ color:"#9c7a62" }}>
-          <a href="/" className="hover:underline">Home</a><ChevronRight size={13}/>
-          <button onClick={onBack} className="hover:underline">Categories</button><ChevronRight size={13}/>
-          <span style={{ color:"#4a3728" }} className="font-medium">{category.name}</span>
-        </div>
-      </div>
+      <Breadcrumb paths={[
+        { id: 1, name: 'Home',           path: '/'          },
+        { id: 2, name: 'Category',       path: '/category'  },
+        { id: 3, name: category?.name || '...', path: `/${categoryId}` },
+      ]} />
 
       {/* Category Hero Banner */}
       <div className="relative h-40 sm:h-52 overflow-hidden">

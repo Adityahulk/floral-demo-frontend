@@ -10,7 +10,8 @@ const Breadcrumb = ({ paths }) => {
           // 🔥 yaha magic ho raha hai
           const fullPath = paths
             .slice(0, i + 1)
-            .map(item => item.path.replace("/", ""))
+            .map(item => item.path.replace(/^\//, ""))
+            .filter(Boolean)
             .join("/");
 
           return (
