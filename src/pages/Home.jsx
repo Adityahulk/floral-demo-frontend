@@ -180,7 +180,7 @@ export default function Home() {
       .then(([productsRes, categoriesRes, pickRes]) => {
         setProducts(Array.isArray(productsRes.data) ? productsRes.data : []);
         setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
-        setTodaysPick(pickRes.data ?? null);
+        setTodaysPick(pickRes.success && pickRes.data ? pickRes.data : null);
       })
       .catch(err => { if (err.name !== "AbortError") setError(true); })
       .finally(() => setLoading(false));
