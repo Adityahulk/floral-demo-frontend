@@ -98,7 +98,23 @@ export default function App() {
             path="/profile"
             element={
               <ProtectedRoute>
-                <ProfilePage />
+                <ProfilePage initialTab="profile" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/password"
+            element={
+              <ProtectedRoute>
+                <ProfilePage initialTab="security" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <ProfilePage initialTab="notif" />
               </ProtectedRoute>
             }
           />

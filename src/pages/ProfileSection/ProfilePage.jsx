@@ -587,9 +587,9 @@ function NotificationsTab() {
 
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 
-export default function ProfilePage() {
+export default function ProfilePage({ initialTab = "profile" }) {
   const navigate = useNavigate();
-  const [active, setActive] = useState("profile");
+  const [active, setActive] = useState(initialTab);
 
   // Initialize from JWT token immediately so page never shows blank
   const [user, setUser] = useState(() => {
