@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { getTokenPayload } from "../../utils/auth";
 import {
   LayoutDashboard, Users, BarChart2, Package, Eye,
-  Star, Bell, Menu, Home, LogOut,
+  Star, Bell, Menu, Home, LogOut, Image,
 } from "lucide-react";
 import FloralLogo from "../../assets/floral-logo.png";
 import AddProductForm from "./AddProductForm";
@@ -13,6 +13,7 @@ import AnalyticsTab from "./AdminTabs/AnalyticsTab";
 import ProductsTab from "./AdminTabs/ProductsTab";
 import AdminOrdersTab from "./AdminTabs/OrdersTab";
 import ReviewsTab from "./AdminTabs/ReviewsTab";
+import BannersTab from "./AdminTabs/BannersTab";
 
 const NAV = [
   { id:"dashboard", icon:<LayoutDashboard size={18}/>, label:"Dashboard" },
@@ -21,6 +22,7 @@ const NAV = [
   { id:"orders",    icon:<Package size={18}/>,         label:"Orders"    },
   { id:"products",  icon:<Eye size={18}/>,             label:"Products"  },
   { id:"reviews",   icon:<Star size={18}/>,            label:"Reviews"   },
+  { id:"banners",   icon:<Image size={18}/>,           label:"Banners"   },
 ];
 
 export default function AdminPanel() {
@@ -72,6 +74,7 @@ export default function AdminPanel() {
     orders:        <AdminOrdersTab />,
     products:      <ProductsTab onEdit={handleEdit} />,
     reviews:       <ReviewsTab />,
+    banners:       <BannersTab />,
     "add-product": <AddProductForm key={editingProduct?._id ?? "new"} initialData={editingProduct} onSuccess={handleEditSuccess} />,
   };
 
