@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
 import { setAuth } from "../../utils/auth";
@@ -71,6 +71,22 @@ export default function AuthPage() {
   const [showForgotPass,   setShowForgotPass]   = useState(false);
   const [showForgotConfirm, setShowForgotConfirm] = useState(false);
 
+  // ─── SIGNUP OTP STATE ─────────────────────────────────────────────────────
+  const [signupOtpSent,       setSignupOtpSent]       = useState(false);
+  const [signupOtpVerified,   setSignupOtpVerified]   = useState(false);
+  const [signupOtp,           setSignupOtp]           = useState("");
+  const [signupOtpToken,      setSignupOtpToken]      = useState("");
+  const [signupVerifiedToken, setSignupVerifiedToken] = useState("");
+  const [signupOtpLoading,    setSignupOtpLoading]    = useState(false);
+  const [signupOtpError,      setSignupOtpError]      = useState(null);
+  const [resendTimer,         setResendTimer]         = useState(0);
+
+  useEffect(() => {
+    if (resendTimer <= 0) return;
+    const t = setTimeout(() => setResendTimer(n => n - 1), 1000);
+    return () => clearTimeout(t);
+  }, [resendTimer]);
+
   function set(key, val) {
     setForm(f => ({ ...f, [key]: val }));
     if (errors[key]) setErrors(e => ({ ...e, [key]: null }));
@@ -104,10 +120,15 @@ export default function AuthPage() {
     setApiError(null);
     setApiSuccess(null);
     try {
+      if (mode === "signup" && !signupOtpVerified) {
+        setApiError("Please verify your email first");
+        setLoading(false);
+        return;
+      }
       const endpoint = mode === "login" ? `${API}/login` : `${API}/register`;
       const body     = mode === "login"
         ? { email: form.email, password: form.password }
-        : { name: form.name, email: form.email, password: form.password, contactNumber: form.contactNumber };
+        : { name: form.name, email: form.email, password: form.password, contactNumber: form.contactNumber, verifiedToken: signupVerifiedToken };
 
       const res  = await fetch(endpoint, {
         method:  "POST",
@@ -144,6 +165,13 @@ export default function AuthPage() {
     setApiError(null);
     setApiSuccess(null);
     setForm({ name: "", email: "", password: "", contactNumber: "" });
+    setSignupOtpSent(false);
+    setSignupOtpVerified(false);
+    setSignupOtp("");
+    setSignupOtpToken("");
+    setSignupVerifiedToken("");
+    setSignupOtpError(null);
+    setResendTimer(0);
   }
 
   // ─── FORGOT PASSWORD HANDLERS ─────────────────────────────────────────────
@@ -154,6 +182,48 @@ export default function AuthPage() {
     setForgotEmail(""); setForgotOtp("");
     setForgotPass(""); setForgotConfirm("");
     setForgotError(null);
+  }
+
+  async function handleSendSignupOtp() {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      return setErrors(e => ({ ...e, email: "Enter a valid email" }));
+    setSignupOtpLoading(true); setSignupOtpError(null);
+    try {
+      const res  = await fetch(`${API}/send-signup-otp`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: form.email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to send OTP");
+      setSignupOtpToken(data.otpToken);
+      setSignupOtpSent(true);
+      setSignupOtp("");
+      setResendTimer(30);
+    } catch (err) {
+      setSignupOtpError(err.message);
+    } finally {
+      setSignupOtpLoading(false);
+    }
+  }
+
+  async function handleVerifySignupOtp() {
+    if (!/^\d{6}$/.test(signupOtp))
+      return setSignupOtpError("Enter the 6-digit OTP");
+    setSignupOtpLoading(true); setSignupOtpError(null);
+    try {
+      const res  = await fetch(`${API}/verify-signup-otp`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ otp: signupOtp, otpToken: signupOtpToken }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "OTP verification failed");
+      setSignupVerifiedToken(data.verifiedToken);
+      setSignupOtpVerified(true);
+    } catch (err) {
+      setSignupOtpError(err.message);
+    } finally {
+      setSignupOtpLoading(false);
+    }
   }
 
   async function handleSendOtp(e) {
