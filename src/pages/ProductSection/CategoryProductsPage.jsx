@@ -11,6 +11,7 @@ import { ChevronRight, List, RefreshCw, Search, X } from "react-feather";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CategoryPageSkeleton from "./ProductSkeletons/CategoryPageSkeleton";
 import Breadcrumb from "../../components/Breadcrumb";
+import { useCart } from "../../context/CartContext";
 const ALL_PRODUCTS = [
   { id:1,  cat:"bouquets",     
     name:"Rose Bliss Bouquet",         
@@ -62,12 +63,13 @@ export default function CategoryProductsPage() {
   const [sort,      setSort]      = useState("popular");
   const [viewMode,  setViewMode]  = useState("grid");
   const [wished,    setWished]    = useState(new Set());
-  const [cart,      setCart]      = useState([]);
   const [added,     setAdded]     = useState(null);
+  const { addToCart: addToCartGlobal, totalItems } = useCart();
   const [filterOpen,setFilterOpen]= useState(false);
   const [priceRange,setPriceRange]= useState(null);
   const [badgeFilter,setBadgeFilter]=useState([]);
   const [ratingFilter,setRatingFilter]=useState(null);
+  const [tagFilter,  setTagFilter]  = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const onBack = () => navigate("/category");
@@ -77,18 +79,41 @@ export default function CategoryProductsPage() {
   const toggleWish = id => setWished(p => { const s = new Set(p); s.has(id)?s.delete(id):s.add(id); return s; });
 
   function addToCart(p) {
-    setCart(prev => {
-      const ex = prev.find(i => i.id === p.id);
-      return ex ? prev.map(i => i.id===p.id ? {...i,qty:i.qty+1} : i) : [...prev,{...p,qty:1}];
-    });
-    setAdded(p.id);
+    addToCartGlobal(p, 1);
+    setAdded(p._id);
     setTimeout(() => setAdded(null), 1500);
   }
 
-  const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState([]);
-  const cartCount = cart.reduce((s, i) => s + i.qty, 0);
-  const activeFilters = [priceRange, ...badgeFilter, ratingFilter].filter(Boolean).length;
+  const [loading,       setLoading]       = useState(true);
+  const [products,      setProducts]      = useState([]);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  // Debounce search input by 300ms
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  const cartCount   = totalItems;
+  const activeFilters = [priceRange, ...badgeFilter, ratingFilter, tagFilter].filter(Boolean).length;
+
+  // Unique tags derived from actual products
+  const allTags = [...new Set(products.flatMap(p => p.tags ?? []))].sort();
+
+  // Filtering + sorting — never mutates `products` state
+  const filtered = products
+    .filter(p => !debouncedSearch || p.name.toLowerCase().includes(debouncedSearch.toLowerCase()))
+    .filter(p => !priceRange   || (p.price >= priceRange.min && p.price <= priceRange.max))
+    .filter(p => badgeFilter.length === 0 || badgeFilter.includes(p.badge))
+    .filter(p => !ratingFilter || (p.rating?.average ?? p.rating ?? 0) >= ratingFilter)
+    .filter(p => !tagFilter    || (p.tags ?? []).includes(tagFilter))
+    .sort((a, b) => {
+      if (sort === "price-low")  return a.price - b.price;
+      if (sort === "price-high") return b.price - a.price;
+      if (sort === "rating")     return (b.rating?.average ?? b.rating ?? 0) - (a.rating?.average ?? a.rating ?? 0);
+      if (sort === "newest")     return new Date(b.createdAt) - new Date(a.createdAt);
+      return (b.reviews ?? 0) - (a.reviews ?? 0);
+    });
 
   const getProducts = (cat_id) => {
     fetch(`http://localhost:3001/api/products/category/${cat_id}`)
@@ -111,34 +136,6 @@ export default function CategoryProductsPage() {
         .catch(() => setLoading(false));
     }
   }, [categoryId]);
-
-  const debouncefunction = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func(...args);
-      }, delay);
-    };
-  };
-  useEffect(() => {
-      const tempProducts = products
-    .filter(p => p.cat === category.id)
-    .filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
-    .filter(p => !priceRange || (p.price >= priceRange.min && p.price <= priceRange.max))
-    .filter(p => badgeFilter.length === 0 || badgeFilter.includes(p.badge))
-    .filter(p => !ratingFilter || p.rating >= ratingFilter)
-    .sort((a, b) => {
-      if (sort === "price-low")  return a.price - b.price;
-      if (sort === "price-high") return b.price - a.price;
-      if (sort === "rating")     return b.rating - a.rating;
-      if (sort === "newest")     return b.isNew - a.isNew;
-      return b.reviews - a.reviews;
-    });
-    debouncefunction(()=>{
-      setProducts(tempProducts);
-    }, 300);
-  },[search, sort, priceRange, badgeFilter, ratingFilter]);
 
   return (
     loading ? 
@@ -296,7 +293,7 @@ export default function CategoryProductsPage() {
 
             {/* Clear */}
             {activeFilters > 0 && (
-              <button onClick={() => { setPriceRange(null); setBadgeFilter([]); setRatingFilter(null); }}
+              <button onClick={() => { setPriceRange(null); setBadgeFilter([]); setRatingFilter(null); setTagFilter(null); }}
                 className="mt-4 flex items-center gap-1.5 text-xs font-semibold hover:opacity-70"
                 style={{ color:"#dc2626" }}>
                 <X size={13}/> Clear all filters
@@ -305,25 +302,38 @@ export default function CategoryProductsPage() {
           </div>
         )}
 
-        {/* Tags */}
-        <div className="flex gap-2 flex-wrap mb-6">
-          {category.tags.map(t => (
-            <button key={t}
-              className="px-3 py-1.5 rounded-full text-xs font-medium border hover:opacity-70 transition-opacity"
-              style={{ borderColor:"#e8d5c4", color:"#7a5c4a", background:"white" }}>
-              {t}
+        {/* Dynamic Tags */}
+        {allTags.length > 0 && (
+          <div className="flex gap-2 flex-wrap mb-6">
+            <button
+              onClick={() => setTagFilter(null)}
+              className="px-3 py-1.5 rounded-full text-xs font-medium border transition-all"
+              style={!tagFilter
+                ? { background:"#4a3728", borderColor:"#4a3728", color:"white" }
+                : { borderColor:"#e8d5c4", color:"#7a5c4a", background:"white" }}>
+              All
             </button>
-          ))}
-        </div>
+            {allTags.map(t => (
+              <button key={t}
+                onClick={() => setTagFilter(tagFilter === t ? null : t)}
+                className="px-3 py-1.5 rounded-full text-xs font-medium border transition-all"
+                style={tagFilter === t
+                  ? { background:"#c97d5b", borderColor:"#c97d5b", color:"white" }
+                  : { borderColor:"#e8d5c4", color:"#7a5c4a", background:"white" }}>
+                {t}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Results Count */}
         <div className="flex items-center justify-between mb-5">
           <p style={{ color:"#9c7a62" }} className="text-sm">
-            Showing <strong style={{ color:"#4a3728" }}>{products.length}</strong> products
-            {search && <span> for "<strong style={{ color:"#c97d5b" }}>{search}</strong>"</span>}
+            Showing <strong style={{ color:"#4a3728" }}>{filtered.length}</strong> products
+            {debouncedSearch && <span> for "<strong style={{ color:"#c97d5b" }}>{debouncedSearch}</strong>"</span>}
           </p>
           {activeFilters > 0 && (
-            <button onClick={() => { setPriceRange(null); setBadgeFilter([]); setRatingFilter(null); }}
+            <button onClick={() => { setPriceRange(null); setBadgeFilter([]); setRatingFilter(null); setTagFilter(null); }}
               className="text-xs font-semibold flex items-center gap-1 hover:opacity-70"
               style={{ color:"#dc2626" }}>
               <X size={12}/> Clear filters
@@ -332,12 +342,12 @@ export default function CategoryProductsPage() {
         </div>
 
         {/* Products */}
-        {products.length === 0 ? (
+        {filtered.length === 0 ? (
           <div className="text-center py-20">
             <span className="text-5xl block mb-4">🌸</span>
             <h3 style={{ fontFamily:"Georgia,serif", color:"#3a2416" }} className="text-xl font-bold mb-2">No products found</h3>
             <p style={{ color:"#9c7a62" }} className="mb-6">Try adjusting your filters or search term</p>
-            <button onClick={() => { setSearch(""); setPriceRange(null); setBadgeFilter([]); setRatingFilter(null); }}
+            <button onClick={() => { setSearch(""); setPriceRange(null); setBadgeFilter([]); setRatingFilter(null); setTagFilter(null); }}
               style={{ background:"#c97d5b" }}
               className="text-white px-6 py-3 rounded-full font-semibold text-sm hover:opacity-90">
               Clear All Filters
@@ -347,7 +357,7 @@ export default function CategoryProductsPage() {
           <div className={viewMode === "grid"
             ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5"
             : "flex flex-col gap-4"}>
-            {products.map(p => (
+            {filtered.map(p => (
               <ProductCard key={p._id} p={p} wished={wished.has(p._id)}
                 onWish={toggleWish} onCart={addToCart} viewMode={viewMode}/>
             ))}

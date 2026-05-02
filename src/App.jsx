@@ -50,8 +50,15 @@
 // }
 
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import Home from "./pages/Home";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import OrdersPage from "./pages/OrdersPage";
@@ -75,6 +82,7 @@ import NotFound from "./pages/NotFound";
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
 
         {/* 🌍 PUBLIC ROUTES */}

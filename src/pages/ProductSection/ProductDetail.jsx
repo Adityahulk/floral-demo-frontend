@@ -165,7 +165,7 @@ export default function ProductDetail() {
 
           {/* ── RIGHT: Info ── */}
           <div className="flex flex-col">
-            <p style={{ color: "#c97d5b" }} className="text-sm font-semibold uppercase tracking-widest mb-2">{product.category}</p>
+            <p style={{ color: "#c97d5b" }} className="text-sm font-semibold uppercase tracking-widest mb-2">{categoryName || product.category?.name || ''}</p>
             <h1 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-4xl font-bold mb-4">{product.name}</h1>
 
 

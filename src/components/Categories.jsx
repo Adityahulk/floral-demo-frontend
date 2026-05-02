@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Categories({ categories = [], loading = false }) {
+  const navigate = useNavigate();
   if (loading) {
     return (
       <section style={{ background: "#fdf8f3" }} className="py-16" id="collections">
@@ -28,7 +31,7 @@ export default function Categories({ categories = [], loading = false }) {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {categories.map(({ _id, name, img }) => (
-            <a key={_id} href="#" className="group relative rounded-2xl overflow-hidden cursor-pointer" style={{ aspectRatio: "3/4" }}>
+            <a key={_id} onClick={() => navigate(`/category/${_id}`)} className="group relative rounded-2xl overflow-hidden cursor-pointer" style={{ aspectRatio: "3/4" }}>
               <img src={img} alt={name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
               <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(58,36,22,0.8), transparent)" }} />
               <div className="absolute bottom-0 left-0 right-0 p-4">

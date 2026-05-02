@@ -49,12 +49,8 @@ function ProductSkeleton() {
   );
 }
 
-function Products({ products = [], tabs = ["All"], loading = false, error = false, wished, onWish, onCart }) {
+function Products({ products = [], loading = false, error = false, wished, onWish, onCart }) {
   const navigate = useNavigate();
-  const [tab, setTab] = useState("All");
-  const filtered = tab === "All"
-    ? products
-    : products.filter(p => p.category?.name === tab);
 
   return (
     <section className="py-16 bg-white" id="shop">
@@ -64,50 +60,27 @@ function Products({ products = [], tabs = ["All"], loading = false, error = fals
             <p style={{ color: "#c97d5b" }} className="text-xs uppercase tracking-widest font-semibold mb-2">
               Hand-Picked For You
             </p>
-            <h2
-              style={{ fontFamily: "Georgia,serif", color: "#3a2416" }}
-              className="text-3xl sm:text-4xl font-bold"
-            >
+            <h2 style={{ fontFamily: "Georgia,serif", color: "#3a2416" }} className="text-3xl sm:text-4xl font-bold">
               Featured Flowers
             </h2>
           </div>
-          <a
-            onClick={() => navigate("/products")}
-            style={{ color: "#c97d5b" }}
-            className="text-sm font-semibold flex items-center gap-1 cursor-pointer"
-          >
+          <a onClick={() => navigate("/category")} style={{ color: "#c97d5b" }}
+            className="text-sm font-semibold flex items-center gap-1 cursor-pointer">
             View All <ArrowRight size={14} />
           </a>
         </div>
 
-        <div className="flex gap-2 flex-wrap mb-8">
-          {tabs.map(t => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className="px-4 py-1.5 rounded-full text-sm font-medium border transition-all"
-              style={
-                tab === t
-                  ? { background: "#4a3728", color: "white", borderColor: "#4a3728" }
-                  : { borderColor: "#e8d5c4", color: "#7a5c4a" }
-              }
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-
         {loading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {Array(8).fill(null).map((_, i) => <ProductSkeleton key={i} />)}
+            {Array(4).fill(null).map((_, i) => <ProductSkeleton key={i} />)}
           </div>
         ) : error ? (
           <p style={{ color: "#9c7a62" }} className="text-center py-12">Unable to load products. Please try again later.</p>
-        ) : filtered.length === 0 ? (
+        ) : products.length === 0 ? (
           <p style={{ color: "#9c7a62" }} className="text-center py-12">No products found.</p>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {filtered.map(p => (
+            {products.map(p => (
               <ProductCard
                 key={p._id}
                 p={p}
@@ -164,7 +137,7 @@ export default function Home() {
   const { addToCart } = useCart();
   const [wished, setWished] = useState(new Set());
   const [cartOpen, setCartOpen] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [categories, setCategories] = useState([]);
   const [todaysPick, setTodaysPick] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -173,12 +146,12 @@ export default function Home() {
   useEffect(() => {
     const controller = new AbortController();
     Promise.all([
-      fetch(`${BASE}/api/products`, { signal: controller.signal }).then(r => r.json()),
+      fetch(`${BASE}/api/recommendations`, { signal: controller.signal }).then(r => r.json()),
       fetch(`${BASE}/api/categories`, { signal: controller.signal }).then(r => r.json()),
       fetch(`${BASE}/api/todayspick`, { signal: controller.signal }).then(r => r.json()),
     ])
-      .then(([productsRes, categoriesRes, pickRes]) => {
-        setProducts(Array.isArray(productsRes.data) ? productsRes.data : []);
+      .then(([recRes, categoriesRes, pickRes]) => {
+        setRecommendations(Array.isArray(recRes.data) ? recRes.data : []);
         setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
         setTodaysPick(pickRes.success && pickRes.data ? pickRes.data : null);
       })
@@ -186,8 +159,6 @@ export default function Home() {
       .finally(() => setLoading(false));
     return () => controller.abort();
   }, []);
-
-  const tabs = ["All", ...categories.map(c => c.name)];
 
   function handleWish(id) {
     setWished(prev => {
@@ -208,8 +179,7 @@ export default function Home() {
       <FeaturesBar />
       <Categories categories={categories} loading={loading} />
       <Products
-        products={products}
-        tabs={tabs}
+        products={recommendations}
         loading={loading}
         error={error}
         wished={wished}
