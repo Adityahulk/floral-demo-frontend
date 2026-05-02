@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import { api } from "../../api/client";
+import { API } from "../../api/endpoints";
 import {
   ArrowLeft, Upload, X, Plus, Check, AlertCircle,
   Image, Tag, IndianRupee, Package, FileText,
@@ -611,11 +613,7 @@ export default function AddProductForm({ onBack, initialData, onSuccess }) {
   const [catLoading, setCatLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/categories")
-      .then(r => {
-        if (!r.ok) throw new Error("API unavailable");
-        return r.json();
-      })
+    api(API.categories.list)
       .then(data => {
         const list = Array.isArray(data) ? data : (data.data ?? []);
         setCategories(list.length > 0

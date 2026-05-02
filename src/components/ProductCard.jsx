@@ -43,12 +43,12 @@ export default function ProductCard({ p, wished, onWish, onCart }) {
             {p.originalPrice ? `-${disc}%` : p.badge}
           </span>
         )}
-        <button
+        {/* <button
           onClick={() => onWish(p._id)}
           className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow hover:scale-110 transition-transform"
         >
           <Heart size={14} className={wished ? "fill-rose-500 text-rose-500" : "text-stone-400"} />
-        </button>
+        </button> */}
         <div
           className="absolute inset-x-0 bottom-0 transition-transform duration-300"
           style={{ transform: hovered ? "translateY(0)" : "translateY(100%)" }}

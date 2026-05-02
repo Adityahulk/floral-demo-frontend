@@ -11,35 +11,6 @@ import ReviewsSection from "./ReviewsSection";
 import { api } from "../../api/client";
 import { API } from "../../api/endpoints";
 
-
-const PRODUCT = {
-  id: 1,
-  name: "Rose Bliss Bouquet",
-  category: "Bouquets",
-  price: 1299,
-  original: 1599,
-  rating: 4.8,
-  reviews: 124,
-  badge: "Bestseller",
-  description: "A breathtaking arrangement of hand-picked premium roses, curated to express love, warmth, and elegance. Each bouquet is freshly assembled on the day of delivery to ensure maximum freshness and longevity.",
-  highlights: [
-    "20–25 premium long-stem roses",
-    "Wrapped in luxury kraft paper",
-    "Lasts 7–10 days with proper care",
-    "Includes a handwritten gift card",
-    "Available in red, pink, and mixed",
-  ],
-  images: [
-    "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=700&q=85",
-    "https://images.unsplash.com/photo-1490750967868-88df5691cc3f?w=700&q=85",
-    "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=700&q=85",
-    "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=700&q=85",
-  ],
-  sizes: ["Small (10 stems)", "Medium (20 stems)", "Large (30 stems)"],
-  colors: ["Red", "Pink", "White", "Mixed"],
-};
-
-
 const fmt = n => "₹" + n.toLocaleString("en-IN");
 
 function Stars({ n, size = 14 }) {
@@ -145,10 +116,10 @@ export default function ProductDetail() {
                 className="absolute top-4 left-4 text-white text-xs font-bold px-3 py-1 rounded-full">
                 {product.badge}
               </span>
-              <button onClick={() => setWished(w => !w)}
+              {/* <button onClick={() => setWished(w => !w)}
                 className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform">
                 <Heart size={18} className={wished ? "fill-rose-500 text-rose-500" : "text-stone-400"} />
-              </button>
+              </button> */}
             </div>
             {/* Thumbnails */}
             <div className="grid grid-cols-4 gap-3">

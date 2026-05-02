@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, 
+import { ArrowRight,
   Truck, RefreshCw, ShieldCheck, TrendingUp
 } from "lucide-react";
 import {  useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/Breadcrumb";
+import { api } from "../../api/client";
+import { API } from "../../api/endpoints";
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
@@ -78,10 +80,8 @@ export default function CategoryPage() {
   const featured = CATEGORIES[0];
   // const rest  = CATEGORIES.slice(1);
   const getCategoryes = () => {
-    fetch("http://localhost:3001/api/categories")
-    .then(res => res.json())
+    api(API.categories.list)
     .then(data => {
-      console.log("Fetched categories:", data?.data);
       setCategories(data?.data);
       setLoading(false);
     })
