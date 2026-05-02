@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
 import { setAuth } from "../../utils/auth";
@@ -71,6 +71,22 @@ export default function AuthPage() {
   const [showForgotPass,   setShowForgotPass]   = useState(false);
   const [showForgotConfirm, setShowForgotConfirm] = useState(false);
 
+  // ─── SIGNUP OTP STATE ─────────────────────────────────────────────────────
+  const [signupOtpSent,       setSignupOtpSent]       = useState(false);
+  const [signupOtpVerified,   setSignupOtpVerified]   = useState(false);
+  const [signupOtp,           setSignupOtp]           = useState("");
+  const [signupOtpToken,      setSignupOtpToken]      = useState("");
+  const [signupVerifiedToken, setSignupVerifiedToken] = useState("");
+  const [signupOtpLoading,    setSignupOtpLoading]    = useState(false);
+  const [signupOtpError,      setSignupOtpError]      = useState(null);
+  const [resendTimer,         setResendTimer]         = useState(0);
+
+  useEffect(() => {
+    if (resendTimer <= 0) return;
+    const t = setTimeout(() => setResendTimer(n => n - 1), 1000);
+    return () => clearTimeout(t);
+  }, [resendTimer]);
+
   function set(key, val) {
     setForm(f => ({ ...f, [key]: val }));
     if (errors[key]) setErrors(e => ({ ...e, [key]: null }));
@@ -104,10 +120,15 @@ export default function AuthPage() {
     setApiError(null);
     setApiSuccess(null);
     try {
+      if (mode === "signup" && !signupOtpVerified) {
+        setApiError("Please verify your email first");
+        setLoading(false);
+        return;
+      }
       const endpoint = mode === "login" ? `${API}/login` : `${API}/register`;
       const body     = mode === "login"
         ? { email: form.email, password: form.password }
-        : { name: form.name, email: form.email, password: form.password, contactNumber: form.contactNumber };
+        : { name: form.name, email: form.email, password: form.password, contactNumber: form.contactNumber, verifiedToken: signupVerifiedToken };
 
       const res  = await fetch(endpoint, {
         method:  "POST",
@@ -144,6 +165,13 @@ export default function AuthPage() {
     setApiError(null);
     setApiSuccess(null);
     setForm({ name: "", email: "", password: "", contactNumber: "" });
+    setSignupOtpSent(false);
+    setSignupOtpVerified(false);
+    setSignupOtp("");
+    setSignupOtpToken("");
+    setSignupVerifiedToken("");
+    setSignupOtpError(null);
+    setResendTimer(0);
   }
 
   // ─── FORGOT PASSWORD HANDLERS ─────────────────────────────────────────────
@@ -154,6 +182,48 @@ export default function AuthPage() {
     setForgotEmail(""); setForgotOtp("");
     setForgotPass(""); setForgotConfirm("");
     setForgotError(null);
+  }
+
+  async function handleSendSignupOtp() {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      return setErrors(e => ({ ...e, email: "Enter a valid email" }));
+    setSignupOtpLoading(true); setSignupOtpError(null);
+    try {
+      const res  = await fetch(`${API}/send-signup-otp`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: form.email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to send OTP");
+      setSignupOtpToken(data.otpToken);
+      setSignupOtpSent(true);
+      setSignupOtp("");
+      setResendTimer(30);
+    } catch (err) {
+      setSignupOtpError(err.message);
+    } finally {
+      setSignupOtpLoading(false);
+    }
+  }
+
+  async function handleVerifySignupOtp() {
+    if (!/^\d{6}$/.test(signupOtp))
+      return setSignupOtpError("Enter the 6-digit OTP");
+    setSignupOtpLoading(true); setSignupOtpError(null);
+    try {
+      const res  = await fetch(`${API}/verify-signup-otp`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ otp: signupOtp, otpToken: signupOtpToken }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "OTP verification failed");
+      setSignupVerifiedToken(data.verifiedToken);
+      setSignupOtpVerified(true);
+    } catch (err) {
+      setSignupOtpError(err.message);
+    } finally {
+      setSignupOtpLoading(false);
+    }
   }
 
   async function handleSendOtp(e) {
@@ -500,49 +570,163 @@ export default function AuthPage() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                {mode === "signup" && (
-                  <Field label="Full Name" placeholder="Ananya Mehta" value={form.name}
-                    onChange={v => set("name", v)} error={errors.name} icon={User} />
-                )}
 
-                <Field label="Email Address" type="email" placeholder="you@example.com"
-                  value={form.email} onChange={v => set("email", v)}
-                  error={errors.email} icon={Mail} />
+                {mode === "login" ? (
+                  /* ── LOGIN FIELDS ── */
+                  <>
+                    <Field label="Email Address" type="email" placeholder="you@example.com"
+                      value={form.email} onChange={v => set("email", v)}
+                      error={errors.email} icon={Mail} />
 
-                <div>
-                  <Field
-                    label="Password"
-                    type={showPass ? "text" : "password"}
-                    placeholder="Min. 6 characters"
-                    value={form.password}
-                    onChange={v => set("password", v)}
-                    error={errors.password}
-                    icon={Lock}
-                    rightEl={
-                      <button type="button" onClick={() => setShowPass(s => !s)}
-                        className="hover:opacity-70" style={{ color: "#9c7a62" }}>
-                        {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
-                      </button>
-                    }
-                  />
-                  {mode === "login" && (
-                    <div className="flex justify-end mt-1.5">
-                      <button
-                        type="button"
-                        onClick={() => { setForgotEmail(form.email); setForgotStep("email"); }}
-                        className="text-xs font-semibold hover:opacity-70 transition-opacity"
-                        style={{ color: "#c97d5b" }}
-                      >
-                        Forgot Password?
-                      </button>
+                    <div>
+                      <Field
+                        label="Password"
+                        type={showPass ? "text" : "password"}
+                        placeholder="Min. 6 characters"
+                        value={form.password}
+                        onChange={v => set("password", v)}
+                        error={errors.password}
+                        icon={Lock}
+                        rightEl={
+                          <button type="button" onClick={() => setShowPass(s => !s)}
+                            className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                            {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                          </button>
+                        }
+                      />
+                      <div className="flex justify-end mt-1.5">
+                        <button
+                          type="button"
+                          onClick={() => { setForgotEmail(form.email); setForgotStep("email"); }}
+                          className="text-xs font-semibold hover:opacity-70 transition-opacity"
+                          style={{ color: "#c97d5b" }}
+                        >
+                          Forgot Password?
+                        </button>
+                      </div>
                     </div>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  /* ── SIGNUP FIELDS ── */
+                  <>
+                    {/* Email row with Send OTP button */}
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-semibold" style={{ color: "#4a3728" }}>Email Address</label>
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                            style={{ color: "#9c7a62" }} />
+                          <input
+                            type="email"
+                            value={form.email}
+                            onChange={e => { if (!signupOtpVerified) set("email", e.target.value); }}
+                            placeholder="you@example.com"
+                            disabled={signupOtpVerified}
+                            className="w-full rounded-xl border px-4 py-3 text-sm outline-none transition-all"
+                            style={{
+                              paddingLeft: "2.5rem",
+                              borderColor: errors.email ? "#dc2626" : "#e8d5c4",
+                              background: signupOtpVerified ? "#f0e4d8" : errors.email ? "#fff5f5" : "white",
+                              color: "#3a2416",
+                            }}
+                          />
+                        </div>
+                        {!signupOtpVerified && (
+                          <button
+                            type="button"
+                            onClick={handleSendSignupOtp}
+                            disabled={signupOtpLoading || resendTimer > 0}
+                            className="px-4 py-3 rounded-xl text-white text-sm font-bold transition-all hover:opacity-90 disabled:opacity-60 whitespace-nowrap"
+                            style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}
+                          >
+                            {signupOtpLoading
+                              ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
+                              : signupOtpSent
+                                ? resendTimer > 0 ? `Resend (${resendTimer}s)` : "Resend OTP"
+                                : "Send OTP"
+                            }
+                          </button>
+                        )}
+                      </div>
+                      {errors.email && <p className="text-xs" style={{ color: "#dc2626" }}>{errors.email}</p>}
+                    </div>
 
-                {mode === "signup" && (
-                  <Field label="Contact Number" placeholder="+91 98765 43210"
-                    value={form.contactNumber} onChange={v => set("contactNumber", v)}
-                    error={errors.contactNumber} icon={Phone} />
+                    {/* OTP input — shown after Send OTP, hidden after verified */}
+                    {signupOtpSent && !signupOtpVerified && (
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-semibold" style={{ color: "#4a3728" }}>Enter OTP</label>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={6}
+                            value={signupOtp}
+                            onChange={e => { setSignupOtp(e.target.value.replace(/\D/g, "").slice(0, 6)); setSignupOtpError(null); }}
+                            placeholder="6-digit OTP"
+                            className="flex-1 rounded-xl border px-4 py-3 text-sm outline-none transition-all"
+                            style={{ borderColor: "#e8d5c4", color: "#3a2416" }}
+                          />
+                          <button
+                            type="button"
+                            onClick={handleVerifySignupOtp}
+                            disabled={signupOtpLoading || signupOtp.length < 6}
+                            className="px-4 py-3 rounded-xl text-white text-sm font-bold transition-all hover:opacity-90 disabled:opacity-60"
+                            style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}
+                          >
+                            {signupOtpLoading
+                              ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
+                              : "Verify"
+                            }
+                          </button>
+                        </div>
+                        <p className="text-xs" style={{ color: "#9c7a62" }}>OTP sent to {form.email}</p>
+                      </div>
+                    )}
+
+                    {/* OTP error */}
+                    {signupOtpError && (
+                      <div className="flex items-start gap-2 p-3 rounded-xl text-sm"
+                        style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca" }}>
+                        <span className="mt-0.5">⚠️</span><span>{signupOtpError}</span>
+                      </div>
+                    )}
+
+                    {/* Verified badge */}
+                    {signupOtpVerified && (
+                      <div className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm"
+                        style={{ background: "#dcfce7", color: "#16a34a", border: "1px solid #bbf7d0" }}>
+                        <span>✓</span><span>Email verified</span>
+                      </div>
+                    )}
+
+                    {/* Rest of signup form — unlocked after email verified */}
+                    {signupOtpVerified && (
+                      <>
+                        <Field label="Full Name" placeholder="Ananya Mehta" value={form.name}
+                          onChange={v => set("name", v)} error={errors.name} icon={User} />
+
+                        <Field
+                          label="Password"
+                          type={showPass ? "text" : "password"}
+                          placeholder="Min. 6 characters"
+                          value={form.password}
+                          onChange={v => set("password", v)}
+                          error={errors.password}
+                          icon={Lock}
+                          rightEl={
+                            <button type="button" onClick={() => setShowPass(s => !s)}
+                              className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                              {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                            </button>
+                          }
+                        />
+
+                        <Field label="Contact Number" placeholder="+91 98765 43210"
+                          value={form.contactNumber} onChange={v => set("contactNumber", v)}
+                          error={errors.contactNumber} icon={Phone} />
+                      </>
+                    )}
+                  </>
                 )}
 
                 {apiSuccess && (
@@ -561,7 +745,7 @@ export default function AuthPage() {
                   </div>
                 )}
 
-                <button type="submit" disabled={loading}
+                <button type="submit" disabled={loading || (mode === "signup" && !signupOtpVerified)}
                   className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 disabled:opacity-60 mt-2"
                   style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
                   {loading
