@@ -64,16 +64,17 @@ export default function ProductDetail() {
   const [selectedColor, setColor]   = useState('');
   const [added, setAdded]           = useState(false);
   const [faqOpen, setFaqOpen]       = useState(null);
+  const [categoryName, setCategoryName] = useState('');
   const { productId, id, categoryId } = useParams();
   const currentProductId = productId ?? id;
 
   const disc = product?.originalPrice ? Math.round((1 - product?.price / product?.originalPrice) * 100) : 0;
 
   const paths = [
-    { id: 1, name: 'Home',            path: '/'           },
-    { id: 2, name: 'Category',        path: '/category'   },
-    ...(product && categoryId
-      ? [{ id: 3, name: product.category, path: `/${categoryId}` }]
+    { id: 1, name: 'Home',      path: '/'         },
+    { id: 2, name: 'Category',  path: '/category' },
+    ...(categoryId
+      ? [{ id: 3, name: categoryName || '...', path: `/${categoryId}` }]
       : []),
     ...(product
       ? [{ id: categoryId ? 4 : 3, name: product.name, path: `/${currentProductId}` }]
@@ -105,6 +106,11 @@ export default function ProductDetail() {
   };
   useEffect(()=>{
     getProductData();
+    if (categoryId) {
+      fetch(`http://localhost:3001/api/categories/${categoryId}`)
+        .then(r => r.json())
+        .then(data => setCategoryName(data?.data?.name || ''));
+    }
     fetch("http://localhost:3001/api/recommendations")
       .then(r => r.json())
       .then(res => setRecommendations(Array.isArray(res.data) ? res.data : []))

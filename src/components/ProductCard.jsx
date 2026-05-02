@@ -92,7 +92,7 @@ export default function ProductCard({ p, wished, onWish, onCart }) {
           </button>
         </div>
         <button
-          onClick={() => navigate(`/category/${p.category?._id}/${p._id}`)}
+          onClick={() => navigate(`/category/${p.category?._id ?? p.category}/${p._id}`)}
           style={{ background: "#4a3728" }}
           className="w-full py-2 my-2 text-white text-sm font-semibold flex items-center justify-center gap-2 hover:opacity-90"
         >
