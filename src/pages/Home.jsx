@@ -166,6 +166,7 @@ export default function Home() {
   const [cartOpen, setCartOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [todaysPick, setTodaysPick] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -174,22 +175,17 @@ export default function Home() {
     Promise.all([
       fetch(`${BASE}/api/products`, { signal: controller.signal }).then(r => r.json()),
       fetch(`${BASE}/api/categories`, { signal: controller.signal }).then(r => r.json()),
+      fetch(`${BASE}/api/todayspick`, { signal: controller.signal }).then(r => r.json()),
     ])
-      .then(([productsRes, categoriesRes]) => {
+      .then(([productsRes, categoriesRes, pickRes]) => {
         setProducts(Array.isArray(productsRes.data) ? productsRes.data : []);
         setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
+        setTodaysPick(pickRes.data ?? null);
       })
       .catch(err => { if (err.name !== "AbortError") setError(true); })
       .finally(() => setLoading(false));
     return () => controller.abort();
   }, []);
-
-  const todaysPick = products.length > 0
-    ? products.reduce((best, p) =>
-        (p.rating?.average ?? 0) > (best.rating?.average ?? 0) ? p : best,
-        products[0]
-      )
-    : null;
 
   const tabs = ["All", ...categories.map(c => c.name)];
 
