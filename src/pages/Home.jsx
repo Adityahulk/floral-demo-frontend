@@ -48,7 +48,7 @@ function ProductSkeleton() {
   );
 }
 
-function Products({ products = [], tabs = ["All"], loading = false, wished, onWish, onCart }) {
+function Products({ products = [], tabs = ["All"], loading = false, error = false, wished, onWish, onCart }) {
   const navigate = useNavigate();
   const [tab, setTab] = useState("All");
   const filtered = tab === "All"
@@ -100,6 +100,8 @@ function Products({ products = [], tabs = ["All"], loading = false, wished, onWi
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {Array(8).fill(null).map((_, i) => <ProductSkeleton key={i} />)}
           </div>
+        ) : error ? (
+          <p style={{ color: "#9c7a62" }} className="text-center py-12">Unable to load products. Please try again later.</p>
         ) : filtered.length === 0 ? (
           <p style={{ color: "#9c7a62" }} className="text-center py-12">No products found.</p>
         ) : (
@@ -193,6 +195,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -203,7 +206,7 @@ export default function Home() {
         setProducts(Array.isArray(productsRes.data) ? productsRes.data : []);
         setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
       })
-      .catch(() => {})
+      .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
 
@@ -238,6 +241,7 @@ export default function Home() {
         products={products}
         tabs={tabs}
         loading={loading}
+        error={error}
         wished={wished}
         onWish={handleWish}
         onCart={handleCart}
