@@ -122,79 +122,96 @@ export default function CustomersTab() {
 
         {/* Table */}
         <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
-          <div className="grid grid-cols-[2fr_1fr_0.8fr_0.8fr_0.8fr_auto] gap-3 px-5 py-3 border-b text-xs font-bold uppercase tracking-wide"
-            style={{ borderColor:"#f0e4d8", background:"#fdf8f3", color:"#9c7a62" }}>
-            <span>Customer</span>
-            <span>Phone</span>
-            <span>Orders</span>
-            <span>Spent</span>
-            <span>Status</span>
-            <span></span>
-          </div>
-
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[580px] border-collapse">
+            <thead>
+              <tr style={{ background:"#fdf8f3", borderBottom:"1px solid #f0e4d8" }}>
+                {["Customer","Phone","Orders","Spent","Status",""].map(h => (
+                  <th key={h} className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
+                    style={{ color:"#9c7a62" }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
           {loading ? (
-            <div className="flex items-center justify-center py-16">
-              <div className="w-6 h-6 border-2 border-t-transparent rounded-full animate-spin"
-                style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
-            </div>
+            <tr><td colSpan={6}>
+              <div className="flex items-center justify-center py-16">
+                <div className="w-6 h-6 border-2 border-t-transparent rounded-full animate-spin"
+                  style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
+              </div>
+            </td></tr>
           ) : filtered.length === 0 ? (
-            <div className="text-center py-12">
-              <span className="text-3xl block mb-2">👤</span>
-              <p style={{ color:"#9c7a62" }} className="text-sm">No users found</p>
-            </div>
+            <tr><td colSpan={6}>
+              <div className="text-center py-12">
+                <span className="text-3xl block mb-2">👤</span>
+                <p style={{ color:"#9c7a62" }} className="text-sm">No users found</p>
+              </div>
+            </td></tr>
           ) : filtered.map((u, idx) => {
             const isSelected = selected?._id === u._id;
             const isTog      = toggling === u._id;
             return (
-              <div key={u._id}
+              <tr key={u._id}
                 onClick={() => { setSelected(isSelected ? null : u); setEditing(false); }}
-                className="grid grid-cols-[2fr_1fr_0.8fr_0.8fr_0.8fr_auto] gap-3 px-5 py-3.5 items-center border-b cursor-pointer transition-colors"
+                className="cursor-pointer transition-colors"
                 style={{
-                  borderColor:"#f0e4d8",
                   background: isSelected ? "#fdf8f3" : "white",
-                  borderLeft: isSelected ? "3px solid #c97d5b" : "3px solid transparent",
-                  ...(idx === filtered.length - 1 ? { borderBottom:"none" } : {}),
+                  borderBottom: idx === filtered.length - 1 ? "none" : "1px solid #f0e4d8",
+                  boxShadow: isSelected ? "inset 3px 0 0 #c97d5b" : "none",
                 }}>
 
-                <div className="flex items-center gap-3 min-w-0">
-                  {u.profileImage
-                    ? <img src={u.profileImage} alt={u.name} className="w-9 h-9 rounded-full object-cover shrink-0"/>
-                    : <div style={{ background: u.active ? "#c97d5b" : "#d4b5a0" }}
-                        className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
-                        {initials(u.name) || "?"}
-                      </div>
-                  }
-                  <div className="min-w-0">
-                    <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{u.name || "—"}</p>
-                    <p style={{ color:"#9c7a62" }} className="text-xs truncate">{u.email}</p>
+                <td className="px-5 py-3.5">
+                  <div className="flex items-center gap-3 min-w-0">
+                    {u.profileImage
+                      ? <img src={u.profileImage} alt={u.name} className="w-9 h-9 rounded-full object-cover shrink-0"/>
+                      : <div style={{ background: u.active ? "#c97d5b" : "#d4b5a0" }}
+                          className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
+                          {initials(u.name) || "?"}
+                        </div>
+                    }
+                    <div className="min-w-0">
+                      <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{u.name || "—"}</p>
+                      <p style={{ color:"#9c7a62" }} className="text-xs truncate">{u.email}</p>
+                    </div>
                   </div>
-                </div>
+                </td>
 
-                <p style={{ color:"#5c4033" }} className="text-xs truncate">{u.contactNumber || "—"}</p>
-                <p style={{ color:"#4a3728" }} className="text-sm font-semibold text-center">{u.totalOrders ?? "—"}</p>
-                <p style={{ color:"#c97d5b" }} className="text-xs font-bold">
-                  {u.totalSpent != null ? fmtK(u.totalSpent) : "—"}
-                </p>
-
-                <button
-                  onClick={e => handleToggle(u, e)}
-                  disabled={isTog}
-                  title={u.active ? "Deactivate" : "Activate"}
-                  className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full transition-all hover:opacity-80 disabled:opacity-50"
-                  style={u.active
-                    ? { background:"#dcfce7", color:"#16a34a" }
-                    : { background:"#f5f5f4", color:"#9c7a62" }}>
-                  {isTog
-                    ? <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"/>
-                    : <span className="w-1.5 h-1.5 rounded-full" style={{ background: u.active ? "#16a34a" : "#9c7a62" }}/>
-                  }
-                  {u.active ? "Active" : "Inactive"}
-                </button>
-
-                <ChevronRight size={14} style={{ color: isSelected ? "#c97d5b" : "#d4b5a0" }} />
-              </div>
+                <td className="px-5 py-3.5 whitespace-nowrap">
+                  <p style={{ color:"#5c4033" }} className="text-xs">{u.contactNumber || "—"}</p>
+                </td>
+                <td className="px-5 py-3.5 text-center">
+                  <p style={{ color:"#4a3728" }} className="text-sm font-semibold">{u.totalOrders ?? "—"}</p>
+                </td>
+                <td className="px-5 py-3.5 whitespace-nowrap">
+                  <p style={{ color:"#c97d5b" }} className="text-xs font-bold">
+                    {u.totalSpent != null ? fmtK(u.totalSpent) : "—"}
+                  </p>
+                </td>
+                <td className="px-5 py-3.5">
+                  <button
+                    onClick={e => handleToggle(u, e)}
+                    disabled={isTog}
+                    title={u.active ? "Deactivate" : "Activate"}
+                    className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full transition-all hover:opacity-80 disabled:opacity-50 whitespace-nowrap"
+                    style={u.active
+                      ? { background:"#dcfce7", color:"#16a34a" }
+                      : { background:"#f5f5f4", color:"#9c7a62" }}>
+                    {isTog
+                      ? <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"/>
+                      : <span className="w-1.5 h-1.5 rounded-full" style={{ background: u.active ? "#16a34a" : "#9c7a62" }}/>
+                    }
+                    {u.active ? "Active" : "Inactive"}
+                  </button>
+                </td>
+                <td className="px-5 py-3.5">
+                  <ChevronRight size={14} style={{ color: isSelected ? "#c97d5b" : "#d4b5a0" }} />
+                </td>
+              </tr>
             );
           })}
+            </tbody>
+          </table>
+          </div>
 
           {totalPages > 1 && (
             <div className="flex items-center justify-between px-5 py-3 border-t" style={{ borderColor:"#f0e4d8" }}>

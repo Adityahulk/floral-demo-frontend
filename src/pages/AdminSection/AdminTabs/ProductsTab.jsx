@@ -253,73 +253,88 @@ export default function ProductsTab({ onEdit }) {
       {/* Table View */}
       {!loading && !error && filtered.length > 0 && view === "table" && (
         <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
-          <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr_1fr_auto] gap-4 px-5 py-3 border-b text-xs font-bold uppercase tracking-wide"
-            style={{ borderColor:"#f0e4d8", background:"#fdf8f3", color:"#9c7a62" }}>
-            <span>Product</span>
-            <span>Category</span>
-            <span>Price</span>
-            <span>Stock</span>
-            <span>Status</span>
-            <span>Actions</span>
-          </div>
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] border-collapse">
+            <thead>
+              <tr style={{ background:"#fdf8f3", borderBottom:"1px solid #f0e4d8" }}>
+                {["Product","Category","Price","Stock","Status","Actions"].map(h => (
+                  <th key={h} className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
+                    style={{ color:"#9c7a62" }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
           {filtered.map(p => {
             const img = Array.isArray(p.images) ? p.images[0] : null;
             const isToggling = toggling === p._id;
             return (
-              <div key={p._id}
-                className="grid grid-cols-[2.5fr_1fr_1fr_1fr_1fr_auto] gap-4 px-5 py-3 items-center border-b"
-                style={{ borderColor:"#f0e4d8" }}
+              <tr key={p._id}
+                className="transition-colors"
+                style={{ borderBottom:"1px solid #f0e4d8" }}
                 onMouseEnter={e => e.currentTarget.style.background="#fdf8f3"}
                 onMouseLeave={e => e.currentTarget.style.background="white"}>
-                <div className="flex items-center gap-3 min-w-0">
-                  {img
-                    ? <img src={img} alt={p.name} className="w-10 h-10 object-cover rounded-xl shrink-0"/>
-                    : <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg" style={{ background:"#f5ede5" }}>🌸</div>
-                  }
-                  <div className="min-w-0">
-                    <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{p.name}</p>
-                    {p.badge && <span className="text-xs font-bold px-1.5 py-0.5 rounded-full" style={{ background:"#fef9c3", color:"#92400e" }}>{p.badge}</span>}
+                <td className="px-5 py-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    {img
+                      ? <img src={img} alt={p.name} className="w-10 h-10 object-cover rounded-xl shrink-0"/>
+                      : <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg" style={{ background:"#f5ede5" }}>🌸</div>
+                    }
+                    <div className="min-w-0">
+                      <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{p.name}</p>
+                      {p.badge && <span className="text-xs font-bold px-1.5 py-0.5 rounded-full" style={{ background:"#fef9c3", color:"#92400e" }}>{p.badge}</span>}
+                    </div>
                   </div>
-                </div>
-                <p style={{ color:"#9c7a62" }} className="text-xs truncate">{p.category?.name ?? p.category ?? "—"}</p>
-                <p style={{ color:"#c97d5b" }} className="text-sm font-bold">₹{p.price?.toLocaleString("en-IN")}</p>
-                <div>
+                </td>
+                <td className="px-5 py-3">
+                  <p style={{ color:"#9c7a62" }} className="text-xs truncate">{p.category?.name ?? p.category ?? "—"}</p>
+                </td>
+                <td className="px-5 py-3 whitespace-nowrap">
+                  <p style={{ color:"#c97d5b" }} className="text-sm font-bold">₹{p.price?.toLocaleString("en-IN")}</p>
+                </td>
+                <td className="px-5 py-3">
                   <p style={{ color: p.quantity < 10 ? "#dc2626" : "#4a3728" }} className="text-sm font-semibold">{p.quantity}</p>
                   {p.quantity < 10 && <p style={{ color:"#dc2626" }} className="text-xs">Low</p>}
-                </div>
-                <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full w-fit"
-                  style={{ background: p.active ? "#dcfce7" : "#fee2e2", color: p.active ? "#16a34a" : "#dc2626" }}>
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: p.active ? "#16a34a" : "#dc2626" }}/>
-                  {p.active ? "Active" : "Inactive"}
-                </span>
-                <div className="flex items-center gap-1.5">
-                  <button onClick={() => handleToggleActive(p)} disabled={isToggling}
-                    className="p-1.5 rounded-lg border transition-all hover:opacity-80 disabled:opacity-50"
-                    title={p.active ? "Deactivate" : "Activate"}
-                    style={p.active
-                      ? { borderColor:"#fca5a5", color:"#dc2626", background:"#fff1f2" }
-                      : { borderColor:"#86efac", color:"#16a34a", background:"#f0fdf4" }}>
-                    {isToggling
-                      ? <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"/>
-                      : p.active ? <ToggleRight size={13}/> : <ToggleLeft size={13}/>
-                    }
-                  </button>
-                  <button onClick={() => onEdit(p)}
-                    className="p-1.5 rounded-lg border transition-all hover:opacity-80"
-                    title="Edit"
-                    style={{ borderColor:"#e8d5c4", color:"#5c4033", background:"#fdf8f3" }}>
-                    <Edit2 size={13}/>
-                  </button>
-                  <button onClick={() => setDeleteConfirm(p)}
-                    className="p-1.5 rounded-lg border transition-all hover:opacity-80"
-                    title="Delete"
-                    style={{ borderColor:"#fca5a5", color:"#dc2626", background:"#fff1f2" }}>
-                    <Trash2 size={13}/>
-                  </button>
-                </div>
-              </div>
+                </td>
+                <td className="px-5 py-3">
+                  <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap"
+                    style={{ background: p.active ? "#dcfce7" : "#fee2e2", color: p.active ? "#16a34a" : "#dc2626" }}>
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ background: p.active ? "#16a34a" : "#dc2626" }}/>
+                    {p.active ? "Active" : "Inactive"}
+                  </span>
+                </td>
+                <td className="px-5 py-3">
+                  <div className="flex items-center gap-1.5">
+                    <button onClick={() => handleToggleActive(p)} disabled={isToggling}
+                      className="p-1.5 rounded-lg border transition-all hover:opacity-80 disabled:opacity-50"
+                      title={p.active ? "Deactivate" : "Activate"}
+                      style={p.active
+                        ? { borderColor:"#fca5a5", color:"#dc2626", background:"#fff1f2" }
+                        : { borderColor:"#86efac", color:"#16a34a", background:"#f0fdf4" }}>
+                      {isToggling
+                        ? <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"/>
+                        : p.active ? <ToggleRight size={13}/> : <ToggleLeft size={13}/>
+                      }
+                    </button>
+                    <button onClick={() => onEdit(p)}
+                      className="p-1.5 rounded-lg border transition-all hover:opacity-80"
+                      title="Edit"
+                      style={{ borderColor:"#e8d5c4", color:"#5c4033", background:"#fdf8f3" }}>
+                      <Edit2 size={13}/>
+                    </button>
+                    <button onClick={() => setDeleteConfirm(p)}
+                      className="p-1.5 rounded-lg border transition-all hover:opacity-80"
+                      title="Delete"
+                      style={{ borderColor:"#fca5a5", color:"#dc2626", background:"#fff1f2" }}>
+                      <Trash2 size={13}/>
+                    </button>
+                  </div>
+                </td>
+              </tr>
             );
           })}
+            </tbody>
+          </table>
+          </div>
         </div>
       )}
 

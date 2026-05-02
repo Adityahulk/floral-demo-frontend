@@ -138,17 +138,17 @@ export default function AdminOrdersTab() {
         </div>
       ) : (
         <div className="rounded-2xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
-
-          <div className="hidden sm:grid grid-cols-[1fr_1.2fr_0.7fr_0.8fr_1fr_auto] gap-3 px-5 py-3 text-xs font-bold uppercase tracking-wide"
-            style={{ background:"#fdf8f3", color:"#9c7a62", borderBottom:"1px solid #f0e4d8" }}>
-            <span>Order</span>
-            <span>Customer</span>
-            <span>Items</span>
-            <span>Amount</span>
-            <span>Status</span>
-            <span>Actions</span>
-          </div>
-
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] border-collapse">
+            <thead className="hidden sm:table-header-group">
+              <tr style={{ background:"#fdf8f3", borderBottom:"1px solid #f0e4d8" }}>
+                {["Order","Customer","Items","Amount","Status",""].map(h => (
+                  <th key={h} className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
+                    style={{ color:"#9c7a62" }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
           {filtered.map((order, idx) => {
             const st    = (order.status||"").toLowerCase();
             const cfg   = ORDER_STATUS_CFG[st] || ORDER_STATUS_CFG.pending;
@@ -161,12 +161,13 @@ export default function AdminOrdersTab() {
             const nextStatuses = STATUS_NEXT[st] || [];
 
             return (
-              <div key={order._id} style={{ borderColor:"#f0e4d8" }}
-                className={idx < filtered.length - 1 || isExp ? "border-b" : ""}>
+              <tr key={order._id}
+                style={{ borderBottom: idx < filtered.length - 1 || isExp ? "1px solid #f0e4d8" : "none" }}>
 
                 {/* Row */}
+                <td colSpan={6} style={{ padding: 0 }}>
                 <div
-                  className="grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_1.2fr_0.7fr_0.8fr_1fr_auto] gap-3 px-5 py-4 items-center cursor-pointer hover:bg-amber-50/30 transition-colors"
+                  className="grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_1.4fr_0.6fr_0.9fr_1.1fr_auto] gap-3 px-5 py-4 items-center cursor-pointer hover:bg-amber-50/30 transition-colors"
                   onClick={() => setExpanded(isExp ? null : order._id)}>
 
                   <div>
@@ -192,7 +193,7 @@ export default function AdminOrdersTab() {
                     <p style={{ color:"#4a3728" }} className="text-sm">{order.items?.length || 0} item{order.items?.length !== 1 ? "s" : ""}</p>
                   </div>
 
-                  <p className="hidden sm:block font-bold text-sm" style={{ color:"#c97d5b" }}>
+                  <p className="hidden sm:block font-bold text-sm whitespace-nowrap" style={{ color:"#c97d5b" }}>
                     {fmt(total)}
                   </p>
 
@@ -213,7 +214,7 @@ export default function AdminOrdersTab() {
 
                 {/* Expanded Detail */}
                 {isExp && (
-                  <div className="border-t px-5 pb-6 pt-5" style={{ borderColor:"#f0e4d8", background:"#fdfaf7" }}>
+                  <div className="border-t px-5 pb-6 pt-5 sm:col-span-6" style={{ borderColor:"#f0e4d8", background:"#fdfaf7" }}>
                     <div className="grid md:grid-cols-2 gap-6">
 
                       <div className="space-y-5">
@@ -349,9 +350,13 @@ export default function AdminOrdersTab() {
                     </div>
                   </div>
                 )}
-              </div>
+                </td>
+              </tr>
             );
           })}
+            </tbody>
+          </table>
+          </div>
         </div>
       )}
     </div>
