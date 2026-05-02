@@ -26,7 +26,7 @@ const NAV = [
   { id:"reviews",        icon:<Star size={18}/>,            label:"Reviews"       },
   { id:"banners",        icon:<Image size={18}/>,           label:"Banners"       },
   { id:"todayspick",     icon:<Crown size={18}/>,           label:"Today's Pick"  },
-  { id:"recommendations",icon:<Sparkles size={18}/>,        label:"Recommendations"},
+  { id:"recommendations", icon:<Sparkles size={18}/>,       label:"Recommendations" },
 ];
 
 export default function AdminPanel() {
@@ -72,16 +72,16 @@ export default function AdminPanel() {
       : NAV.find(n => n.id === tab)?.label ?? "";
 
   const PAGES = {
-    dashboard:     <Dashboard />,
-    customers:     <CustomersTab />,
-    analytics:     <AnalyticsTab />,
-    orders:        <AdminOrdersTab />,
-    products:      <ProductsTab onEdit={handleEdit} />,
-    reviews:       <ReviewsTab />,
+    dashboard:       <Dashboard />,
+    customers:       <CustomersTab />,
+    analytics:       <AnalyticsTab />,
+    orders:          <AdminOrdersTab />,
+    products:        <ProductsTab onEdit={handleEdit} />,
+    reviews:         <ReviewsTab />,
     banners:         <BannersTab />,
     todayspick:      <TodaysPickTab />,
     recommendations: <RecommendationsTab />,
-    "add-product": <AddProductForm key={editingProduct?._id ?? "new"} initialData={editingProduct} onSuccess={handleEditSuccess} />,
+    "add-product":   <AddProductForm key={editingProduct?._id ?? "new"} initialData={editingProduct} onSuccess={handleEditSuccess} />,
   };
 
   return (
