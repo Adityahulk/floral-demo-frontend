@@ -170,16 +170,18 @@ export default function Home() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
     Promise.all([
-      fetch(`${BASE}/api/products`).then(r => r.json()),
-      fetch(`${BASE}/api/categories`).then(r => r.json()),
+      fetch(`${BASE}/api/products`, { signal: controller.signal }).then(r => r.json()),
+      fetch(`${BASE}/api/categories`, { signal: controller.signal }).then(r => r.json()),
     ])
       .then(([productsRes, categoriesRes]) => {
         setProducts(Array.isArray(productsRes.data) ? productsRes.data : []);
         setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
       })
-      .catch(() => setError(true))
+      .catch(err => { if (err.name !== "AbortError") setError(true); })
       .finally(() => setLoading(false));
+    return () => controller.abort();
   }, []);
 
   const todaysPick = products.length > 0

@@ -8,11 +8,13 @@ export default function PromoBanner() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${BASE}/api/banners`)
+    const controller = new AbortController();
+    fetch(`${BASE}/api/banners`, { signal: controller.signal })
       .then(r => r.json())
       .then(res => setBanners(Array.isArray(res.data) ? res.data : []))
-      .catch(() => setBanners([]))
+      .catch(err => { if (err.name !== "AbortError") setBanners([]); })
       .finally(() => setLoading(false));
+    return () => controller.abort();
   }, []);
 
   if (loading) {
@@ -31,20 +33,20 @@ export default function PromoBanner() {
   return (
     <section style={{ background: "#fdf8f3" }} className="py-16">
       <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-6">
-        {banners.map(category => (
-          <div key={category._id} className="group relative rounded-3xl overflow-hidden h-64 sm:h-72 cursor-pointer">
+        {banners.map(banner => (
+          <div key={banner._id} className="group relative rounded-3xl overflow-hidden h-64 sm:h-72 cursor-pointer">
             <img
-              src={category.img}
-              alt={category.name}
+              src={banner.img}
+              alt={banner.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
             <div className="absolute inset-0" style={{ background: "rgba(58,36,22,0.5)" }} />
             <div className="absolute inset-0 flex flex-col justify-end p-8">
               <span style={{ color: "#f5c8a8" }} className="text-xs uppercase tracking-widest font-semibold mb-2 line-clamp-1">
-                {category.desc}
+                {banner.desc}
               </span>
               <h3 style={{ fontFamily: "Georgia,serif" }} className="text-white text-2xl font-bold mb-4">
-                {category.name}
+                {banner.name}
               </h3>
               <a
                 href="#"
