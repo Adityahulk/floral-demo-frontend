@@ -4,7 +4,7 @@ import {
   ShieldCheck, Minus, Plus, ChevronDown, ChevronUp, Check
 } from "lucide-react";
 import Breadcrumb from "../../components/Breadcrumb";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ProductDetailSkeleton from "./ProductSkeletons/ProductDetailSkeleton";
 import { useCart } from "../../context/CartContext";
 import ReviewsSection from "./ReviewsSection";
@@ -37,12 +37,6 @@ const PRODUCT = {
   colors: ["Red", "Pink", "White", "Mixed"],
 };
 
-const RELATED = [
-  { id:2, name:"Pastel Dream",   price:1899, img:"https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=400&q=80", rating:4.9 },
-  { id:3, name:"Wildflower Mix", price:999,  img:"https://images.unsplash.com/photo-1491013516836-7db643ee125a?w=400&q=80", rating:4.7 },
-  { id:4, name:"Sunflower Bunch",price:1499, img:"https://images.unsplash.com/photo-1543218024-57a70143c369?w=400&q=80", rating:4.6 },
-];
-
 
 const fmt = n => "₹" + n.toLocaleString("en-IN");
 
@@ -60,6 +54,8 @@ function Stars({ n, size = 14 }) {
 
 export default function ProductDetail() {
   const { addToCart } = useCart();
+  const navigate = useNavigate();
+  const [recommendations, setRecommendations] = useState([]);
    const [product, setProduct] = useState(null);
   const [activeImg, setActiveImg]   = useState(0);
   const [qty, setQty]               = useState(1);
@@ -101,6 +97,10 @@ export default function ProductDetail() {
   };
   useEffect(()=>{
     getProductData();
+    fetch("http://localhost:3001/api/recommendations")
+      .then(r => r.json())
+      .then(res => setRecommendations(Array.isArray(res.data) ? res.data : []))
+      .catch(() => setRecommendations([]));
   },[productId])
 
   return (
@@ -305,25 +305,40 @@ export default function ProductDetail() {
         </div>
 
         {/* Related Products */}
-        <div>
-          <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-3xl font-bold mb-8">You May Also Like</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
-            {RELATED.map(p => (
-              <div key={p.id} className="group bg-white rounded-2xl overflow-hidden border hover:shadow-lg transition-shadow" style={{ borderColor: "#f0e4d8" }}>
-                <div className="overflow-hidden aspect-square">
-                  <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <div className="p-4">
-                  <p style={{ color: "#3a2416", fontFamily: "Georgia, serif" }} className="font-semibold mb-1">{p.name}</p>
-                  <div className="flex items-center justify-between">
-                    <span style={{ color: "#c97d5b" }} className="font-bold">{fmt(p.price)}</span>
-                    <Stars n={p.rating} size={12} />
+        {recommendations.filter(p => p._id !== productId).length > 0 && (
+          <div>
+            <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-3xl font-bold mb-8">You May Also Like</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
+              {recommendations
+                .filter(p => p._id !== productId)
+                .slice(0, 3)
+                .map(p => (
+                  <div
+                    key={p._id}
+                    onClick={() => navigate(`/product/${p._id}`)}
+                    className="group bg-white rounded-2xl overflow-hidden border hover:shadow-lg transition-shadow cursor-pointer"
+                    style={{ borderColor: "#f0e4d8" }}
+                  >
+                    <div className="overflow-hidden aspect-square">
+                      <img
+                        src={p.images?.[0]}
+                        alt={p.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <p style={{ color: "#3a2416", fontFamily: "Georgia, serif" }} className="font-semibold mb-1">{p.name}</p>
+                      <div className="flex items-center justify-between">
+                        <span style={{ color: "#c97d5b" }} className="font-bold">{fmt(p.price)}</span>
+                        <Stars n={p.rating?.average ?? 0} size={12} />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                ))
+              }
+            </div>
           </div>
-        </div>
+        )}
 
       </div>
     </div>
