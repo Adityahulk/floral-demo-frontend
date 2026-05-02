@@ -116,7 +116,7 @@ export default function OrderDetail() {
     <div style={{ fontFamily:"system-ui, sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
 
       <div style={{ background:"#f5ede5", borderBottom:"1px solid #e8d5c4" }} className="py-3">
-        <div className="max-w-5xl mx-auto px-4 flex items-center gap-2 text-sm flex-wrap" style={{ color:"#9c7a62" }}>
+        <div className="max-w-7xl mx-auto px-4 flex items-center gap-2 text-sm flex-wrap" style={{ color:"#9c7a62" }}>
           <Link to="/" className="hover:underline">Home</Link><ChevronRight size={13}/>
           <Link to="/profile" className="hover:underline">My Account</Link><ChevronRight size={13}/>
           <Link to="/orders" className="hover:underline">My Orders</Link><ChevronRight size={13}/>
@@ -124,7 +124,7 @@ export default function OrderDetail() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-10">
+      <div className="max-w-7xl mx-auto px-4 py-10">
 
         <button onClick={() => window.history.back()}
           className="flex items-center gap-2 mb-6 text-sm font-medium hover:opacity-70"
@@ -176,7 +176,7 @@ export default function OrderDetail() {
           </div>
         )}
 
-        <div className="grid lg:grid-cols-[1fr_340px] gap-6">
+        <div className="grid lg:grid-cols-[1fr_360px] gap-6">
 
           <div className="space-y-6">
             <Section title="Order Items" icon={<Package size={16}/>}>
