@@ -570,49 +570,163 @@ export default function AuthPage() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                {mode === "signup" && (
-                  <Field label="Full Name" placeholder="Ananya Mehta" value={form.name}
-                    onChange={v => set("name", v)} error={errors.name} icon={User} />
-                )}
 
-                <Field label="Email Address" type="email" placeholder="you@example.com"
-                  value={form.email} onChange={v => set("email", v)}
-                  error={errors.email} icon={Mail} />
+                {mode === "login" ? (
+                  /* ── LOGIN FIELDS ── */
+                  <>
+                    <Field label="Email Address" type="email" placeholder="you@example.com"
+                      value={form.email} onChange={v => set("email", v)}
+                      error={errors.email} icon={Mail} />
 
-                <div>
-                  <Field
-                    label="Password"
-                    type={showPass ? "text" : "password"}
-                    placeholder="Min. 6 characters"
-                    value={form.password}
-                    onChange={v => set("password", v)}
-                    error={errors.password}
-                    icon={Lock}
-                    rightEl={
-                      <button type="button" onClick={() => setShowPass(s => !s)}
-                        className="hover:opacity-70" style={{ color: "#9c7a62" }}>
-                        {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
-                      </button>
-                    }
-                  />
-                  {mode === "login" && (
-                    <div className="flex justify-end mt-1.5">
-                      <button
-                        type="button"
-                        onClick={() => { setForgotEmail(form.email); setForgotStep("email"); }}
-                        className="text-xs font-semibold hover:opacity-70 transition-opacity"
-                        style={{ color: "#c97d5b" }}
-                      >
-                        Forgot Password?
-                      </button>
+                    <div>
+                      <Field
+                        label="Password"
+                        type={showPass ? "text" : "password"}
+                        placeholder="Min. 6 characters"
+                        value={form.password}
+                        onChange={v => set("password", v)}
+                        error={errors.password}
+                        icon={Lock}
+                        rightEl={
+                          <button type="button" onClick={() => setShowPass(s => !s)}
+                            className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                            {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                          </button>
+                        }
+                      />
+                      <div className="flex justify-end mt-1.5">
+                        <button
+                          type="button"
+                          onClick={() => { setForgotEmail(form.email); setForgotStep("email"); }}
+                          className="text-xs font-semibold hover:opacity-70 transition-opacity"
+                          style={{ color: "#c97d5b" }}
+                        >
+                          Forgot Password?
+                        </button>
+                      </div>
                     </div>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  /* ── SIGNUP FIELDS ── */
+                  <>
+                    {/* Email row with Send OTP button */}
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-semibold" style={{ color: "#4a3728" }}>Email Address</label>
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                            style={{ color: "#9c7a62" }} />
+                          <input
+                            type="email"
+                            value={form.email}
+                            onChange={e => { if (!signupOtpVerified) set("email", e.target.value); }}
+                            placeholder="you@example.com"
+                            disabled={signupOtpVerified}
+                            className="w-full rounded-xl border px-4 py-3 text-sm outline-none transition-all"
+                            style={{
+                              paddingLeft: "2.5rem",
+                              borderColor: errors.email ? "#dc2626" : "#e8d5c4",
+                              background: signupOtpVerified ? "#f0e4d8" : errors.email ? "#fff5f5" : "white",
+                              color: "#3a2416",
+                            }}
+                          />
+                        </div>
+                        {!signupOtpVerified && (
+                          <button
+                            type="button"
+                            onClick={handleSendSignupOtp}
+                            disabled={signupOtpLoading || resendTimer > 0}
+                            className="px-4 py-3 rounded-xl text-white text-sm font-bold transition-all hover:opacity-90 disabled:opacity-60 whitespace-nowrap"
+                            style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}
+                          >
+                            {signupOtpLoading
+                              ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
+                              : signupOtpSent
+                                ? resendTimer > 0 ? `Resend (${resendTimer}s)` : "Resend OTP"
+                                : "Send OTP"
+                            }
+                          </button>
+                        )}
+                      </div>
+                      {errors.email && <p className="text-xs" style={{ color: "#dc2626" }}>{errors.email}</p>}
+                    </div>
 
-                {mode === "signup" && (
-                  <Field label="Contact Number" placeholder="+91 98765 43210"
-                    value={form.contactNumber} onChange={v => set("contactNumber", v)}
-                    error={errors.contactNumber} icon={Phone} />
+                    {/* OTP input — shown after Send OTP, hidden after verified */}
+                    {signupOtpSent && !signupOtpVerified && (
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-semibold" style={{ color: "#4a3728" }}>Enter OTP</label>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={6}
+                            value={signupOtp}
+                            onChange={e => { setSignupOtp(e.target.value.replace(/\D/g, "").slice(0, 6)); setSignupOtpError(null); }}
+                            placeholder="6-digit OTP"
+                            className="flex-1 rounded-xl border px-4 py-3 text-sm outline-none transition-all"
+                            style={{ borderColor: "#e8d5c4", color: "#3a2416" }}
+                          />
+                          <button
+                            type="button"
+                            onClick={handleVerifySignupOtp}
+                            disabled={signupOtpLoading || signupOtp.length < 6}
+                            className="px-4 py-3 rounded-xl text-white text-sm font-bold transition-all hover:opacity-90 disabled:opacity-60"
+                            style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}
+                          >
+                            {signupOtpLoading
+                              ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
+                              : "Verify"
+                            }
+                          </button>
+                        </div>
+                        <p className="text-xs" style={{ color: "#9c7a62" }}>OTP sent to {form.email}</p>
+                      </div>
+                    )}
+
+                    {/* OTP error */}
+                    {signupOtpError && (
+                      <div className="flex items-start gap-2 p-3 rounded-xl text-sm"
+                        style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca" }}>
+                        <span className="mt-0.5">⚠️</span><span>{signupOtpError}</span>
+                      </div>
+                    )}
+
+                    {/* Verified badge */}
+                    {signupOtpVerified && (
+                      <div className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm"
+                        style={{ background: "#dcfce7", color: "#16a34a", border: "1px solid #bbf7d0" }}>
+                        <span>✓</span><span>Email verified</span>
+                      </div>
+                    )}
+
+                    {/* Rest of signup form — unlocked after email verified */}
+                    {signupOtpVerified && (
+                      <>
+                        <Field label="Full Name" placeholder="Ananya Mehta" value={form.name}
+                          onChange={v => set("name", v)} error={errors.name} icon={User} />
+
+                        <Field
+                          label="Password"
+                          type={showPass ? "text" : "password"}
+                          placeholder="Min. 6 characters"
+                          value={form.password}
+                          onChange={v => set("password", v)}
+                          error={errors.password}
+                          icon={Lock}
+                          rightEl={
+                            <button type="button" onClick={() => setShowPass(s => !s)}
+                              className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                              {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                            </button>
+                          }
+                        />
+
+                        <Field label="Contact Number" placeholder="+91 98765 43210"
+                          value={form.contactNumber} onChange={v => set("contactNumber", v)}
+                          error={errors.contactNumber} icon={Phone} />
+                      </>
+                    )}
+                  </>
                 )}
 
                 {apiSuccess && (
@@ -631,7 +745,7 @@ export default function AuthPage() {
                   </div>
                 )}
 
-                <button type="submit" disabled={loading}
+                <button type="submit" disabled={loading || (mode === "signup" && !signupOtpVerified)}
                   className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 disabled:opacity-60 mt-2"
                   style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
                   {loading
