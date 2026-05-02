@@ -462,7 +462,12 @@ export default function CheckoutPage() {
     };
 
     const rzp = new window.Razorpay(options);
-    rzp.open();
+    try {
+      rzp.open();
+    } catch {
+      setError("Failed to open payment modal. Please try again.");
+      setPlacing(false);
+    }
   }
 
   if (cart.length === 0 && step < 2) {
