@@ -7,6 +7,7 @@ import ProductCard from "../components/ProductCard";
 import Categories from "../components/Categories";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import PromoBanner from "../components/PromoBanner";
 
 const BASE = "http://localhost:3001";
 
@@ -117,35 +118,6 @@ function Products({ products = [], tabs = ["All"], loading = false, error = fals
             ))}
           </div>
         )}
-      </div>
-    </section>
-  );
-}
-
-function PromoBanner() {
-  return (
-    <section style={{ background: "#fdf8f3" }} className="py-16">
-      <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-6">
-        {[
-          { label: "Special Event", title: "Wedding Florals", img: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=80", btn: "Explore" },
-          { label: "Long Lasting", title: "Dried Flower Art", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", btn: "Discover" },
-        ].map(({ label, title, img, btn }) => (
-          <div key={title} className="group relative rounded-3xl overflow-hidden h-64 sm:h-72 cursor-pointer">
-            <img src={img} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-            <div className="absolute inset-0" style={{ background: "rgba(58,36,22,0.5)" }} />
-            <div className="absolute inset-0 flex flex-col justify-end p-8">
-              <span style={{ color: "#f5c8a8" }} className="text-xs uppercase tracking-widest font-semibold mb-2">{label}</span>
-              <h3 style={{ fontFamily: "Georgia,serif" }} className="text-white text-2xl font-bold mb-4">{title}</h3>
-              <a
-                href="#"
-                className="inline-flex items-center gap-2 bg-white px-5 py-2 rounded-full text-sm font-semibold w-fit hover:opacity-90 transition-opacity"
-                style={{ color: "#4a3728" }}
-              >
-                {btn} <ArrowRight size={14} />
-              </a>
-            </div>
-          </div>
-        ))}
       </div>
     </section>
   );
