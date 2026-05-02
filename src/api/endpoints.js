@@ -24,6 +24,9 @@ export const API = {
   categories: {
     list:   "/api/categories",
     detail: (id) => `/api/categories/${id}`,
+    create: "/api/createcategory",
+    update: (id) => `/api/categories/${id}`,
+    delete: (id) => `/api/categories/${id}`,
   },
   orders: {
     create:      "/api/orders",

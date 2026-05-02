@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { getTokenPayload } from "../../utils/auth";
 import {
   LayoutDashboard, Users, BarChart2, Package, Eye,
-  Star, Bell, Menu, Home, LogOut, Image, Sparkles, Crown, Mail, Megaphone,
+  Star, Bell, Menu, Home, LogOut, Image, Sparkles, Crown, Mail, Megaphone, Layers,
 } from "lucide-react";
 import FloralLogo from "../../assets/floral-logo.png";
 import AddProductForm from "./AddProductForm";
@@ -18,6 +18,7 @@ import TodaysPickTab from "./AdminTabs/TodaysPickTab";
 import RecommendationsTab from "./AdminTabs/RecommendationsTab";
 import ContactsTab from "./AdminTabs/ContactsTab";
 import AnnouncementTab from "./AdminTabs/AnnouncementTab";
+import CategoriesTab from "./AdminTabs/CategoriesTab";
 
 const NAV = [
   { id:"dashboard",      icon:<LayoutDashboard size={18}/>, label:"Dashboard"     },
@@ -25,6 +26,7 @@ const NAV = [
   { id:"analytics",      icon:<BarChart2 size={18}/>,       label:"Analytics"     },
   { id:"orders",         icon:<Package size={18}/>,         label:"Orders"        },
   { id:"products",       icon:<Eye size={18}/>,             label:"Products"      },
+  { id:"categories",     icon:<Layers size={18}/>,          label:"Categories"    },
   { id:"reviews",        icon:<Star size={18}/>,            label:"Reviews"       },
   { id:"banners",        icon:<Image size={18}/>,           label:"Banners"       },
   { id:"todayspick",     icon:<Crown size={18}/>,           label:"Today's Pick"  },
@@ -81,6 +83,7 @@ export default function AdminPanel() {
     analytics:       <AnalyticsTab />,
     orders:          <AdminOrdersTab />,
     products:        <ProductsTab onEdit={handleEdit} />,
+    categories:      <CategoriesTab />,
     reviews:         <ReviewsTab />,
     banners:         <BannersTab />,
     todayspick:      <TodaysPickTab />,
