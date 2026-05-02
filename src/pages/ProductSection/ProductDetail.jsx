@@ -244,7 +244,9 @@ export default function ProductDetail() {
               </button>
             </div>
 
-            <button className="w-full py-3 rounded-full font-bold border-2 mb-6 transition-all hover:opacity-80"
+            <button
+              onClick={() => { addToCart(product, qty, selectedSize, selectedColor ? [selectedColor] : []); navigate("/cart"); }}
+              className="w-full py-3 rounded-full font-bold border-2 mb-6 transition-all hover:opacity-80"
               style={{ borderColor: "#4a3728", color: "#4a3728" }}>
               Buy Now
             </button>

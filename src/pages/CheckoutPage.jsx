@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   ArrowLeft, Check, ChevronDown, ChevronUp,
-  CreditCard, Truck, Tag, ShieldCheck, MapPin
+  CreditCard, Truck, Tag, ShieldCheck, MapPin, Minus, Plus, Trash2
 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
@@ -42,7 +42,7 @@ function StepBar({ step }) {
 
 // ─── ORDER SUMMARY ────────────────────────────────────────────────────────────
 
-function OrderSummary({ items, coupon, setCoupon, couponApplied, onApplyCoupon }) {
+function OrderSummary({ items, coupon, setCoupon, couponApplied, onApplyCoupon, onUpdateQty, onRemove }) {
   const [open, setOpen] = useState(true);
   const subtotal  = items.reduce((s, i) => s + i.price * i.qty, 0);
   const delivery  = subtotal >= 999 ? 0 : 99;
@@ -70,17 +70,30 @@ function OrderSummary({ items, coupon, setCoupon, couponApplied, onApplyCoupon }
                     ? <img src={item.img} alt={item.name} className="w-16 h-16 object-cover rounded-xl" />
                     : <div className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl" style={{ background: "#f5ede5" }}>🌸</div>
                   }
-                  <span style={{ background: "#c97d5b" }}
-                    className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold">
-                    {item.qty}
-                  </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p style={{ color: "#3a2416" }} className="text-sm font-semibold truncate">{item.name}</p>
+                  <div className="flex items-start justify-between gap-2">
+                    <p style={{ color: "#3a2416" }} className="text-sm font-semibold truncate">{item.name}</p>
+                    <button onClick={() => onRemove(item.key)} className="shrink-0 hover:opacity-70 transition-opacity mt-0.5">
+                      <Trash2 size={13} style={{ color: "#dc2626" }} />
+                    </button>
+                  </div>
                   {item.size && <p style={{ color: "#9c7a62" }} className="text-xs">{item.size}</p>}
-                  <p style={{ color: "#9c7a62" }} className="text-xs mt-0.5">Qty: {item.qty}</p>
+                  <div className="flex items-center justify-between mt-1.5">
+                    <div className="flex items-center gap-1.5 rounded-full border px-1.5 py-0.5" style={{ borderColor: "#e8d5c4" }}>
+                      <button onClick={() => item.qty > 1 ? onUpdateQty(item.key, item.qty - 1) : onRemove(item.key)}
+                        className="w-5 h-5 flex items-center justify-center hover:opacity-60" style={{ color: "#4a3728" }}>
+                        <Minus size={11} />
+                      </button>
+                      <span style={{ color: "#4a3728" }} className="text-xs font-bold w-4 text-center">{item.qty}</span>
+                      <button onClick={() => onUpdateQty(item.key, item.qty + 1)}
+                        className="w-5 h-5 flex items-center justify-center hover:opacity-60" style={{ color: "#4a3728" }}>
+                        <Plus size={11} />
+                      </button>
+                    </div>
+                    <p style={{ color: "#4a3728" }} className="font-semibold text-sm">{fmt(item.price * item.qty)}</p>
+                  </div>
                 </div>
-                <p style={{ color: "#4a3728" }} className="font-semibold text-sm shrink-0">{fmt(item.price * item.qty)}</p>
               </div>
             ))}
           </div>
@@ -321,7 +334,7 @@ function loadRazorpayScript() {
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 
 export default function CheckoutPage() {
-  const { cart, clearCart } = useCart();
+  const { cart, clearCart, updateQty, removeFromCart } = useCart();
   const navigate = useNavigate();
   const [step, setStep]     = useState(0);
   const [method, setMethod] = useState("razorpay");
@@ -535,6 +548,7 @@ export default function CheckoutPage() {
                 items={cart}
                 coupon={coupon} setCoupon={setCoupon}
                 couponApplied={couponApplied} onApplyCoupon={applyCoupon}
+                onUpdateQty={updateQty} onRemove={removeFromCart}
               />
             </div>
           </div>
