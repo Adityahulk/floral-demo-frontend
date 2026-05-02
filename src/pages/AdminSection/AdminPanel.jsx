@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { getTokenPayload } from "../../utils/auth";
 import {
   LayoutDashboard, Users, BarChart2, Package, Eye,
-  Star, Bell, Menu, Home, LogOut, Image, Sparkles,
+  Star, Bell, Menu, Home, LogOut, Image, Sparkles, Crown,
 } from "lucide-react";
 import FloralLogo from "../../assets/floral-logo.png";
 import AddProductForm from "./AddProductForm";
@@ -18,15 +18,15 @@ import TodaysPickTab from "./AdminTabs/TodaysPickTab";
 import RecommendationsTab from "./AdminTabs/RecommendationsTab";
 
 const NAV = [
-  { id:"dashboard", icon:<LayoutDashboard size={18}/>, label:"Dashboard" },
-  { id:"customers", icon:<Users size={18}/>,           label:"Customers" },
-  { id:"analytics", icon:<BarChart2 size={18}/>,       label:"Analytics" },
-  { id:"orders",    icon:<Package size={18}/>,         label:"Orders"    },
-  { id:"products",  icon:<Eye size={18}/>,             label:"Products"  },
-  { id:"reviews",   icon:<Star size={18}/>,            label:"Reviews"   },
-  { id:"banners",         icon:<Image size={18}/>,           label:"Banners"        },
-  { id:"todayspick",      icon:<Star size={18}/>,            label:"Today's Pick"   },
-  { id:"recommendations", icon:<Sparkles size={18}/>,        label:"Recommendations" },
+  { id:"dashboard",      icon:<LayoutDashboard size={18}/>, label:"Dashboard"     },
+  { id:"customers",      icon:<Users size={18}/>,           label:"Customers"     },
+  { id:"analytics",      icon:<BarChart2 size={18}/>,       label:"Analytics"     },
+  { id:"orders",         icon:<Package size={18}/>,         label:"Orders"        },
+  { id:"products",       icon:<Eye size={18}/>,             label:"Products"      },
+  { id:"reviews",        icon:<Star size={18}/>,            label:"Reviews"       },
+  { id:"banners",        icon:<Image size={18}/>,           label:"Banners"       },
+  { id:"todayspick",     icon:<Crown size={18}/>,           label:"Today's Pick"  },
+  { id:"recommendations",icon:<Sparkles size={18}/>,        label:"Recommendations"},
 ];
 
 export default function AdminPanel() {
@@ -78,7 +78,7 @@ export default function AdminPanel() {
     orders:        <AdminOrdersTab />,
     products:      <ProductsTab onEdit={handleEdit} />,
     reviews:       <ReviewsTab />,
-    banners:       <BannersTab />,
+    banners:         <BannersTab />,
     todayspick:      <TodaysPickTab />,
     recommendations: <RecommendationsTab />,
     "add-product": <AddProductForm key={editingProduct?._id ?? "new"} initialData={editingProduct} onSuccess={handleEditSuccess} />,
