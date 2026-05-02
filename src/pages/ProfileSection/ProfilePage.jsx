@@ -636,12 +636,46 @@ export default function ProfilePage({ initialTab = "profile" }) {
         { id: 2, name: MENU.find(m => m.id === active)?.label ?? "Profile", path: MENU.find(m => m.id === active)?.path ?? "/profile" },
       ]} />
 
-      <div className="max-w-6xl mx-auto px-4 py-10">
-        <div className="grid lg:grid-cols-[280px_1fr] gap-8 items-start">
+      {/* ── Mobile: sticky tab bar ── */}
+      <div className="lg:hidden sticky top-0 z-20 border-b" style={{ background:"#fdf8f3", borderColor:"#e8d5c4" }}>
+        {/* compact user strip */}
+        <div className="flex items-center gap-3 px-4 py-3 border-b" style={{ borderColor:"#e8d5c4" }}>
+          {user?.profileImage
+            ? <img src={user.profileImage} alt="avatar" className="w-9 h-9 rounded-full object-cover flex-shrink-0" style={{ border:"2px solid #c97d5b" }}/>
+            : <div style={{ background:"#c97d5b" }} className="w-9 h-9 rounded-full flex items-center justify-center text-white text-base font-bold flex-shrink-0">
+                {user?.name?.charAt(0)?.toUpperCase() || "?"}
+              </div>
+          }
+          <div className="min-w-0">
+            <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-semibold text-sm truncate">{user?.name || "User"}</p>
+            <p style={{ color:"#9c7a62" }} className="text-xs truncate">{user?.email || ""}</p>
+          </div>
+          <button onClick={handleLogout} className="ml-auto flex-shrink-0 flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border" style={{ color:"#dc2626", borderColor:"#fca5a5" }}>
+            <LogOut size={13}/> Logout
+          </button>
+        </div>
+        {/* horizontal tabs */}
+        <div className="flex overflow-x-auto scrollbar-none px-3 py-2 gap-2">
+          {MENU.map(({ id, path, icon, label }) => (
+            <button key={id} onClick={() => { setActive(id); navigate(path); }}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex-shrink-0 transition-all"
+              style={{
+                background: active === id ? "#4a3728" : "white",
+                color:      active === id ? "white"   : "#5c4033",
+                border:     `1px solid ${active === id ? "#4a3728" : "#e8d5c4"}`,
+              }}>
+              <span style={{ color: active === id ? "white" : "#9c7a62" }}>{icon}</span>
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
 
-          {/* ── Sidebar ── */}
+      <div className="max-w-7xl mx-auto px-4 py-6 lg:py-10">
+
+        {/* ── Desktop: sidebar + content ── */}
+        <div className="hidden lg:grid lg:grid-cols-[280px_1fr] gap-8 items-start">
           <div className="lg:sticky lg:top-6">
-            {/* User Card */}
             <div className="p-5 rounded-3xl mb-4 text-center" style={{ background:"#4a3728" }}>
               {user?.profileImage
                 ? <img src={user.profileImage} alt="avatar"
@@ -652,13 +686,9 @@ export default function ProfilePage({ initialTab = "profile" }) {
                     {user?.name?.charAt(0)?.toUpperCase() || "?"}
                   </div>
               }
-              <p style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="font-bold text-lg truncate">
-                {user?.name || "User"}
-              </p>
+              <p style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="font-bold text-lg truncate">{user?.name || "User"}</p>
               <p style={{ color:"#b89c8a" }} className="text-xs truncate">{user?.email || ""}</p>
             </div>
-
-            {/* Menu */}
             <div className="bg-white rounded-3xl overflow-hidden border" style={{ borderColor:"#e8d5c4" }}>
               {MENU.map(({ id, path, icon, label }) => (
                 <button key={id} onClick={() => { setActive(id); navigate(path); }}
@@ -674,7 +704,6 @@ export default function ProfilePage({ initialTab = "profile" }) {
                   <ChevronRight size={14} className="ml-auto" style={{ color: active === id ? "#c97d5b" : "#d0b8a8" }}/>
                 </button>
               ))}
-
               <button onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-medium border-t hover:bg-red-50 transition-colors"
                 style={{ borderColor:"#f0e4d8", color:"#dc2626" }}>
@@ -682,13 +711,16 @@ export default function ProfilePage({ initialTab = "profile" }) {
               </button>
             </div>
           </div>
-
-          {/* ── Content ── */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 border" style={{ borderColor:"#e8d5c4" }}>
             {TABS[active]}
           </div>
-
         </div>
+
+        {/* ── Mobile: full-width content ── */}
+        <div className="lg:hidden bg-white rounded-3xl p-5 border" style={{ borderColor:"#e8d5c4" }}>
+          {TABS[active]}
+        </div>
+
       </div>
     </div>
   );
