@@ -126,11 +126,11 @@ export default function ProductDetail() {
       <div className="max-w-7xl mx-auto px-4 py-10">
 
         {/* Back Button */}
-        <button onClick={() => window.history.back()}
+        {/* <button onClick={() => window.history.back()}
           className="flex items-center gap-2 mb-8 text-sm font-medium hover:opacity-70 transition-opacity"
           style={{ color: "#c97d5b" }}>
           <ArrowLeft size={16} /> Back to Shop
-        </button>
+        </button> */}
 
         {/* Main Grid */}
         <div className="grid lg:grid-cols-2 gap-12 mb-16">

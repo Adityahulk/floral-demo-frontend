@@ -46,7 +46,7 @@ function StepBar({ step }) {
 function OrderSummary({ items, coupon, setCoupon, couponApplied, onApplyCoupon, onUpdateQty, onRemove }) {
   const [open, setOpen] = useState(true);
   const subtotal  = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const delivery  = subtotal >= 999 ? 0 : 99;
+  const delivery  = 0;
   const discount  = couponApplied ? Math.round(subtotal * 0.15) : 0;
   const total     = subtotal + delivery - discount;
 
@@ -66,15 +66,15 @@ function OrderSummary({ items, coupon, setCoupon, couponApplied, onApplyCoupon, 
           <div className="space-y-4 mb-5">
             {items.map(item => (
               <div key={item.key} className="flex gap-3">
-                <div className="relative shrink-0">
+                <Link to={`/product/${item.product}`} className="relative shrink-0">
                   {item.img
                     ? <img src={item.img} alt={item.name} className="w-16 h-16 object-cover rounded-xl" />
                     : <div className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl" style={{ background: "#f5ede5" }}>🌸</div>
                   }
-                </div>
+                </Link>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <p style={{ color: "#3a2416" }} className="text-sm font-semibold truncate">{item.name}</p>
+                    <Link to={`/product/${item.product}`} style={{ color: "#3a2416" }} className="text-sm font-semibold truncate hover:underline">{item.name}</Link>
                     <button onClick={() => onRemove(item.key)} className="shrink-0 hover:opacity-70 transition-opacity mt-0.5">
                       <Trash2 size={13} style={{ color: "#dc2626" }} />
                     </button>
@@ -338,6 +338,7 @@ export default function CheckoutPage() {
   const { cart, clearCart, updateQty, removeFromCart } = useCart();
   const navigate = useNavigate();
   const [step, setStep]     = useState(0);
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, [step]);
   const [method, setMethod] = useState("razorpay");
   const [coupon, setCoupon] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
@@ -496,14 +497,14 @@ export default function CheckoutPage() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", background: "#fdf8f3", minHeight: "100vh" }}>
       <div className="max-w-6xl mx-auto px-4 py-10">
-
+{/* 
         {step < 2 && (
           <button onClick={() => step > 0 ? setStep(s => s - 1) : window.history.back()}
             className="flex items-center gap-2 mb-6 text-sm font-medium hover:opacity-70"
             style={{ color: "#c97d5b" }}>
             <ArrowLeft size={16} /> {step > 0 ? "Back to Delivery" : "Back to Cart"}
           </button>
-        )}
+        )} */}
 
         <StepBar step={step} />
 

@@ -24,7 +24,7 @@ export default function ProductCard({ p, wished, onWish, onCart }) {
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative bg-white rounded-2xl overflow-hidden border transition-all duration-300 cursor-pointer"
+      className="relative bg-white rounded-2xl overflow-hidden border transition-all duration-300 "
       style={{
         borderColor: "#f0e4d8",
         boxShadow: hovered ? "0 20px 40px rgba(58,36,22,0.12)" : "0 2px 8px rgba(58,36,22,0.06)",
