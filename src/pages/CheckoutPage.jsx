@@ -440,7 +440,7 @@ export default function CheckoutPage() {
       amount:    Math.round(amount * 100),
       currency,
       order_id:  razorpayOrderId,
-      name:      "Floral Studio",
+      name:      "The Floral Studio",
       description: "Order Payment",
       theme:     { color: "#c97d5b" },
       handler: async ({ razorpay_payment_id, razorpay_order_id, razorpay_signature }) => {

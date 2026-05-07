@@ -71,7 +71,7 @@ export default function AboutPage() {
               Since 2018
             </h1>
             <p style={{ color: "#c4a088" }} className="text-lg leading-relaxed mb-8 max-w-md">
-              Floral Studio was born from a simple belief — that a touch of green can turn any house
+              The Floral Studio was born from a simple belief — that a touch of green can turn any house
               into a home. For over 7 years we've been bringing plants, planters and decor to homes across India.
             </p>
             <a href="/shop" style={{ background: "#c97d5b" }}
@@ -125,7 +125,7 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4" style={{ color: "#7a5c4a" }}>
               <p className="leading-relaxed">
-                Floral Studio started in 2018 when our founder Ananya Mehta left her corporate job to pursue her
+                The Floral Studio started in 2018 when our founder Ananya Mehta left her corporate job to pursue her
                 lifelong passion for plants and home styling. Starting from a small nursery corner in Surat,
                 she began curating indoor plants and handcrafted planters that quickly won the hearts of locals.
               </p>

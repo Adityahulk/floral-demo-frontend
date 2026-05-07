@@ -135,17 +135,17 @@ function TermsOfService() {
         icon={<FileText size={32}/>}
         tag="Legal"
         title="Terms of Service"
-        subtitle="Please read these terms carefully before using our website or placing an order. By using Floral Studio, you agree to these terms."
+        subtitle="Please read these terms carefully before using our website or placing an order. By using The Floral Studio, you agree to these terms."
         updated="28 April 2025"
       />
       <div className="max-w-4xl mx-auto px-4 py-12">
 
         <Highlight type="info"
           icon={<AlertCircle size={16}/>}
-          text="These Terms of Service constitute a legally binding agreement between you and Floral Studio (operated by Floral Studio Plants & Decor, Surat, Gujarat, India)." />
+          text="These Terms of Service constitute a legally binding agreement between you and The Floral Studio (operated by The Floral Studio Plants & Decor, Surat, Gujarat, India)." />
 
         <Section title="Acceptance of Terms" icon={<CheckCircle size={16}/>}>
-          <p>By accessing or using the Floral Studio website, mobile application, or any related services, you confirm that:</p>
+          <p>By accessing or using the The Floral Studio website, mobile application, or any related services, you confirm that:</p>
           <BulletList items={[
             "You are at least 18 years of age or have parental/guardian consent",
             "You have read, understood, and agreed to these Terms of Service",
@@ -208,7 +208,7 @@ function TermsOfService() {
             "Wallets (Paytm, Freecharge, Mobikwik)",
             "EMI options (available on select cards for orders above ₹2,000)",
           ]} />
-          <p className="mt-3">All online payments are processed securely via Razorpay, which is PCI-DSS Level 1 compliant. Floral Studio does not store any card or UPI credentials.</p>
+          <p className="mt-3">All online payments are processed securely via Razorpay, which is PCI-DSS Level 1 compliant. The Floral Studio does not store any card or UPI credentials.</p>
           <Highlight type="warning"
             icon={<AlertCircle size={16}/>}
             text="Cash on Delivery is currently not available. All orders must be paid online at checkout." />
@@ -228,7 +228,7 @@ function TermsOfService() {
         <Section title="Reviews & User Content" icon={<Star size={16}/>}>
           <p>By submitting a review, photo, or any other content on our platform, you:</p>
           <BulletList items={[
-            "Grant Floral Studio a non-exclusive, royalty-free licence to use, display, and share your content",
+            "Grant The Floral Studio a non-exclusive, royalty-free licence to use, display, and share your content",
             "Confirm the content is your own original work and does not infringe third-party rights",
             "Agree not to submit false, misleading, defamatory, or offensive content",
             "Understand we may remove content that violates our guidelines without notice",
@@ -236,12 +236,12 @@ function TermsOfService() {
         </Section>
 
         <Section title="Intellectual Property" icon={<Lock size={16}/>}>
-          <p>All content on the Floral Studio website — including text, images, logos, product photographs, design elements, and software — is owned by or licensed to Floral Studio and is protected by Indian and international copyright, trademark, and intellectual property laws.</p>
+          <p>All content on the The Floral Studio website — including text, images, logos, product photographs, design elements, and software — is owned by or licensed to The Floral Studio and is protected by Indian and international copyright, trademark, and intellectual property laws.</p>
           <p className="mt-3">You may not reproduce, distribute, modify, or create derivative works from any of our content without express written permission.</p>
         </Section>
 
         <Section title="Limitation of Liability" icon={<AlertCircle size={16}/>}>
-          <p>To the maximum extent permitted by applicable law, Floral Studio shall not be liable for:</p>
+          <p>To the maximum extent permitted by applicable law, The Floral Studio shall not be liable for:</p>
           <BulletList items={[
             "Indirect, incidental, or consequential damages arising from use of our services",
             "Loss of profits, revenue, or business opportunities",

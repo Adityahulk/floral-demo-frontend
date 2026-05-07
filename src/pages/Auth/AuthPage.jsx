@@ -302,22 +302,22 @@ export default function AuthPage() {
 
         <div className="relative z-10 text-center">
           <div className="flex justify-center mb-6">
-            <img src={FloralLogo} alt="Floral Studio"
+            <img src={FloralLogo} alt="The Floral Studio"
               className="w-24 h-24 rounded-full border-4"
               style={{ borderColor: "rgba(201,125,91,0.5)" }} />
           </div>
           <h1 style={{ fontFamily: "Georgia, serif", color: "#f5e6d3" }}
-            className="text-4xl font-bold mb-3">Floral Studio</h1>
+            className="text-4xl font-bold mb-3">The Floral Studio</h1>
           <p style={{ color: "#c9a990" }} className="text-lg mb-8">
-            Where every petal tells a story
+            Where every corner finds its green
           </p>
 
           <div className="space-y-4">
             {[
-              "🌸 Handcrafted fresh bouquets",
+              "🌿 Healthy nursery-fresh plants",
               "🚚 Same-day delivery available",
-              "💐 Premium floral arrangements",
-              "🎁 Perfect for every occasion",
+              "🪴 Handpicked planters & decor",
+              "🎁 Perfect for every space",
             ].map(t => (
               <div key={t} className="flex items-center gap-3 text-left">
                 <span className="text-lg">{t.slice(0, 2)}</span>
@@ -336,7 +336,7 @@ export default function AuthPage() {
           <div className="flex items-center gap-3 mb-8 lg:hidden">
             <img src={FloralLogo} alt="" className="w-10 h-10 rounded-full" />
             <span style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="font-bold text-xl">
-              Floral Studio
+              The Floral Studio
             </span>
           </div>
 

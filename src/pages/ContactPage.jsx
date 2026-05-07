@@ -234,9 +234,9 @@ export default function ContactPage() {
               <div className="space-y-3">
                 {[
                   { icon:<Instagram size={18}/>, label:"@floralstudio.in",  handle:"Instagram", color:"#e1306c", href:"#" },
-                  { icon:<Facebook  size={18}/>, label:"Floral Studio",     handle:"Facebook",  color:"#1877f2", href:"#" },
+                  { icon:<Facebook  size={18}/>, label:"The Floral Studio",     handle:"Facebook",  color:"#1877f2", href:"#" },
                   { icon:<Twitter   size={18}/>, label:"@floralstudio",     handle:"Twitter",   color:"#1da1f2", href:"#" },
-                  { icon:<Youtube   size={18}/>, label:"Floral Studio",     handle:"YouTube",   color:"#ff0000", href:"#" },
+                  { icon:<Youtube   size={18}/>, label:"The Floral Studio",     handle:"YouTube",   color:"#ff0000", href:"#" },
                 ].map(({ icon, label, handle, color, href }) => (
                   <a key={handle} href={href}
                     className="flex items-center gap-3 p-3 rounded-2xl hover:opacity-80 transition-opacity"
@@ -282,7 +282,7 @@ export default function ContactPage() {
                 <div style={{ background:"#f5ede5" }} className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <MapPin size={28} style={{ color:"#c97d5b" }} />
                 </div>
-                <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg mb-1">Floral Studio</h3>
+                <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg mb-1">The Floral Studio</h3>
                 <p style={{ color:"#7a5c4a" }} className="text-sm mb-4">123 Garden Lane,<br />Surat, Gujarat 395007</p>
                 <a href="https://maps.google.com" target="_blank" rel="noreferrer"
                   style={{ background:"#c97d5b" }} className="text-white text-sm font-semibold px-5 py-2 rounded-full hover:opacity-90 inline-block">

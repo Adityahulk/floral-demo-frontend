@@ -175,10 +175,10 @@ export default function Header({ cartCount, onCartOpen }) {
         <div className="flex items-center justify-between h-16">
 
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-            <img src={FloralLogo} alt="Floral Studio"
+            <img src={FloralLogo} alt="The Floral Studio"
               style={{ width:"3rem", borderRadius:"50%", border:"2px solid #3a2416" }} />
             <div>
-              <p style={{ fontFamily:"Georgia,serif", color:"#4a3728" }} className="font-bold text-lg leading-none">Floral</p>
+              <p style={{ fontFamily:"Georgia,serif", color:"#4a3728" }} className="font-bold text-lg leading-none">The Floral</p>
               <p style={{ color:"#9c7a62" }} className="text-xs uppercase tracking-widest">Studio</p>
             </div>
           </div>

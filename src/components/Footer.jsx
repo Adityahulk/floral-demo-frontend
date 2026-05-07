@@ -31,8 +31,8 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link to="/" className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity">
-              <img src={FloralLogo} alt="Floral Studio" style={{ width: "2rem", borderRadius: "50%" }} />
-              <span style={{ fontFamily: "Georgia,serif" }} className="font-bold text-lg">Floral Studio</span>
+              <img src={FloralLogo} alt="The Floral Studio" style={{ width: "2rem", borderRadius: "50%" }} />
+              <span style={{ fontFamily: "Georgia,serif" }} className="font-bold text-lg">The Floral Studio</span>
             </Link>
             <p style={{ color: "#b89c8a" }} className="text-sm leading-relaxed mb-5">
               Bringing nature's beauty to your doorstep, one bloom at a time.
@@ -102,7 +102,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t pt-6 flex flex-col sm:flex-row justify-between gap-3 text-xs"
           style={{ borderColor: "#4a3728", color: "#7a5c4a" }}>
-          <p>© {new Date().getFullYear()} Floral Studio. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} The Floral Studio. All rights reserved.</p>
           <div className="flex gap-4">
             <Link to="/privacy-policy" className="hover:opacity-70 transition-opacity">Privacy Policy</Link>
             <Link to="/terms-conditions" className="hover:opacity-70 transition-opacity">Terms of Service</Link>

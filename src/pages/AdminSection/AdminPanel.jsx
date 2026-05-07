@@ -107,9 +107,9 @@ export default function AdminPanel() {
           transform: sidebarOpen ? "translateX(0)" : undefined,
         }}>
         <div className="flex items-center gap-2.5 px-5 py-5 border-b" style={{ borderColor:"#4a3728" }}>
-          <img src={FloralLogo} alt="Floral Studio" style={{ width:"3rem", borderRadius:"50%", border:"2px solid #3a2416" }} />
+          <img src={FloralLogo} alt="The Floral Studio" style={{ width:"3rem", borderRadius:"50%", border:"2px solid #3a2416" }} />
           <div>
-            <p style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="font-bold leading-none">Floral Studio</p>
+            <p style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="font-bold leading-none">The Floral Studio</p>
             <p style={{ color:"#9c7a62" }} className="text-xs">Admin Panel</p>
           </div>
         </div>
