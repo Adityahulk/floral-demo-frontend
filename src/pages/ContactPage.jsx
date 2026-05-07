@@ -234,7 +234,7 @@ export default function ContactPage() {
               <div className="space-y-3">
                 {[
                   { icon:<Instagram size={18}/>, label:"@thefloralstudio_surat", handle:"Instagram", color:"#e1306c", href:"https://www.instagram.com/thefloralstudio_surat/" },
-                  { icon:<Facebook  size={18}/>, label:"The Floral Studio",      handle:"Facebook",  color:"#1877f2", href:"#" },
+                  { icon:<Facebook  size={18}/>, label:"The Floral Studio",      handle:"Facebook",  color:"#1877f2", href:"https://www.facebook.com/61564869235012/photos/" },
                   { icon:<Twitter   size={18}/>, label:"@thefloralstudio",       handle:"Twitter",   color:"#1da1f2", href:"#" },
                   { icon:<Youtube   size={18}/>, label:"The Floral Studio",      handle:"YouTube",   color:"#ff0000", href:"#" },
                 ].map(({ icon, label, handle, color, href }) => (

@@ -17,7 +17,7 @@ const SUPPORT_LINKS = [
 
 const SOCIAL = [
   { Icon: Instagram, href: "https://www.instagram.com/thefloralstudio_surat/" },
-  { Icon: Facebook,  href: "https://facebook.com"  },
+  { Icon: Facebook,  href: "https://www.facebook.com/61564869235012/photos/"  },
   { Icon: Twitter,   href: "https://twitter.com"   },
   { Icon: Youtube,   href: "https://youtube.com"   },
 ];

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Play, Truck, RefreshCw, ShieldCheck, Gift } from "lucide-react";
+import { Truck, RefreshCw, ShieldCheck, Gift } from "lucide-react";
 import Hero from "../components/Hero";
 import CartDrawer from "../components/CartDrawer";
 import Testimonials from "../components/Testimonials";
@@ -9,11 +9,14 @@ import { api } from "../api/client";
 import { API } from "../api/endpoints";
 
 const STORIES = [
-  { id: 1, thumb: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80", url: "https://www.instagram.com/thefloralstudio_surat/" },
-  { id: 2, thumb: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=600&q=80", url: "https://www.instagram.com/thefloralstudio_surat/" },
-  { id: 3, thumb: "https://images.unsplash.com/photo-1502672023488-70e25813eb80?w=600&q=80", url: "https://www.instagram.com/thefloralstudio_surat/" },
-  { id: 4, thumb: "https://images.unsplash.com/photo-1545241047-6083a3684587?w=600&q=80", url: "https://www.instagram.com/thefloralstudio_surat/" },
-  { id: 5, thumb: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=600&q=80", url: "https://www.instagram.com/thefloralstudio_surat/" },
+  "https://www.instagram.com/reel/DYBviDMtzZc/embed/",
+  "https://www.instagram.com/reel/DX6CN7oI5bg/embed/",
+  "https://www.instagram.com/p/DXbCp3wiGje/embed/",
+  "https://www.instagram.com/p/DXV2QCuCJRJ/embed/",
+  "https://www.instagram.com/p/DW0Y1H7EWK0/embed/",
+  "https://www.instagram.com/p/DWao08WiMuy/embed/",
+  "https://www.instagram.com/p/DQV7dFfiK9o/embed/",
+  "https://www.instagram.com/p/DQlSC_vCNHt/embed/",
 ];
 
 function FeaturesBar() {
@@ -53,31 +56,19 @@ function OurStories() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {STORIES.map(s => (
-            <a
-              key={s.id}
-              href={s.url}
-              target="_blank"
-              rel="noreferrer"
-              className="group relative rounded-2xl overflow-hidden block"
-              style={{ aspectRatio: "9/16" }}
-            >
-              <img
-                src={s.thumb}
-                alt="Instagram story"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0) 50%)" }} />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center bg-white/90 group-hover:scale-110 transition-transform"
-                  style={{ boxShadow: "0 4px 14px rgba(0,0,0,0.25)" }}
-                >
-                  <Play size={20} style={{ color: "var(--color-olive)", marginLeft: "2px" }} fill="var(--color-olive)" />
-                </div>
-              </div>
-            </a>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {STORIES.map((src, i) => (
+            <iframe
+              key={i}
+              src={src}
+              title={`Instagram story ${i + 1}`}
+              loading="lazy"
+              scrolling="no"
+              allow="encrypted-media; clipboard-write"
+              allowFullScreen
+              className="w-full rounded-2xl border bg-white"
+              style={{ height: "640px", borderColor: "var(--color-border)" }}
+            />
           ))}
         </div>
       </div>
