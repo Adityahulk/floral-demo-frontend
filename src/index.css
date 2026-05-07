@@ -21,3 +21,6 @@
 .wa-bounce {
   animation: wa-bounce 2.4s ease-in-out infinite;
 }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
