@@ -15,7 +15,7 @@ function FeaturesBar() {
   const items = [
     { icon: <Truck size={20} />, title: "Free Delivery", sub: "On orders above ₹999" },
     { icon: <RefreshCw size={20} />, title: "Easy Returns", sub: "7-day return policy" },
-    { icon: <ShieldCheck size={20} />, title: "100% Fresh", sub: "Quality guaranteed" },
+    { icon: <ShieldCheck size={20} />, title: "Healthy & Fresh", sub: "Nursery-grown plants" },
     { icon: <Gift size={20} />, title: "Gift Wrapping", sub: "Complimentary service" },
   ];
   return (
@@ -61,7 +61,7 @@ function Products({ products = [], loading = false, error = false, wished, onWis
               Hand-Picked For You
             </p>
             <h2 style={{ fontFamily: "Georgia,serif", color: "#3a2416" }} className="text-3xl sm:text-4xl font-bold">
-              Featured Flowers
+              Featured Plants
             </h2>
           </div>
           <a onClick={() => navigate("/category")} style={{ color: "#c97d5b" }}
@@ -102,13 +102,13 @@ function Newsletter() {
   return (
     <section style={{ background: "#fdf8f3" }} className="py-16">
       <div className="max-w-xl mx-auto px-4 text-center">
-        <span className="text-4xl block mb-4">💌</span>
-        <h2 style={{ fontFamily: "Georgia,serif", color: "#3a2416" }} className="text-3xl font-bold mb-3">Stay In Bloom</h2>
+        <span className="text-4xl block mb-4">🌿</span>
+        <h2 style={{ fontFamily: "Georgia,serif", color: "#3a2416" }} className="text-3xl font-bold mb-3">Stay Rooted With Us</h2>
         <p style={{ color: "#7a5c4a" }} className="mb-8">
-          Subscribe for seasonal offers & floral inspiration. Get 10% off your first order.
+          Subscribe for seasonal offers, plant care tips & green-living inspiration. Get 10% off your first order.
         </p>
         {done ? (
-          <p style={{ color: "#c97d5b" }} className="font-semibold">🌸 Thank you! Check your inbox for a special welcome gift.</p>
+          <p style={{ color: "#c97d5b" }} className="font-semibold">🌱 Thank you! Check your inbox for a special welcome gift.</p>
         ) : (
           <div className="flex flex-col sm:flex-row gap-3">
             <input

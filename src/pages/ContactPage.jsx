@@ -11,13 +11,14 @@ import { Instagram, Facebook, Twitter, Youtube,} from "react-feather";
 
 const FAQS = [
   { q:"What are your delivery hours?",          a:"We deliver 7 days a week from 8AM to 9PM. Same-day delivery is available for orders placed before 2PM." },
-  { q:"Do you deliver outside Lucknow?",         a:"Yes! We currently deliver to 12 cities including Delhi, Mumbai, Bengaluru, Hyderabad, Pune, and more." },
-  { q:"Can I customise a bouquet?",              a:"Absolutely! Call or WhatsApp us with your requirements and budget. Our florists will create something just for you." },
+  { q:"Do you deliver outside Surat?",          a:"Yes! We currently deliver to 12 cities including Delhi, Mumbai, Bengaluru, Hyderabad, Pune, and more." },
+  { q:"Can I get help choosing a plant?",       a:"Absolutely! Call or WhatsApp us with your space and lighting details. Our plant stylists will recommend something that thrives in your home." },
+  { q:"How are plants packed for delivery?",    a:"All plants are packed in eco-friendly, breathable packaging with the soil secured to keep your plant safe and healthy in transit." },
   { q:"What is your cancellation policy?",      a:"Orders can be cancelled up to 4 hours before the scheduled delivery time for a full refund." },
-  { q:"Do you do bulk/wedding orders?",          a:"Yes, we specialise in bulk and wedding florals. Please contact us at least 7 days in advance for large orders." },
+  { q:"Do you do bulk/event orders?",           a:"Yes, we take bulk orders for offices, housewarmings, weddings and events. Please contact us at least 7 days in advance for large orders." },
 ];
 
-const TOPICS = ["General Inquiry", "Order Issue", "Custom Bouquet", "Wedding / Events", "Feedback", "Other"];
+const TOPICS = ["General Inquiry", "Order Issue", "Plant Care Help", "Custom Planter", "Bulk / Events", "Feedback"];
 
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 
@@ -64,7 +65,7 @@ export default function ContactPage() {
             We'd Love To<br /><span style={{ color:"#f5c8a8" }} className="italic">Hear From You</span>
           </h1>
           <p style={{ color:"#c4a088" }} className="text-lg leading-relaxed max-w-xl mx-auto">
-            Have a question, a custom order request, or just want to say hello?
+            Have a plant care question, a custom planter request, or just want to say hello?
             Our team is here for you — always.
           </p>
         </div>
@@ -78,7 +79,7 @@ export default function ContactPage() {
               { icon:<Phone size={22}/>,          title:"Call Us",        value:"+91 98765 43210",         sub:"Mon–Sun, 8AM–9PM",           href:"tel:+919876543210",           color:"#c97d5b" },
               { icon:<MessageCircle size={22}/>,   title:"WhatsApp",      value:"+91 98765 43210",         sub:"Quick replies in minutes",    href:"https://wa.me/919876543210", color:"#22c55e" },
               { icon:<Mail size={22}/>,            title:"Email Us",      value:"thefloralstudiosurat@gmail.com",   sub:"Reply within 24 hours",       href:"mailto:thefloralstudiosurat@gmail.com",color:"#3b82f6" },
-              { icon:<MapPin size={22}/>,          title:"Visit Studio",  value:"123 Garden Lane, Lucknow",sub:"Open daily 9AM–7PM",          href:"#map",                        color:"#f59e0b" },
+              { icon:<MapPin size={22}/>,          title:"Visit Studio",  value:"123 Garden Lane, Surat",  sub:"Open daily 9AM–7PM",          href:"#map",                        color:"#f59e0b" },
             ].map(({ icon, title, value, sub, href, color }) => (
               <a key={title} href={href}
                 className="bg-white rounded-3xl p-6 border text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block"
@@ -124,7 +125,7 @@ export default function ContactPage() {
               <>
                 <div className="mb-8">
                   <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold mb-1">Send Us a Message</h2>
-                  <p style={{ color:"#9c7a62" }} className="text-sm">Fill out the form and we'll respond within 24 hours.</p>
+                  <p style={{ color:"#9c7a62" }} className="text-sm">Plant queries, order help, or styling advice — we'll respond within 24 hours.</p>
                 </div>
 
                 <div className="space-y-5">
@@ -177,7 +178,7 @@ export default function ContactPage() {
                   <div>
                     <label style={{ color:"#4a3728" }} className="block text-sm font-semibold mb-1.5">Your Message *</label>
                     <textarea value={form.message} onChange={e => onChange("message", e.target.value)}
-                      rows={5} placeholder="Tell us how we can help you..."
+                      rows={5} placeholder="Tell us about your space, the plant you're after, or how we can help..."
                       className={inputCls + " resize-none"} style={inputStyle}
                       onFocus={e => e.target.style.borderColor="#c97d5b"}
                       onBlur={e  => e.target.style.borderColor="#e8d5c4"} />
@@ -282,7 +283,7 @@ export default function ContactPage() {
                   <MapPin size={28} style={{ color:"#c97d5b" }} />
                 </div>
                 <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg mb-1">Floral Studio</h3>
-                <p style={{ color:"#7a5c4a" }} className="text-sm mb-4">123 Garden Lane, Gomti Nagar,<br />Lucknow, UP 226010</p>
+                <p style={{ color:"#7a5c4a" }} className="text-sm mb-4">123 Garden Lane,<br />Surat, Gujarat 395007</p>
                 <a href="https://maps.google.com" target="_blank" rel="noreferrer"
                   style={{ background:"#c97d5b" }} className="text-white text-sm font-semibold px-5 py-2 rounded-full hover:opacity-90 inline-block">
                   Get Directions

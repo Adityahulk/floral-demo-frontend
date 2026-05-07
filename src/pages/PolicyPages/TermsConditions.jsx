@@ -142,10 +142,10 @@ function TermsOfService() {
 
         <Highlight type="info"
           icon={<AlertCircle size={16}/>}
-          text="These Terms of Service constitute a legally binding agreement between you and Floral Studio (operated by Ananya Mehta Florals Pvt. Ltd., Lucknow, Uttar Pradesh, India)." />
+          text="These Terms of Service constitute a legally binding agreement between you and Floral Studio (operated by Floral Studio Plants & Decor, Surat, Gujarat, India)." />
 
         <Section title="Acceptance of Terms" icon={<CheckCircle size={16}/>}>
-          <p>By accessing or using the Floral Studio website (floralstudio.in), mobile application, or any related services, you confirm that:</p>
+          <p>By accessing or using the Floral Studio website, mobile application, or any related services, you confirm that:</p>
           <BulletList items={[
             "You are at least 18 years of age or have parental/guardian consent",
             "You have read, understood, and agreed to these Terms of Service",
@@ -156,13 +156,13 @@ function TermsOfService() {
         </Section>
 
         <Section title="Products & Orders" icon={<ShoppingCart size={16}/>}>
-          <p><strong>Product Descriptions:</strong> We make every effort to display product colours, sizes, and descriptions accurately. However, the actual appearance of floral products may vary slightly due to the natural nature of flowers, seasonal availability, and screen colour variations.</p>
+          <p><strong>Product Descriptions:</strong> We make every effort to display product colours, sizes, and descriptions accurately. However, the actual appearance of plants, planters and decor items may vary slightly due to natural variation in plants, seasonal availability, handcrafted finishes, and screen colour variations.</p>
           <p className="mt-3"><strong>Order Acceptance:</strong> Placing an order constitutes an offer to purchase. We reserve the right to accept or decline any order at our discretion. Your order is confirmed only upon receipt of our confirmation email.</p>
           <p className="mt-3"><strong>Pricing:</strong> All prices are displayed in Indian Rupees (INR) and include applicable taxes. We reserve the right to change prices at any time without prior notice. The price applicable to your order is the price at the time of order confirmation.</p>
           <p className="mt-3"><strong>Availability:</strong> All orders are subject to product availability. In case a product is unavailable after order placement, we will contact you to offer a suitable alternative or a full refund.</p>
           <Highlight type="warning"
             icon={<AlertCircle size={16}/>}
-            text="Floral products are perishable and subject to seasonal availability. Specific flower varieties cannot always be guaranteed. Our florists may substitute flowers of equal or greater value while maintaining the overall look and feel of your arrangement." />
+            text="Plants are living products and subject to seasonal availability. Exact size, leaf shape, and flowering cycle may vary from the product images. Our team may substitute a plant of equal or greater value while keeping the overall look and category of your order intact." />
         </Section>
 
         <Section title="Delivery Policy" icon={<Truck size={16}/>}>
@@ -174,7 +174,7 @@ function TermsOfService() {
             "Express Delivery: Within 4 hours (subject to availability and additional charge)",
           ]} />
           <p className="mt-3"><strong>Delivery Responsibility:</strong> We are responsible for your order until it is handed over to the recipient or left at the specified address per your instructions. We are not liable for delays caused by incorrect address details, recipient unavailability, or force majeure events.</p>
-          <p className="mt-3"><strong>Delivery Attempts:</strong> If delivery is unsuccessful, we will make one re-attempt. A second failed delivery may result in the order being cancelled without refund, as floral products are perishable.</p>
+          <p className="mt-3"><strong>Delivery Attempts:</strong> If delivery is unsuccessful, we will make one re-attempt. A second failed delivery may result in the order being cancelled, as live plants left in transit can suffer stress or damage and may not survive a third attempt.</p>
         </Section>
 
         <Section title="Cancellations & Refunds" icon={<RefreshCw size={16}/>}>
@@ -188,7 +188,8 @@ function TermsOfService() {
           <p className="mt-3"><strong>Refund Eligibility:</strong> Refunds are issued in cases where:</p>
           <BulletList items={[
             "The delivered product is significantly different from what was ordered",
-            "The flowers are demonstrably not fresh upon delivery",
+            "The plant arrives damaged, severely wilted, or unhealthy on delivery",
+            "A planter or decor item arrives broken or visibly defective",
             "The order was not delivered within the agreed timeframe",
             "A duplicate charge was made on your account",
           ]} />
@@ -205,10 +206,12 @@ function TermsOfService() {
             "UPI (Google Pay, PhonePe, Paytm, BHIM)",
             "Net Banking",
             "Wallets (Paytm, Freecharge, Mobikwik)",
-            "Cash on Delivery (available in select areas)",
             "EMI options (available on select cards for orders above ₹2,000)",
           ]} />
           <p className="mt-3">All online payments are processed securely via Razorpay, which is PCI-DSS Level 1 compliant. Floral Studio does not store any card or UPI credentials.</p>
+          <Highlight type="warning"
+            icon={<AlertCircle size={16}/>}
+            text="Cash on Delivery is currently not available. All orders must be paid online at checkout." />
         </Section>
 
         <Section title="User Accounts" icon={<Shield size={16}/>}>
@@ -242,7 +245,7 @@ function TermsOfService() {
           <BulletList items={[
             "Indirect, incidental, or consequential damages arising from use of our services",
             "Loss of profits, revenue, or business opportunities",
-            "Damages arising from the perishable nature of floral products",
+            "Damage or decline of plants caused by improper care, lighting, watering or environment after delivery",
             "Delays or failures in delivery caused by circumstances beyond our reasonable control",
             "Any errors or omissions in product descriptions or pricing",
           ]} />
@@ -250,7 +253,7 @@ function TermsOfService() {
         </Section>
 
         <Section title="Governing Law" icon={<Globe size={16}/>}>
-          <p>These Terms of Service are governed by and construed in accordance with the laws of India. Any disputes arising out of or in connection with these terms shall be subject to the exclusive jurisdiction of the courts of Lucknow, Uttar Pradesh, India.</p>
+          <p>These Terms of Service are governed by and construed in accordance with the laws of India. Any disputes arising out of or in connection with these terms shall be subject to the exclusive jurisdiction of the courts of Surat, Gujarat, India.</p>
           <p className="mt-3">We encourage you to contact us first to resolve any disputes amicably before initiating formal legal proceedings.</p>
         </Section>
 

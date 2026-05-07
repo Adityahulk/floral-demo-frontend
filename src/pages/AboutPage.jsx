@@ -9,30 +9,30 @@ import { Facebook, Instagram, Twitter } from "react-feather";
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
 const TEAM = [
-  { name:"Ananya Mehta",  role:"Founder & Head Florist",    img:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80", quote:"Every bloom tells a story worth sharing." },
+  { name:"Ananya Mehta",  role:"Founder & Head Curator",     img:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80", quote:"A home truly comes alive with a little green." },
   { name:"Rohan Kapoor",  role:"Creative Director",          img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80", quote:"Design is how beauty speaks to the world." },
-  { name:"Sneha Gupta",   role:"Lead Arrangement Artist",   img:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80", quote:"Nature is the finest artist of all." },
-  { name:"Vikram Singh",  role:"Delivery & Operations Head", img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80", quote:"Freshness delivered, every single time." },
+  { name:"Sneha Gupta",   role:"Lead Plant Stylist",         img:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80", quote:"Every plant finds the corner where it belongs." },
+  { name:"Vikram Singh",  role:"Delivery & Operations Head", img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80", quote:"Healthy plants delivered, every single time." },
 ];
 
 const MILESTONES = [
-  { year:"2018", title:"Founded",        desc:"Started from a small flower market stall in Lucknow." },
-  { year:"2019", title:"First Studio",   desc:"Opened our first brick-and-mortar studio in Gomti Nagar." },
-  { year:"2021", title:"Online Launch",  desc:"Launched floralstudio.in with same-day delivery in Lucknow." },
-  { year:"2023", title:"Pan-India",      desc:"Expanded to 12 cities across India with 2000+ happy customers." },
-  { year:"2025", title:"Awards",         desc:"Won 'Best Floral Brand' at India Lifestyle Awards 2025." },
+  { year:"2018", title:"Founded",        desc:"Started as a small plant nursery corner in Surat." },
+  { year:"2019", title:"First Studio",   desc:"Opened our first brick-and-mortar plant studio with planters & decor." },
+  { year:"2021", title:"Online Launch",  desc:"Launched our online store with same-day plant delivery in Surat." },
+  { year:"2023", title:"Pan-India",      desc:"Expanded to 12 cities across India with 2000+ happy plant parents." },
+  { year:"2025", title:"Awards",         desc:"Won 'Best Plant & Decor Brand' at India Lifestyle Awards 2025." },
 ];
 
 const VALUES = [
-  { icon:"🌿", title:"Farm Fresh",       desc:"We source directly from farms, ensuring every flower is at peak freshness when it reaches you." },
-  { icon:"🤝", title:"Handcrafted",      desc:"Every bouquet is hand-assembled by our skilled artisans with care and attention to detail." },
-  { icon:"🌍", title:"Eco Conscious",    desc:"We use biodegradable packaging and support local flower farmers across India." },
-  { icon:"💛", title:"Made With Love",   desc:"From selection to delivery, every step is done with love for flowers and people." },
+  { icon:"🌿", title:"Nursery Fresh",    desc:"We source directly from trusted nurseries, so every plant arrives healthy, hydrated, and ready to thrive." },
+  { icon:"🤝", title:"Handpicked",       desc:"Every plant, planter and decor piece is handpicked and quality-checked by our team before it reaches you." },
+  { icon:"🌍", title:"Eco Conscious",    desc:"We use biodegradable packaging and support local growers and artisans across India." },
+  { icon:"💛", title:"Made With Love",   desc:"From potting to delivery, every step is done with love for plants, planters and the people who grow with them." },
 ];
 
 const STATS = [
-  { n:"2,000+", l:"Happy Customers" },
-  { n:"500+",   l:"Flower Varieties" },
+  { n:"2,000+", l:"Happy Plant Parents" },
+  { n:"500+",   l:"Plants & Planters" },
   { n:"12",     l:"Cities Covered" },
   { n:"4.9★",   l:"Average Rating" },
 ];
@@ -66,13 +66,13 @@ export default function AboutPage() {
             </span>
             <h1 style={{ fontFamily: "Georgia, serif", color: "#f5e6d3" }}
               className="text-5xl xl:text-6xl font-bold leading-tight mb-6">
-              Blooming With<br />
+              Growing With<br />
               <span style={{ color: "#f5c8a8" }} className="italic">Passion</span><br />
               Since 2018
             </h1>
             <p style={{ color: "#c4a088" }} className="text-lg leading-relaxed mb-8 max-w-md">
-              Floral Studio was born from a simple belief — that flowers have the power to turn ordinary
-              moments into extraordinary memories. We've been doing exactly that for over 7 years.
+              Floral Studio was born from a simple belief — that a touch of green can turn any house
+              into a home. For over 7 years we've been bringing plants, planters and decor to homes across India.
             </p>
             <a href="/shop" style={{ background: "#c97d5b" }}
               className="inline-flex items-center gap-2 text-white px-7 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity">
@@ -83,13 +83,13 @@ export default function AboutPage() {
           {/* Image Collage */}
           <div className="relative h-80 lg:h-[420px]">
             <img src="https://images.unsplash.com/photo-1490750967868-88df5691cc3f?w=600&q=85"
-              alt="Bouquet" className="absolute top-0 right-0 w-56 h-64 object-cover rounded-3xl"
+              alt="Indoor plants" className="absolute top-0 right-0 w-56 h-64 object-cover rounded-3xl"
               style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }} />
             <img src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&q=85"
-              alt="Flowers" className="absolute bottom-0 left-0 w-48 h-52 object-cover rounded-3xl"
+              alt="Planters" className="absolute bottom-0 left-0 w-48 h-52 object-cover rounded-3xl"
               style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }} />
             <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=85"
-              alt="Dried" className="absolute bottom-10 right-32 w-36 h-40 object-cover rounded-2xl"
+              alt="Home decor" className="absolute bottom-10 right-32 w-36 h-40 object-cover rounded-2xl"
               style={{ boxShadow: "0 10px 30px rgba(0,0,0,0.3)" }} />
           </div>
         </div>
@@ -121,22 +121,22 @@ export default function AboutPage() {
           <div>
             <p style={{ color: "#c97d5b" }} className="text-xs uppercase tracking-widest font-semibold mb-3">Who We Are</p>
             <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-4xl font-bold mb-6">
-              More Than Just a Flower Shop
+              More Than Just a Plant Store
             </h2>
             <div className="space-y-4" style={{ color: "#7a5c4a" }}>
               <p className="leading-relaxed">
                 Floral Studio started in 2018 when our founder Ananya Mehta left her corporate job to pursue her
-                lifelong passion for floristry. Starting from a small stall in Lucknow's Aminabad flower market,
-                she began creating bespoke arrangements that quickly won the hearts of locals.
+                lifelong passion for plants and home styling. Starting from a small nursery corner in Surat,
+                she began curating indoor plants and handcrafted planters that quickly won the hearts of locals.
               </p>
               <p className="leading-relaxed">
-                Today, we are a team of 20+ passionate floral artists, delivery specialists, and creative minds
-                working together to bring joy through flowers. We serve 12 cities across India and have
-                delivered smiles to over 2,000 happy customers.
+                Today, we are a team of 20+ passionate plant curators, stylists, delivery specialists, and creative
+                minds working together to bring nature indoors. We serve 12 cities across India and have made
+                over 2,000 happy plant parents.
               </p>
               <p className="leading-relaxed">
-                We believe every flower has a personality — and every person deserves an arrangement that
-                speaks to their soul. That's why we never do cookie-cutter bouquets. Every piece is unique.
+                We believe every home has a personality — and every corner deserves a plant or planter that
+                speaks to it. That's why we never do cookie-cutter selections. Every piece is hand-picked.
               </p>
             </div>
             <div className="flex gap-4 mt-8">
@@ -274,9 +274,9 @@ export default function AboutPage() {
           </div>
           <div className="grid sm:grid-cols-3 gap-6">
             {[
-              { icon:<Award size={28}/>, title:"Best Floral Brand", sub:"India Lifestyle Awards 2025" },
-              { icon:<Star size={28}/>,  title:"4.9★ Rated",         sub:"Google Reviews — 2,000+ ratings" },
-              { icon:<Users size={28}/>, title:"Top Florist",        sub:"Lucknow Times Choice Award 2024" },
+              { icon:<Award size={28}/>, title:"Best Plant & Decor Brand", sub:"India Lifestyle Awards 2025" },
+              { icon:<Star size={28}/>,  title:"4.9★ Rated",               sub:"Google Reviews — 2,000+ ratings" },
+              { icon:<Users size={28}/>, title:"Top Plant Studio",         sub:"Surat Times Choice Award 2024" },
             ].map(({ icon, title, sub }) => (
               <div key={title} className="flex items-center gap-4 p-6 rounded-3xl border bg-white"
                 style={{ borderColor: "#e8d5c4" }}>
@@ -297,13 +297,13 @@ export default function AboutPage() {
       {/* ── CTA ── */}
       <section style={{ background: "#4a3728" }} className="py-16">
         <div className="max-w-2xl mx-auto px-4 text-center">
-          <span className="text-4xl block mb-4">🌸</span>
+          <span className="text-4xl block mb-4">🌿</span>
           <h2 style={{ fontFamily: "Georgia, serif", color: "#f5e6d3" }} className="text-4xl font-bold mb-4">
-            Let's Make Your Moment Special
+            Let's Bring Your Home To Life
           </h2>
           <p style={{ color: "#b89c8a" }} className="mb-8 leading-relaxed">
-            Whether it's a birthday, anniversary, wedding, or just because — we'll find the perfect
-            flowers to tell your story.
+            Whether it's a housewarming, a fresh corner, an office refresh, or just because —
+            we'll help you find the perfect plants and planters for your space.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <a href="/shop" style={{ background: "#c97d5b" }}
