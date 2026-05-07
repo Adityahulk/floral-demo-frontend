@@ -92,7 +92,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={14} style={{ color: "#c97d5b" }} />
-                <a href="mailto:hello@floralstudio.in" className="hover:opacity-70 transition-opacity">hello@floralstudio.in</a>
+                <a href="mailto:thefloralstudiosurat@gmail.com" className="hover:opacity-70 transition-opacity">thefloralstudiosurat@gmail.com</a>
               </li>
             </ul>
           </div>

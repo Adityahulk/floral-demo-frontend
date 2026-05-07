@@ -77,7 +77,7 @@ export default function ContactPage() {
             {[
               { icon:<Phone size={22}/>,          title:"Call Us",        value:"+91 98765 43210",         sub:"Mon–Sun, 8AM–9PM",           href:"tel:+919876543210",           color:"#c97d5b" },
               { icon:<MessageCircle size={22}/>,   title:"WhatsApp",      value:"+91 98765 43210",         sub:"Quick replies in minutes",    href:"https://wa.me/919876543210", color:"#22c55e" },
-              { icon:<Mail size={22}/>,            title:"Email Us",      value:"hello@floralstudio.in",   sub:"Reply within 24 hours",       href:"mailto:hello@floralstudio.in",color:"#3b82f6" },
+              { icon:<Mail size={22}/>,            title:"Email Us",      value:"thefloralstudiosurat@gmail.com",   sub:"Reply within 24 hours",       href:"mailto:thefloralstudiosurat@gmail.com",color:"#3b82f6" },
               { icon:<MapPin size={22}/>,          title:"Visit Studio",  value:"123 Garden Lane, Lucknow",sub:"Open daily 9AM–7PM",          href:"#map",                        color:"#f59e0b" },
             ].map(({ icon, title, value, sub, href, color }) => (
               <a key={title} href={href}
