@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { getTokenPayload, clearAuth } from "../../utils/auth";
 import {
   LayoutDashboard, Users, BarChart2, Package, Eye,
-  Star, Bell, Menu, Home, LogOut, Image, Sparkles, Crown, Mail, Megaphone, Layers,
+  Star, Bell, Menu, Home, LogOut, Image, Sparkles, Crown, Mail, Megaphone, Layers, Send,
 } from "lucide-react";
 import FloralLogo from "../../assets/floral-logo.png";
 import AddProductForm from "./AddProductForm";
@@ -19,6 +19,7 @@ import RecommendationsTab from "./AdminTabs/RecommendationsTab";
 import ContactsTab from "./AdminTabs/ContactsTab";
 import AnnouncementTab from "./AdminTabs/AnnouncementTab";
 import CategoriesTab from "./AdminTabs/CategoriesTab";
+import NewsletterTab from "./AdminTabs/NewsletterTab";
 
 const NAV = [
   { id:"dashboard",      icon:<LayoutDashboard size={18}/>, label:"Dashboard"     },
@@ -33,6 +34,7 @@ const NAV = [
   { id:"recommendations", icon:<Sparkles size={18}/>,       label:"Recommendations" },
   { id:"contacts",        icon:<Mail size={18}/>,            label:"Contacts"        },
   { id:"announcement",    icon:<Megaphone size={18}/>,       label:"Announcement"    },
+  { id:"newsletter",      icon:<Send size={18}/>,            label:"Newsletter"      },
 ];
 
 export default function AdminPanel() {
@@ -90,6 +92,7 @@ export default function AdminPanel() {
     recommendations: <RecommendationsTab />,
     contacts:        <ContactsTab />,
     announcement:    <AnnouncementTab />,
+    newsletter:      <NewsletterTab />,
     "add-product":   <AddProductForm key={editingProduct?._id ?? "new"} initialData={editingProduct} onSuccess={handleEditSuccess} />,
   };
 

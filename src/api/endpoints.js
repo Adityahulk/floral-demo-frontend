@@ -74,6 +74,13 @@ export const API = {
     dashboard: "/api/admin/analytics/dashboard",
     products:  "/api/admin/analytics/products",
   },
+  newsletter: {
+    config:        "/api/newsletter",
+    updateConfig:  "/api/newsletter",
+    subscribe:     "/api/newsletter/subscribe",
+    subscribers:   "/api/newsletter/subscribers",
+    deleteSub:     (id) => `/api/newsletter/subscribers/${id}`,
+  },
   upload: {
     image: "/api/upload",
   },

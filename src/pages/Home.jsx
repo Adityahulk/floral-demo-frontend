@@ -36,34 +36,70 @@ function FeaturesBar() {
 function Newsletter() {
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [config, setConfig] = useState({
+    emoji:       "🌿",
+    heading:     "Stay Rooted With Us",
+    subheading:  "Subscribe for seasonal offers, plant care tips & green-living inspiration. Get 10% off your first order.",
+    buttonText:  "Subscribe Now",
+    successText: "🌱 Thank you! Check your inbox for a special welcome gift.",
+    enabled:     true,
+  });
+
+  useEffect(() => {
+    api(API.newsletter.config)
+      .then(d => { if (d.success && d.data) setConfig(c => ({ ...c, ...d.data })); })
+      .catch(() => {});
+  }, []);
+
+  async function handleSubscribe() {
+    if (!email) return;
+    setError("");
+    setSubmitting(true);
+    try {
+      const d = await api(API.newsletter.subscribe, { method: "POST", body: { email } });
+      if (d.success) setDone(true);
+      else setError(d.message || "Subscription failed. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (!config.enabled) return null;
+
   return (
     <section style={{ background: "var(--color-beige)" }} className="py-16">
       <div className="max-w-xl mx-auto px-4 text-center">
-        <span className="text-4xl block mb-4">🌿</span>
-        <h2 style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }} className="text-3xl font-bold mb-3">Stay Rooted With Us</h2>
+        <span className="text-4xl block mb-4">{config.emoji}</span>
+        <h2 style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }} className="text-3xl font-bold mb-3">{config.heading}</h2>
         <p style={{ color: "var(--color-olive)" }} className="mb-8">
-          Subscribe for seasonal offers, plant care tips & green-living inspiration. Get 10% off your first order.
+          {config.subheading}
         </p>
         {done ? (
-          <p style={{ color: "var(--color-olive)" }} className="font-semibold">🌱 Thank you! Check your inbox for a special welcome gift.</p>
+          <p style={{ color: "var(--color-olive)" }} className="font-semibold">{config.successText}</p>
         ) : (
-          <div className="flex flex-col sm:flex-row gap-3">
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="Enter your email address"
-              className="flex-1 px-5 py-3 rounded-full border text-sm outline-none"
-              style={{ borderColor: "var(--color-border)" }}
-            />
-            <button
-              onClick={() => email && setDone(true)}
-              style={{ background: "var(--color-olive)" }}
-              className="text-white px-7 py-3 rounded-full font-semibold text-sm hover:opacity-90 whitespace-nowrap"
-            >
-              Subscribe Now
-            </button>
-          </div>
+          <>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Enter your email address"
+                className="flex-1 px-5 py-3 rounded-full border text-sm outline-none"
+                style={{ borderColor: "var(--color-border)" }}
+              />
+              <button
+                onClick={handleSubscribe}
+                disabled={submitting}
+                style={{ background: "var(--color-olive)" }}
+                className="text-white px-7 py-3 rounded-full font-semibold text-sm hover:opacity-90 whitespace-nowrap disabled:opacity-60"
+              >
+                {submitting ? "Subscribing…" : config.buttonText}
+              </button>
+            </div>
+            {error && <p style={{ color: "#dc2626" }} className="text-xs mt-3">{error}</p>}
+          </>
         )}
       </div>
     </section>
