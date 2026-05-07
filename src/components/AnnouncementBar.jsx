@@ -33,7 +33,7 @@ export default function AnnouncementBar() {
   if (!config.enabled || active.length === 0) return null;
 
   return (
-    <div style={{ background: config.bgColor, color: config.textColor }}
+    <div style={{ background: "var(--color-charcoal)", color: "var(--color-beige)" }}
       className="text-center py-2 text-sm font-medium transition-colors duration-300">
       {active[idx % active.length]?.text}
     </div>

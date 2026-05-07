@@ -4,7 +4,7 @@ import {
    ArrowRight
 } from "lucide-react";
 import Breadcrumb from "../components/Breadcrumb";
-import { Facebook, Instagram, Twitter } from "react-feather";
+import OurStories from "../components/OurStories";
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
@@ -102,48 +102,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── OUR STORY ── */}
-      <section className="py-20">
-        <div className="max-w-6xl mx-auto px-4 grid lg:grid-cols-2 gap-14 items-center">
-          <div className="relative">
-            <div className="absolute inset-6 rounded-full" style={{ background: "var(--color-beige)" }} />
-            <img src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=700&q=85"
-              alt="Studio" className="relative z-10 w-full aspect-square object-cover"
-              style={{ borderRadius: "40% 60% 55% 45% / 50% 45% 55% 50%" }} />
-          </div>
-          <div>
-            <p style={{ color: "var(--color-olive)" }} className="text-xs uppercase tracking-widest font-semibold mb-3">Who We Are</p>
-            <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-4xl font-bold mb-6">
-              More Than Just a Plant Store
-            </h2>
-            <div className="space-y-4" style={{ color: "var(--color-olive)" }}>
-              <p className="leading-relaxed">
-                The Floral Studio started in 2018 when our founder Ananya Mehta left her corporate job to pursue her
-                lifelong passion for plants and home styling. Starting from a small nursery corner in Surat,
-                she began curating indoor plants and handcrafted planters that quickly won the hearts of locals.
-              </p>
-              <p className="leading-relaxed">
-                Today, we are a team of 20+ passionate plant curators, stylists, delivery specialists, and creative
-                minds working together to bring nature indoors. We serve 12 cities across India and have made
-                over 2,000 happy plant parents.
-              </p>
-              <p className="leading-relaxed">
-                We believe every home has a personality — and every corner deserves a plant or planter that
-                speaks to it. That's why we never do cookie-cutter selections. Every piece is hand-picked.
-              </p>
-            </div>
-            <div className="flex gap-4 mt-8">
-              {[Instagram, Facebook, Twitter].map((Icon, i) => (
-                <a key={i} href="#"
-                  style={{ background: "var(--color-beige)", color: "var(--color-olive)" }}
-                  className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-70 transition-opacity">
-                  <Icon size={16} />
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ── OUR STORIES (Instagram videos) ── */}
+      <OurStories />
 
       {/* ── VALUES ── */}
       <section className="py-20" style={{ background: "var(--color-beige)" }}>
@@ -263,7 +223,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section style={{ background: "var(--color-charcoal)" }} className="py-16">
+      <section style={{ background: "var(--color-charcoal)", opacity: "0.9" }} className="py-16">
         <div className="max-w-2xl mx-auto px-4 text-center">
           <span className="text-4xl block mb-4">🌿</span>
           <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-beige)" }} className="text-4xl font-bold mb-4">
