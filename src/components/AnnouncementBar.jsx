@@ -6,8 +6,8 @@ const FALLBACK = {
   messages: [
     { text: "🌸 Free delivery on orders above ₹999", active: true },
   ],
-  bgColor: "#4a3728",
-  textColor: "#f5e6d3",
+  bgColor: "var(--color-charcoal)",
+  textColor: "var(--color-beige)",
   interval: 3,
   enabled: true,
 };

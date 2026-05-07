@@ -62,14 +62,14 @@ export default function ContactsTab() {
         {/* Toolbar */}
         <div className="flex flex-wrap items-center gap-3 mb-5">
           <div className="relative flex-1 min-w-48">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"#9c7a62" }} />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"var(--color-olive)" }} />
             <input value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search messages..."
               className="w-full pl-9 pr-4 py-2 rounded-full border text-sm outline-none"
-              style={{ borderColor:"#e8d5c4", background:"white" }} />
+              style={{ borderColor:"var(--color-border)", background:"white" }} />
           </div>
-          <button onClick={load} className="p-2 rounded-full border hover:opacity-70" style={{ borderColor:"#e8d5c4" }}>
-            <RefreshCw size={15} style={{ color:"#9c7a62" }} />
+          <button onClick={load} className="p-2 rounded-full border hover:opacity-70" style={{ borderColor:"var(--color-border)" }}>
+            <RefreshCw size={15} style={{ color:"var(--color-olive)" }} />
           </button>
         </div>
 
@@ -79,8 +79,8 @@ export default function ContactsTab() {
             <button key={f} onClick={() => setFilter(f)}
               className="px-4 py-1.5 rounded-full text-xs font-semibold capitalize border transition-all"
               style={filter === f
-                ? { background:"#4a3728", color:"white", borderColor:"#4a3728" }
-                : { borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                ? { background:"var(--color-charcoal)", color:"white", borderColor:"var(--color-charcoal)" }
+                : { borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
               {f}{f === "all" && unreadCount > 0 && <span className="ml-1.5 bg-red-500 text-white rounded-full px-1.5 py-0.5 text-xs">{unreadCount}</span>}
             </button>
           ))}
@@ -90,13 +90,13 @@ export default function ContactsTab() {
         {loading ? (
           <div className="space-y-3">
             {Array(5).fill(null).map((_,i) => (
-              <div key={i} className="h-20 rounded-2xl animate-pulse" style={{ background:"#f5ede5" }} />
+              <div key={i} className="h-20 rounded-2xl animate-pulse" style={{ background:"var(--color-beige)" }} />
             ))}
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
             <Mail size={40} className="mx-auto mb-3" style={{ color:"#d0b8a8" }} />
-            <p style={{ color:"#9c7a62" }}>No messages found</p>
+            <p style={{ color:"var(--color-olive)" }}>No messages found</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -105,25 +105,25 @@ export default function ContactsTab() {
                 onClick={() => { setSelected(c); if (c.status === "unread") setStatus(c._id, "read"); }}
                 className="flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all hover:shadow-md"
                 style={{
-                  borderColor: selected?._id === c._id ? "#c97d5b" : "#e8d5c4",
-                  background:  selected?._id === c._id ? "#fdf8f3" : "white",
+                  borderColor: selected?._id === c._id ? "var(--color-olive)" : "var(--color-border)",
+                  background:  selected?._id === c._id ? "var(--color-beige)" : "white",
                   borderLeftWidth: c.status === "unread" ? "3px" : "1px",
-                  borderLeftColor: c.status === "unread" ? "#c97d5b" : (selected?._id === c._id ? "#c97d5b" : "#e8d5c4"),
+                  borderLeftColor: c.status === "unread" ? "var(--color-olive)" : (selected?._id === c._id ? "var(--color-olive)" : "var(--color-border)"),
                 }}>
                 <div className="shrink-0 mt-0.5">
                   {c.status === "unread"
-                    ? <Mail size={16} style={{ color:"#c97d5b" }} />
-                    : <MailOpen size={16} style={{ color:"#9c7a62" }} />}
+                    ? <Mail size={16} style={{ color:"var(--color-olive)" }} />
+                    : <MailOpen size={16} style={{ color:"var(--color-olive)" }} />}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2 mb-0.5">
-                    <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{c.name}</p>
-                    <span className="text-xs shrink-0" style={{ color:"#9c7a62" }}>
+                    <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold truncate">{c.name}</p>
+                    <span className="text-xs shrink-0" style={{ color:"var(--color-olive)" }}>
                       {new Date(c.createdAt).toLocaleDateString("en-IN", { day:"numeric", month:"short" })}
                     </span>
                   </div>
-                  <p style={{ color:"#9c7a62" }} className="text-xs truncate mb-1">{c.email} · {c.topic}</p>
-                  <p style={{ color:"#7a5c4a" }} className="text-xs truncate">{c.message}</p>
+                  <p style={{ color:"var(--color-olive)" }} className="text-xs truncate mb-1">{c.email} · {c.topic}</p>
+                  <p style={{ color:"var(--color-olive)" }} className="text-xs truncate">{c.message}</p>
                 </div>
                 <span className="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full"
                   style={{ background: STATUS_CONFIG[c.status].bg, color: STATUS_CONFIG[c.status].color }}>
@@ -137,12 +137,12 @@ export default function ContactsTab() {
 
       {/* ── Detail Panel ── */}
       {selected ? (
-        <div className="w-96 shrink-0 rounded-3xl border p-6 bg-white self-start sticky top-4" style={{ borderColor:"#e8d5c4" }}>
+        <div className="w-96 shrink-0 rounded-3xl border p-6 bg-white self-start sticky top-4" style={{ borderColor:"var(--color-border)" }}>
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h3 style={{ color:"#3a2416", fontFamily:"Georgia,serif" }} className="font-bold text-lg">{selected.name}</h3>
-              <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">{selected.email}</p>
-              {selected.phone && <p style={{ color:"#9c7a62" }} className="text-xs">{selected.phone}</p>}
+              <h3 style={{ color:"var(--color-charcoal)", fontFamily:"Georgia,serif" }} className="font-bold text-lg">{selected.name}</h3>
+              <p style={{ color:"var(--color-olive)" }} className="text-xs mt-0.5">{selected.email}</p>
+              {selected.phone && <p style={{ color:"var(--color-olive)" }} className="text-xs">{selected.phone}</p>}
             </div>
             <span className="text-xs font-semibold px-2 py-1 rounded-full"
               style={{ background: STATUS_CONFIG[selected.status].bg, color: STATUS_CONFIG[selected.status].color }}>
@@ -150,13 +150,13 @@ export default function ContactsTab() {
             </span>
           </div>
 
-          <div className="mb-4 px-3 py-2 rounded-xl text-xs font-semibold" style={{ background:"#f5ede5", color:"#c97d5b" }}>
+          <div className="mb-4 px-3 py-2 rounded-xl text-xs font-semibold" style={{ background:"var(--color-beige)", color:"var(--color-olive)" }}>
             {selected.topic}
           </div>
 
-          <p style={{ color:"#4a3728" }} className="text-sm leading-relaxed mb-5 whitespace-pre-wrap">{selected.message}</p>
+          <p style={{ color:"var(--color-charcoal)" }} className="text-sm leading-relaxed mb-5 whitespace-pre-wrap">{selected.message}</p>
 
-          <p style={{ color:"#b89c8a" }} className="text-xs mb-5">
+          <p style={{ color:"var(--color-sage)" }} className="text-xs mb-5">
             {new Date(selected.createdAt).toLocaleString("en-IN", { dateStyle:"medium", timeStyle:"short" })}
           </p>
 
@@ -185,9 +185,9 @@ export default function ContactsTab() {
         </div>
       ) : (
         <div className="w-96 shrink-0 rounded-3xl border p-6 bg-white flex flex-col items-center justify-center text-center self-start"
-          style={{ borderColor:"#e8d5c4", minHeight:"200px" }}>
+          style={{ borderColor:"var(--color-border)", minHeight:"200px" }}>
           <MailOpen size={36} className="mb-3" style={{ color:"#d0b8a8" }} />
-          <p style={{ color:"#9c7a62" }} className="text-sm">Select a message to read it</p>
+          <p style={{ color:"var(--color-olive)" }} className="text-sm">Select a message to read it</p>
         </div>
       )}
     </div>

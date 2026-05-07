@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --color-sage:     #A3B18A;
+  --color-beige:    #F5F1E8;
+  --color-olive:    #5F6F52;
+  --color-charcoal: #2E2E2E;
+  --color-border:   #E5E0D5;
+}
+
+@keyframes wa-bounce {
+  0%, 100% { transform: translateY(0); }
+  20%      { transform: translateY(-10px); }
+  40%      { transform: translateY(0); }
+  55%      { transform: translateY(-6px); }
+  70%      { transform: translateY(0); }
+}
+
+.wa-bounce {
+  animation: wa-bounce 2.4s ease-in-out infinite;
+}

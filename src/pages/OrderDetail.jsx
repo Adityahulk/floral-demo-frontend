@@ -30,12 +30,12 @@ function normalizeStatus(s) { return (s || "").toLowerCase(); }
 
 function Section({ title, icon, children }) {
   return (
-    <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
-      <div className="flex items-center gap-3 px-6 py-4 border-b" style={{ borderColor:"#f0e4d8", background:"#fdf8f3" }}>
-        <div style={{ background:"#f5ede5", color:"#c97d5b" }} className="w-8 h-8 rounded-xl flex items-center justify-center">
+    <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"var(--color-border)" }}>
+      <div className="flex items-center gap-3 px-6 py-4 border-b" style={{ borderColor:"var(--color-border)", background:"var(--color-beige)" }}>
+        <div style={{ background:"var(--color-beige)", color:"var(--color-olive)" }} className="w-8 h-8 rounded-xl flex items-center justify-center">
           {icon}
         </div>
-        <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold">{title}</h2>
+        <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold">{title}</h2>
       </div>
       <div className="p-4 sm:p-6">{children}</div>
     </div>
@@ -82,10 +82,10 @@ export default function OrderDetail() {
 
   if (loading) {
     return (
-      <div style={{ background:"#fdf8f3", minHeight:"100vh" }} className="flex items-center justify-center">
+      <div style={{ background:"var(--color-beige)", minHeight:"100vh" }} className="flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
-          <p style={{ color:"#9c7a62" }} className="text-sm">Loading order...</p>
+          <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor:"var(--color-olive)", borderTopColor:"transparent" }} />
+          <p style={{ color:"var(--color-olive)" }} className="text-sm">Loading order...</p>
         </div>
       </div>
     );
@@ -93,10 +93,10 @@ export default function OrderDetail() {
 
   if (error || !order) {
     return (
-      <div style={{ background:"#fdf8f3", minHeight:"100vh" }} className="flex flex-col items-center justify-center gap-4">
+      <div style={{ background:"var(--color-beige)", minHeight:"100vh" }} className="flex flex-col items-center justify-center gap-4">
         <span className="text-5xl">⚠️</span>
         <p style={{ color:"#dc2626" }}>{error || "Order not found."}</p>
-        <Link to="/orders" style={{ color:"#c97d5b" }} className="hover:underline">Back to Orders</Link>
+        <Link to="/orders" style={{ color:"var(--color-olive)" }} className="hover:underline">Back to Orders</Link>
       </div>
     );
   }
@@ -112,7 +112,7 @@ export default function OrderDetail() {
   const canCancel  = !["delivered","cancelled"].includes(statusKey);
 
   return (
-    <div style={{ fontFamily:"system-ui, sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
+    <div style={{ fontFamily:"system-ui, sans-serif", background:"var(--color-beige)", minHeight:"100vh" }}>
 
       <Breadcrumb paths={[
         { id: 1, name: "Home",          path: "/" },
@@ -125,26 +125,26 @@ export default function OrderDetail() {
 
         <button onClick={() => window.history.back()}
           className="flex items-center gap-2 mb-5 text-sm font-medium hover:opacity-70"
-          style={{ color:"#c97d5b" }}>
+          style={{ color:"var(--color-olive)" }}>
           <ArrowLeft size={16}/> Back to Orders
         </button>
 
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-6">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl sm:text-3xl font-bold">Order Details</h1>
+              <h1 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-2xl sm:text-3xl font-bold">Order Details</h1>
               <span className="text-xs font-bold px-3 py-1 rounded-full"
                 style={{ background: s.bg, color: s.color }}>
                 ● {s.label}
               </span>
             </div>
             <div className="flex items-center gap-2 mt-2">
-              <p style={{ color:"#9c7a62" }} className="text-sm">Order ID: <strong style={{ color:"#4a3728" }}>#{shortId}</strong></p>
+              <p style={{ color:"var(--color-olive)" }} className="text-sm">Order ID: <strong style={{ color:"var(--color-charcoal)" }}>#{shortId}</strong></p>
               <button onClick={copyOrderId} className="hover:opacity-70 transition-opacity">
-                {copied ? <CheckCheck size={14} style={{ color:"#22c55e" }}/> : <Copy size={14} style={{ color:"#9c7a62" }}/>}
+                {copied ? <CheckCheck size={14} style={{ color:"#22c55e" }}/> : <Copy size={14} style={{ color:"var(--color-olive)" }}/>}
               </button>
             </div>
-            {dateStr && <p style={{ color:"#9c7a62" }} className="text-sm mt-0.5">Placed on {dateStr}</p>}
+            {dateStr && <p style={{ color:"var(--color-olive)" }} className="text-sm mt-0.5">Placed on {dateStr}</p>}
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -155,7 +155,7 @@ export default function OrderDetail() {
                 <X size={14}/> {cancelling ? "Cancelling..." : "Cancel Order"}
               </button>
             )}
-            <a href="https://wa.me/919876543210"
+            <a href="https://wa.me/919825553565"
               style={{ background:"#25d366" }}
               className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white hover:opacity-90">
               Help
@@ -185,31 +185,31 @@ export default function OrderDetail() {
                   const price = (p && p.price)   ? p.price : 0;
                   return (
                     <div key={i}>
-                      {i > 0 && <div className="border-t mb-4" style={{ borderColor:"#f0e4d8" }} />}
+                      {i > 0 && <div className="border-t mb-4" style={{ borderColor:"var(--color-border)" }} />}
                       <div className="flex gap-3">
                         {img
                           ? <img src={img} alt={name} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-2xl shrink-0" />
-                          : <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl shrink-0 flex items-center justify-center text-2xl" style={{ background:"#f5ede5" }}>🌸</div>
+                          : <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl shrink-0 flex items-center justify-center text-2xl" style={{ background:"var(--color-beige)" }}>🌸</div>
                         }
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
-                            <p style={{ color:"#3a2416" }} className="font-bold leading-snug">{name}</p>
+                            <p style={{ color:"var(--color-charcoal)" }} className="font-bold leading-snug">{name}</p>
                             {price > 0 && (
-                              <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }}
+                              <p style={{ color:"var(--color-olive)", fontFamily:"Georgia, serif" }}
                                 className="font-bold shrink-0 text-sm sm:text-base">{fmt(price * item.quantity)}</p>
                             )}
                           </div>
                           <div className="flex flex-wrap gap-1.5 mt-1">
                             {item.size && (
-                              <span style={{ background:"#f5ede5", color:"#9c7a62" }}
+                              <span style={{ background:"var(--color-beige)", color:"var(--color-olive)" }}
                                 className="text-xs px-2 py-0.5 rounded-full">{item.size}</span>
                             )}
                             {item.color && Array.isArray(item.color) && item.color.length > 0 && (
-                              <span style={{ background:"#f5ede5", color:"#9c7a62" }}
+                              <span style={{ background:"var(--color-beige)", color:"var(--color-olive)" }}
                                 className="text-xs px-2 py-0.5 rounded-full">{item.color.join(", ")}</span>
                             )}
                           </div>
-                          <p style={{ color:"#9c7a62" }} className="text-xs mt-1">Qty: {item.quantity}</p>
+                          <p style={{ color:"var(--color-olive)" }} className="text-xs mt-1">Qty: {item.quantity}</p>
                         </div>
                       </div>
                     </div>
@@ -221,7 +221,7 @@ export default function OrderDetail() {
             {order.note && (
               <Section title="Gift Note" icon={<AlertCircle size={16}/>}>
                 <div className="p-4 rounded-2xl italic text-sm leading-relaxed"
-                  style={{ background:"#fdf8f3", color:"#5c4033", border:"1px dashed #e8d5c4" }}>
+                  style={{ background:"var(--color-beige)", color:"var(--color-charcoal)", border:"1px dashed var(--color-border)" }}>
                   "{order.note}"
                 </div>
               </Section>
@@ -234,7 +234,7 @@ export default function OrderDetail() {
 
                 {/* Delivery Status */}
                 <div className="flex items-center justify-between">
-                  <span style={{ color:"#9c7a62" }}>Delivery Status</span>
+                  <span style={{ color:"var(--color-olive)" }}>Delivery Status</span>
                   <span className="text-xs font-bold px-2.5 py-1 rounded-full"
                     style={{ background: s.bg, color: s.color }}>
                     {s.label}
@@ -243,7 +243,7 @@ export default function OrderDetail() {
 
                 {/* Payment Status */}
                 <div className="flex items-center justify-between">
-                  <span style={{ color:"#9c7a62" }}>Payment Status</span>
+                  <span style={{ color:"var(--color-olive)" }}>Payment Status</span>
                   <span className="text-xs font-bold px-2.5 py-1 rounded-full"
                     style={{ background: pm.bg, color: pm.color }}>
                     {pm.label}
@@ -253,15 +253,15 @@ export default function OrderDetail() {
                 {/* Payment Mode */}
                 {order.paymentMethod && (
                   <div className="flex justify-between">
-                    <span style={{ color:"#9c7a62" }}>Payment Mode</span>
-                    <span style={{ color:"#4a3728" }} className="font-medium capitalize">{order.paymentMethod}</span>
+                    <span style={{ color:"var(--color-olive)" }}>Payment Mode</span>
+                    <span style={{ color:"var(--color-charcoal)" }} className="font-medium capitalize">{order.paymentMethod}</span>
                   </div>
                 )}
 
-                <div className="border-t pt-3" style={{ borderColor:"#f0e4d8" }}>
+                <div className="border-t pt-3" style={{ borderColor:"var(--color-border)" }}>
                   <div className="flex justify-between font-bold text-base">
-                    <span style={{ color:"#3a2416" }}>Total Payable</span>
-                    <span style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }}>{fmt(totalAmt)}</span>
+                    <span style={{ color:"var(--color-charcoal)" }}>Total Payable</span>
+                    <span style={{ color:"var(--color-olive)", fontFamily:"Georgia, serif" }}>{fmt(totalAmt)}</span>
                   </div>
                 </div>
               </div>
@@ -269,16 +269,16 @@ export default function OrderDetail() {
 
             <Section title="Delivery Address" icon={<MapPin size={16}/>}>
               <div className="flex items-start gap-3">
-                <div style={{ background:"#f5ede5" }}
+                <div style={{ background:"var(--color-beige)" }}
                   className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
-                  <MapPin size={15} style={{ color:"#c97d5b" }}/>
+                  <MapPin size={15} style={{ color:"var(--color-olive)" }}/>
                 </div>
-                <div className="text-sm" style={{ color:"#5c4033" }}>
-                  {addr.name && <p className="font-bold" style={{ color:"#3a2416" }}>{addr.name}</p>}
+                <div className="text-sm" style={{ color:"var(--color-charcoal)" }}>
+                  {addr.name && <p className="font-bold" style={{ color:"var(--color-charcoal)" }}>{addr.name}</p>}
                   {addr.street && <p>{addr.street}</p>}
                   {(addr.city || addr.state) && <p>{[addr.city, addr.state, addr.zipCode].filter(Boolean).join(", ")}</p>}
                   {addr.phone && (
-                    <div className="flex items-center gap-1.5 mt-2" style={{ color:"#9c7a62" }}>
+                    <div className="flex items-center gap-1.5 mt-2" style={{ color:"var(--color-olive)" }}>
                       <Phone size={12}/> {addr.phone}
                     </div>
                   )}
@@ -286,15 +286,15 @@ export default function OrderDetail() {
               </div>
             </Section>
 
-            <div className="p-5 rounded-3xl text-center" style={{ background:"#4a3728" }}>
-              <p style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="font-bold mb-1">Need Help?</p>
-              <p style={{ color:"#b89c8a" }} className="text-xs mb-4">Our team is available 7 days a week</p>
+            <div className="p-5 rounded-3xl text-center" style={{ background:"var(--color-charcoal)" }}>
+              <p style={{ fontFamily:"Georgia, serif", color:"var(--color-beige)" }} className="font-bold mb-1">Need Help?</p>
+              <p style={{ color:"var(--color-sage)" }} className="text-xs mb-4">Our team is available 7 days a week</p>
               <div className="flex gap-2">
-                <a href="tel:+919876543210" style={{ background:"#c97d5b" }}
+                <a href="tel:+919825553565" style={{ background:"var(--color-olive)" }}
                   className="flex-1 py-2 rounded-full text-white text-xs font-bold text-center hover:opacity-90">
                   📞 Call
                 </a>
-                <a href="https://wa.me/919876543210" style={{ background:"#25d366" }}
+                <a href="https://wa.me/919825553565" style={{ background:"#25d366" }}
                   className="flex-1 py-2 rounded-full text-white text-xs font-bold text-center hover:opacity-90">
                   💬 WhatsApp
                 </a>

@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import CartDrawer from "../components/CartDrawer";
 import { useCart } from "../context/CartContext";
 
-const WHATSAPP_NUMBER = "919876543210"; // update with actual number (country code + number, no +)
+const WHATSAPP_NUMBER = "919825553565"; // update with actual number (country code + number, no +)
 
 export default function MainLayout() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -26,6 +26,7 @@ export default function MainLayout() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
+        className="wa-bounce"
         style={{
           position: "fixed",
           bottom: "24px",
@@ -39,15 +40,6 @@ export default function MainLayout() {
           alignItems: "center",
           justifyContent: "center",
           boxShadow: "0 4px 16px rgba(37,211,102,0.45)",
-          transition: "transform 0.2s, box-shadow 0.2s",
-        }}
-        onMouseEnter={e => {
-          e.currentTarget.style.transform = "scale(1.1)";
-          e.currentTarget.style.boxShadow = "0 6px 20px rgba(37,211,102,0.55)";
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.transform = "scale(1)";
-          e.currentTarget.style.boxShadow = "0 4px 16px rgba(37,211,102,0.45)";
         }}
       >
         <svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">

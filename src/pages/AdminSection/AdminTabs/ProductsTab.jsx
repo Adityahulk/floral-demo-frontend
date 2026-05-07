@@ -109,7 +109,7 @@ export default function ProductsTab({ onEdit }) {
       {/* Toast */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 max-w-sm px-5 py-3.5 rounded-2xl shadow-xl text-sm font-medium flex items-start gap-3"
-          style={{ background:"#4a3728", color:"#f5e6d3" }}>
+          style={{ background:"var(--color-charcoal)", color:"var(--color-beige)" }}>
           <span className="leading-snug">{toast}</span>
           <button onClick={() => setToast(null)} className="shrink-0 opacity-60 hover:opacity-100 mt-0.5 text-lg leading-none">×</button>
         </div>
@@ -118,45 +118,45 @@ export default function ProductsTab({ onEdit }) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold">Products</h2>
-          <p style={{ color:"#9c7a62" }} className="text-sm">{products.length} total products</p>
+          <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-xl font-bold">Products</h2>
+          <p style={{ color:"var(--color-olive)" }} className="text-sm">{products.length} total products</p>
         </div>
         <button onClick={() => onEdit(null)}
           className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold text-white"
-          style={{ background:"#c97d5b" }}>
+          style={{ background:"var(--color-olive)" }}>
           <Plus size={15}/> Add Product
         </button>
         <div className="flex gap-2 flex-wrap">
           <div className="relative">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"#9c7a62" }} />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"var(--color-olive)" }} />
             <input value={inputVal} onChange={e => setInputVal(e.target.value)}
               placeholder="Search products..."
               className="pl-9 pr-4 py-2.5 rounded-full border text-sm outline-none w-48"
-              style={{ borderColor:"#e8d5c4", background:"white", color:"#3a2416" }} />
+              style={{ borderColor:"var(--color-border)", background:"white", color:"var(--color-charcoal)" }} />
           </div>
           {["all","active","inactive"].map(f => (
             <button key={f} onClick={() => setFilterActive(f)}
               className="px-3 py-2 rounded-full text-xs font-semibold border capitalize transition-all"
               style={filterActive === f
-                ? { background:"#c97d5b", borderColor:"#c97d5b", color:"white" }
-                : { borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                ? { background:"var(--color-olive)", borderColor:"var(--color-olive)", color:"white" }
+                : { borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
               {f}
             </button>
           ))}
-          <div className="flex rounded-full border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+          <div className="flex rounded-full border overflow-hidden" style={{ borderColor:"var(--color-border)" }}>
             <button onClick={() => setView("grid")}
               className="px-3 py-2 transition-all"
-              style={view === "grid" ? { background:"#c97d5b", color:"white" } : { background:"white", color:"#7a5c4a" }}>
+              style={view === "grid" ? { background:"var(--color-olive)", color:"white" } : { background:"white", color:"var(--color-olive)" }}>
               <LayoutGrid size={14}/>
             </button>
             <button onClick={() => setView("table")}
               className="px-3 py-2 transition-all"
-              style={view === "table" ? { background:"#c97d5b", color:"white" } : { background:"white", color:"#7a5c4a" }}>
+              style={view === "table" ? { background:"var(--color-olive)", color:"white" } : { background:"white", color:"var(--color-olive)" }}>
               <List size={14}/>
             </button>
           </div>
           <button onClick={refresh} className="p-2.5 rounded-full border hover:opacity-70"
-            style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+            style={{ borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
             <RefreshCw size={14}/>
           </button>
         </div>
@@ -165,21 +165,21 @@ export default function ProductsTab({ onEdit }) {
       {/* States */}
       {loading && (
         <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor:"#e8d5c4", borderTopColor:"#c97d5b" }}/>
+          <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor:"var(--color-border)", borderTopColor:"var(--color-olive)" }}/>
         </div>
       )}
       {error && !loading && (
         <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
           <p style={{ color:"#dc2626" }} className="font-semibold">{error}</p>
           <button onClick={refresh} className="px-4 py-2 rounded-full text-sm font-semibold"
-            style={{ background:"#f5ede5", color:"#c97d5b" }}>Retry</button>
+            style={{ background:"var(--color-beige)", color:"var(--color-olive)" }}>Retry</button>
         </div>
       )}
       {!loading && !error && filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <span className="text-5xl mb-3">🌸</span>
-          <p style={{ color:"#4a3728" }} className="font-semibold">No products found</p>
-          <p style={{ color:"#9c7a62" }} className="text-sm mt-1">Try a different filter or add a new product</p>
+          <p style={{ color:"var(--color-charcoal)" }} className="font-semibold">No products found</p>
+          <p style={{ color:"var(--color-olive)" }} className="text-sm mt-1">Try a different filter or add a new product</p>
         </div>
       )}
 
@@ -191,7 +191,7 @@ export default function ProductsTab({ onEdit }) {
             const isToggling = toggling === p._id;
             return (
               <div key={p._id} className="bg-white rounded-3xl border overflow-hidden flex flex-col"
-                style={{ borderColor:"#e8d5c4" }}>
+                style={{ borderColor:"var(--color-border)" }}>
                 <div className="relative h-44 bg-gray-100 overflow-hidden shrink-0">
                   {img
                     ? <img src={img} alt={p.name} className="w-full h-full object-cover"/>
@@ -210,13 +210,13 @@ export default function ProductsTab({ onEdit }) {
                 </div>
                 <div className="p-4 flex-1 flex flex-col gap-3">
                   <div>
-                    <p style={{ color:"#3a2416", fontFamily:"Georgia, serif" }} className="font-bold text-base leading-tight">{p.name}</p>
-                    <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5 truncate">{p.category?.name ?? p.category ?? "—"}</p>
+                    <p style={{ color:"var(--color-charcoal)", fontFamily:"Georgia, serif" }} className="font-bold text-base leading-tight">{p.name}</p>
+                    <p style={{ color:"var(--color-olive)" }} className="text-xs mt-0.5 truncate">{p.category?.name ?? p.category ?? "—"}</p>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }} className="font-bold text-lg">₹{p.price?.toLocaleString("en-IN")}</p>
+                    <p style={{ color:"var(--color-olive)", fontFamily:"Georgia, serif" }} className="font-bold text-lg">₹{p.price?.toLocaleString("en-IN")}</p>
                     <div className="text-right">
-                      <p style={{ color: p.quantity < 10 ? "#dc2626" : "#4a3728" }} className="text-sm font-semibold">{p.quantity} in stock</p>
+                      <p style={{ color: p.quantity < 10 ? "#dc2626" : "var(--color-charcoal)" }} className="text-sm font-semibold">{p.quantity} in stock</p>
                       {p.quantity < 10 && <p style={{ color:"#dc2626" }} className="text-xs">Low stock</p>}
                     </div>
                   </div>
@@ -234,7 +234,7 @@ export default function ProductsTab({ onEdit }) {
                     </button>
                     <button onClick={() => onEdit(p)}
                       className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-semibold border transition-all hover:opacity-80"
-                      style={{ borderColor:"#e8d5c4", color:"#5c4033", background:"#fdf8f3" }}>
+                      style={{ borderColor:"var(--color-border)", color:"var(--color-charcoal)", background:"var(--color-beige)" }}>
                       <Edit2 size={13}/> Edit
                     </button>
                     <button onClick={() => setDeleteConfirm(p)}
@@ -252,14 +252,14 @@ export default function ProductsTab({ onEdit }) {
 
       {/* Table View */}
       {!loading && !error && filtered.length > 0 && view === "table" && (
-        <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+        <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"var(--color-border)" }}>
           <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] border-collapse">
             <thead>
-              <tr style={{ background:"#fdf8f3", borderBottom:"1px solid #f0e4d8" }}>
+              <tr style={{ background:"var(--color-beige)", borderBottom:"1px solid var(--color-border)" }}>
                 {["Product","Category","Price","Stock","Status","Actions"].map(h => (
                   <th key={h} className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
-                    style={{ color:"#9c7a62" }}>{h}</th>
+                    style={{ color:"var(--color-olive)" }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -270,29 +270,29 @@ export default function ProductsTab({ onEdit }) {
             return (
               <tr key={p._id}
                 className="transition-colors"
-                style={{ borderBottom:"1px solid #f0e4d8" }}
-                onMouseEnter={e => e.currentTarget.style.background="#fdf8f3"}
+                style={{ borderBottom:"1px solid var(--color-border)" }}
+                onMouseEnter={e => e.currentTarget.style.background="var(--color-beige)"}
                 onMouseLeave={e => e.currentTarget.style.background="white"}>
                 <td className="px-5 py-3">
                   <div className="flex items-center gap-3 min-w-0">
                     {img
                       ? <img src={img} alt={p.name} className="w-10 h-10 object-cover rounded-xl shrink-0"/>
-                      : <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg" style={{ background:"#f5ede5" }}>🌸</div>
+                      : <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg" style={{ background:"var(--color-beige)" }}>🌸</div>
                     }
                     <div className="min-w-0">
-                      <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{p.name}</p>
+                      <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold truncate">{p.name}</p>
                       {p.badge && <span className="text-xs font-bold px-1.5 py-0.5 rounded-full" style={{ background:"#fef9c3", color:"#92400e" }}>{p.badge}</span>}
                     </div>
                   </div>
                 </td>
                 <td className="px-5 py-3">
-                  <p style={{ color:"#9c7a62" }} className="text-xs truncate">{p.category?.name ?? p.category ?? "—"}</p>
+                  <p style={{ color:"var(--color-olive)" }} className="text-xs truncate">{p.category?.name ?? p.category ?? "—"}</p>
                 </td>
                 <td className="px-5 py-3 whitespace-nowrap">
-                  <p style={{ color:"#c97d5b" }} className="text-sm font-bold">₹{p.price?.toLocaleString("en-IN")}</p>
+                  <p style={{ color:"var(--color-olive)" }} className="text-sm font-bold">₹{p.price?.toLocaleString("en-IN")}</p>
                 </td>
                 <td className="px-5 py-3">
-                  <p style={{ color: p.quantity < 10 ? "#dc2626" : "#4a3728" }} className="text-sm font-semibold">{p.quantity}</p>
+                  <p style={{ color: p.quantity < 10 ? "#dc2626" : "var(--color-charcoal)" }} className="text-sm font-semibold">{p.quantity}</p>
                   {p.quantity < 10 && <p style={{ color:"#dc2626" }} className="text-xs">Low</p>}
                 </td>
                 <td className="px-5 py-3">
@@ -318,7 +318,7 @@ export default function ProductsTab({ onEdit }) {
                     <button onClick={() => onEdit(p)}
                       className="p-1.5 rounded-lg border transition-all hover:opacity-80"
                       title="Edit"
-                      style={{ borderColor:"#e8d5c4", color:"#5c4033", background:"#fdf8f3" }}>
+                      style={{ borderColor:"var(--color-border)", color:"var(--color-charcoal)", background:"var(--color-beige)" }}>
                       <Edit2 size={13}/>
                     </button>
                     <button onClick={() => setDeleteConfirm(p)}
@@ -342,14 +342,14 @@ export default function ProductsTab({ onEdit }) {
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl w-full max-w-sm shadow-2xl p-6 space-y-4">
-            <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">Delete Product?</p>
-            <p style={{ color:"#9c7a62" }} className="text-sm">
-              Are you sure you want to delete <strong style={{ color:"#3a2416" }}>{deleteConfirm.name}</strong>? This cannot be undone.
+            <p style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg">Delete Product?</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-sm">
+              Are you sure you want to delete <strong style={{ color:"var(--color-charcoal)" }}>{deleteConfirm.name}</strong>? This cannot be undone.
             </p>
             <div className="flex gap-3 pt-2">
               <button onClick={() => setDeleteConfirm(null)}
                 className="flex-1 py-2.5 rounded-full border font-semibold text-sm"
-                style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                style={{ borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
                 Cancel
               </button>
               <button onClick={() => handleDelete(deleteConfirm._id)} disabled={deleting}

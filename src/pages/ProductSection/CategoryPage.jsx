@@ -47,7 +47,7 @@ const CATEGORIES = [
     count:9,
     desc:"Everlasting dried floral art that lasts for months",
     img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=85",
-    color:"#d4b896",
+    color:"var(--color-sage)",
     tags:["Boho","Wall Art","Gift","Long-lasting"],
   },
   {
@@ -91,24 +91,24 @@ export default function CategoryPage() {
     getCategoryes();
   }, []);
   return (
-    <div style={{ fontFamily:"system-ui,sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
+    <div style={{ fontFamily:"system-ui,sans-serif", background:"var(--color-beige)", minHeight:"100vh" }}>
 
       {/* Breadcrumb */}
       <Breadcrumb paths={[{id:1,name:'Home',path:'/'},{id:2,name:'Category',path:'/category'}]} />
 
       {/* Hero */}
-      <section style={{ background:"#4a3728" }} className="relative overflow-hidden py-14">
-        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full opacity-10" style={{ background:"#c97d5b" }}/>
-        <div className="absolute -bottom-8 -left-8 w-48 h-48 rounded-full opacity-10" style={{ background:"#f5e6d3" }}/>
+      <section style={{ background:"var(--color-charcoal)" }} className="relative overflow-hidden py-14">
+        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full opacity-10" style={{ background:"var(--color-olive)" }}/>
+        <div className="absolute -bottom-8 -left-8 w-48 h-48 rounded-full opacity-10" style={{ background:"var(--color-beige)" }}/>
         <div className="relative max-w-7xl mx-auto px-4 text-center">
-          <span style={{ background:"rgba(201,125,91,0.2)", color:"#f5c8a8" }}
+          <span style={{ background:"rgba(95,111,82,0.2)", color:"var(--color-sage)" }}
             className="inline-block text-xs uppercase tracking-widest font-semibold px-3 py-1 rounded-full mb-4">
             Shop By Category
           </span>
-          <h1 style={{ fontFamily:"Georgia,serif", color:"#f5e6d3" }} className="text-4xl sm:text-5xl font-bold mb-4">
-            Find Your Perfect<br/><span style={{ color:"#f5c8a8" }} className="italic">Bloom</span>
+          <h1 style={{ fontFamily:"Georgia,serif", color:"var(--color-beige)" }} className="text-4xl sm:text-5xl font-bold mb-4">
+            Find Your Perfect<br/><span style={{ color:"var(--color-sage)" }} className="italic">Bloom</span>
           </h1>
-          <p style={{ color:"#c4a088" }} className="max-w-xl mx-auto text-base leading-relaxed">
+          <p style={{ color:"var(--color-sage)" }} className="max-w-xl mx-auto text-base leading-relaxed">
             From fresh bouquets to dried flower art — explore our full collection of handcrafted floral creations.
           </p>
         </div>
@@ -117,7 +117,7 @@ export default function CategoryPage() {
       <div className="max-w-7xl mx-auto px-4 py-12">
       
         {/* Category Grid */}
-        <p style={{ color:"#c97d5b" }} className="text-xs uppercase tracking-widest font-semibold mb-4">All Categories</p>
+        <p style={{ color:"var(--color-olive)" }} className="text-xs uppercase tracking-widest font-semibold mb-4">All Categories</p>
         {!loading && categories.length>0?<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-12">
           {categories.map(cat => (
             <div key={cat.name}
@@ -126,8 +126,8 @@ export default function CategoryPage() {
               onMouseLeave={() => setHovered(null)}
               className="group relative rounded-2xl overflow-hidden cursor-pointer border transition-all duration-300"
               style={{
-                borderColor: hovered === cat._id ? "#c97d5b" : "#e8d5c4",
-                boxShadow: hovered === cat._id ? "0 12px 32px rgba(201,125,91,0.2)" : "none",
+                borderColor: hovered === cat._id ? "var(--color-olive)" : "var(--color-border)",
+                boxShadow: hovered === cat._id ? "0 12px 32px rgba(95,111,82,0.2)" : "none",
                 transform: hovered === cat._id ? "translateY(-4px)" : "none",
               }}>
               <div className="aspect-[4/5] overflow-hidden">
@@ -135,15 +135,15 @@ export default function CategoryPage() {
                   className="w-full h-full object-cover transition-transform duration-500"
                   style={{ transform: hovered === cat._id ? "scale(1.08)" : "scale(1)" }}/>
                 <div className="absolute inset-0" 
-                style={{ background:"linear-gradient(to top, rgba(58,36,22,0.85), rgba(58,36,22,0.1))" }}/>
+                style={{ background:"linear-gradient(to top, rgba(46,46,46,0.85), rgba(46,46,46,0.1))" }}/>
               </div>
               <div className="absolute inset-0 flex flex-col justify-end p-4">
                 <span className="text-2xl mb-1">{cat.emoji}</span>
-                <h3 style={{ fontFamily:"Georgia,serif", color:"#f5e6d3" }} className="font-bold text-base leading-tight">{cat.name}</h3>
-                <p style={{ color:"#f5c8a8" }} className="text-xs mt-1">{cat.count} products</p>
+                <h3 style={{ fontFamily:"Georgia,serif", color:"var(--color-beige)" }} className="font-bold text-base leading-tight">{cat.name}</h3>
+                <p style={{ color:"var(--color-sage)" }} className="text-xs mt-1">{cat.count} products</p>
                 <div className="flex flex-wrap gap-1 mt-2">
                   {cat.tags.slice(0,2).map(t => (
-                    <span key={t} style={{ background:"rgba(245,230,211,0.15)", color:"#f5e6d3" }}
+                    <span key={t} style={{ background:"rgba(245,230,211,0.15)", color:"var(--color-beige)" }}
                       className="text-xs px-2 py-0.5 rounded-full">{t}</span>
                   ))}
                 </div>
@@ -151,7 +151,7 @@ export default function CategoryPage() {
               {/* Arrow on hover */}
               <div className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
                 style={{
-                  background: hovered === cat._id ? "#c97d5b" : "rgba(255,255,255,0.1)",
+                  background: hovered === cat._id ? "var(--color-olive)" : "rgba(255,255,255,0.1)",
                   opacity: hovered === cat._id ? 1 : 0,
                 }}>
                 <ArrowRight size={14} className="text-white"/>
@@ -167,14 +167,14 @@ export default function CategoryPage() {
       }
 
         {/* Features Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 rounded-3xl" style={{ background:"#4a3728" }}>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 rounded-3xl" style={{ background:"var(--color-charcoal)" }}>
           {[
             [<Truck size={20}/>,       "Free Delivery",  "Orders above ₹999"],
             [<RefreshCw size={20}/>,   "Easy Returns",   "7-day policy"],
             [<ShieldCheck size={20}/>, "100% Fresh",     "Guaranteed"],
             [<TrendingUp size={20}/>,  "Best Prices",    "Price match promise"],
           ].map(([icon, title, sub]) => (
-            <div key={title} className="flex items-center gap-3" style={{ color:"#f5e6d3" }}>
+            <div key={title} className="flex items-center gap-3" style={{ color:"var(--color-beige)" }}>
               <div className="opacity-70 shrink-0">{icon}</div>
               <div>
                 <p className="text-sm font-semibold">{title}</p>
@@ -186,7 +186,7 @@ export default function CategoryPage() {
 
          {/* Featured Category */}
         {/* <div className="mb-10">
-          <p style={{ color:"#c97d5b" }} className="text-xs uppercase tracking-widest font-semibold mb-4">⭐ Featured</p>
+          <p style={{ color:"var(--color-olive)" }} className="text-xs uppercase tracking-widest font-semibold mb-4">⭐ Featured</p>
           <div
             onClick={() => onSelectCategory(featured)}
             className="group relative rounded-3xl overflow-hidden cursor-pointer h-64 sm:h-80"
@@ -195,18 +195,18 @@ export default function CategoryPage() {
             <img src={featured.img} alt={featured.name}
               className="w-full h-full object-cover transition-transform duration-700"
               style={{ transform: hovered === featured.id ? "scale(1.05)" : "scale(1)" }}/>
-            <div className="absolute inset-0" style={{ background:"linear-gradient(to right, rgba(58,36,22,0.85), rgba(58,36,22,0.3))" }}/>
+            <div className="absolute inset-0" style={{ background:"linear-gradient(to right, rgba(46,46,46,0.85), rgba(46,46,46,0.3))" }}/>
             <div className="absolute inset-0 flex flex-col justify-center px-10">
               <span className="text-5xl mb-3">{featured.emoji}</span>
-              <h2 style={{ fontFamily:"Georgia,serif", color:"#f5e6d3" }} className="text-4xl font-bold mb-2">{featured.name}</h2>
-              <p style={{ color:"#c4a088" }} className="mb-4 max-w-sm">{featured.desc}</p>
+              <h2 style={{ fontFamily:"Georgia,serif", color:"var(--color-beige)" }} className="text-4xl font-bold mb-2">{featured.name}</h2>
+              <p style={{ color:"var(--color-sage)" }} className="mb-4 max-w-sm">{featured.desc}</p>
               <div className="flex flex-wrap gap-2 mb-5">
                 {featured.tags.map(t => (
-                  <span key={t} style={{ background:"rgba(245,230,211,0.15)", color:"#f5e6d3" }}
+                  <span key={t} style={{ background:"rgba(245,230,211,0.15)", color:"var(--color-beige)" }}
                     className="text-xs px-2.5 py-1 rounded-full">{t}</span>
                 ))}
               </div>
-              <button style={{ background:"#c97d5b" }}
+              <button style={{ background:"var(--color-olive)" }}
                 className="inline-flex items-center gap-2 text-white px-6 py-2.5 rounded-full font-semibold text-sm w-fit hover:opacity-90">
                 Explore {featured.count} Products <ArrowRight size={14}/>
               </button>

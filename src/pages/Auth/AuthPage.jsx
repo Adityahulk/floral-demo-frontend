@@ -12,11 +12,11 @@ const API = `${BASE}/api/auth`;
 function Field({ label, type = "text", value, onChange, error, placeholder, icon: Icon, rightEl }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-sm font-semibold" style={{ color: "#4a3728" }}>{label}</label>
+      <label className="text-sm font-semibold" style={{ color: "var(--color-charcoal)" }}>{label}</label>
       <div className="relative">
         {Icon && (
           <Icon size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
-            style={{ color: "#9c7a62" }} />
+            style={{ color: "var(--color-olive)" }} />
         )}
         <input
           type={type}
@@ -27,12 +27,12 @@ function Field({ label, type = "text", value, onChange, error, placeholder, icon
           style={{
             paddingLeft: Icon ? "2.5rem" : "1rem",
             paddingRight: rightEl ? "3rem" : "1rem",
-            borderColor: error ? "#dc2626" : "#e8d5c4",
+            borderColor: error ? "#dc2626" : "var(--color-border)",
             background: error ? "#fff5f5" : "white",
-            color: "#3a2416",
+            color: "var(--color-charcoal)",
           }}
-          onFocus={e => { if (!error) e.target.style.borderColor = "#c97d5b"; }}
-          onBlur={e => { if (!error) e.target.style.borderColor = "#e8d5c4"; }}
+          onFocus={e => { if (!error) e.target.style.borderColor = "var(--color-olive)"; }}
+          onBlur={e => { if (!error) e.target.style.borderColor = "var(--color-border)"; }}
         />
         {rightEl && <div className="absolute right-3 top-1/2 -translate-y-1/2">{rightEl}</div>}
       </div>
@@ -289,26 +289,26 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex" style={{ fontFamily: "system-ui, sans-serif", background: "#fdf8f3" }}>
+    <div className="min-h-screen flex" style={{ fontFamily: "system-ui, sans-serif", background: "var(--color-beige)" }}>
 
       {/* ── LEFT PANEL (decorative) ── */}
       <div className="hidden lg:flex lg:w-5/12 flex-col items-center justify-center p-12 relative overflow-hidden"
-        style={{ background: "linear-gradient(145deg, #3a2416 0%, #5c3d2e 60%, #7a5c4a 100%)" }}>
+        style={{ background: "linear-gradient(145deg, var(--color-charcoal) 0%, var(--color-charcoal) 60%, var(--color-olive) 100%)" }}>
 
         <div className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10"
-          style={{ background: "#c97d5b", transform: "translate(30%, -30%)" }} />
+          style={{ background: "var(--color-olive)", transform: "translate(30%, -30%)" }} />
         <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full opacity-10"
-          style={{ background: "#c97d5b", transform: "translate(-30%, 30%)" }} />
+          style={{ background: "var(--color-olive)", transform: "translate(-30%, 30%)" }} />
 
         <div className="relative z-10 text-center">
           <div className="flex justify-center mb-6">
             <img src={FloralLogo} alt="The Floral Studio"
               className="w-24 h-24 rounded-full border-4"
-              style={{ borderColor: "rgba(201,125,91,0.5)" }} />
+              style={{ borderColor: "rgba(95,111,82,0.5)" }} />
           </div>
-          <h1 style={{ fontFamily: "Georgia, serif", color: "#f5e6d3" }}
+          <h1 style={{ fontFamily: "Georgia, serif", color: "var(--color-beige)" }}
             className="text-4xl font-bold mb-3">The Floral Studio</h1>
-          <p style={{ color: "#c9a990" }} className="text-lg mb-8">
+          <p style={{ color: "var(--color-sage)" }} className="text-lg mb-8">
             Where every corner finds its green
           </p>
 
@@ -321,7 +321,7 @@ export default function AuthPage() {
             ].map(t => (
               <div key={t} className="flex items-center gap-3 text-left">
                 <span className="text-lg">{t.slice(0, 2)}</span>
-                <span style={{ color: "#d4b5a0" }} className="text-sm">{t.slice(3)}</span>
+                <span style={{ color: "var(--color-sage)" }} className="text-sm">{t.slice(3)}</span>
               </div>
             ))}
           </div>
@@ -335,7 +335,7 @@ export default function AuthPage() {
           {/* Mobile logo */}
           <div className="flex items-center gap-3 mb-8 lg:hidden">
             <img src={FloralLogo} alt="" className="w-10 h-10 rounded-full" />
-            <span style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="font-bold text-xl">
+            <span style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="font-bold text-xl">
               The Floral Studio
             </span>
           </div>
@@ -352,7 +352,7 @@ export default function AuthPage() {
                   else resetForgot();
                 }}
                 className="flex items-center gap-1 text-sm mb-6 hover:opacity-70 transition-opacity"
-                style={{ color: "#c97d5b" }}
+                style={{ color: "var(--color-olive)" }}
               >
                 ← {forgotStep === "email" ? "Back to Login" : "Back"}
               </button>
@@ -361,10 +361,10 @@ export default function AuthPage() {
               {forgotStep === "email" && (
                 <form onSubmit={handleSendOtp} className="space-y-4">
                   <div className="mb-6">
-                    <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold">
+                    <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-2xl font-bold">
                       Forgot Password
                     </h2>
-                    <p style={{ color: "#9c7a62" }} className="text-sm mt-1">
+                    <p style={{ color: "var(--color-olive)" }} className="text-sm mt-1">
                       Enter your email and we'll send you a reset OTP
                     </p>
                   </div>
@@ -387,7 +387,7 @@ export default function AuthPage() {
 
                   <button type="submit" disabled={forgotLoading}
                     className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 disabled:opacity-60"
-                    style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
+                    style={{ background: "linear-gradient(135deg, var(--color-olive), var(--color-olive))" }}>
                     {forgotLoading
                       ? <span className="flex items-center justify-center gap-2">
                           <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -403,10 +403,10 @@ export default function AuthPage() {
               {forgotStep === "otp" && (
                 <form onSubmit={handleVerifyOtp} className="space-y-4">
                   <div className="mb-6">
-                    <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold">
+                    <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-2xl font-bold">
                       Enter OTP
                     </h2>
-                    <p style={{ color: "#9c7a62" }} className="text-sm mt-1">
+                    <p style={{ color: "var(--color-olive)" }} className="text-sm mt-1">
                       A 6-digit OTP was sent to <strong>{forgotEmail}</strong>
                     </p>
                   </div>
@@ -418,7 +418,7 @@ export default function AuthPage() {
                     onChange={v => { setForgotOtp(v.replace(/\D/g, "").slice(0, 6)); setForgotError(null); }}
                   />
 
-                  <p className="text-sm" style={{ color: "#9c7a62" }}>
+                  <p className="text-sm" style={{ color: "var(--color-olive)" }}>
                     Didn't receive it?{" "}
                     <button
                       type="button"
@@ -427,7 +427,7 @@ export default function AuthPage() {
                         await handleSendOtp();
                       }}
                       className="font-bold hover:opacity-70"
-                      style={{ color: "#c97d5b" }}
+                      style={{ color: "var(--color-olive)" }}
                     >
                       Resend OTP
                     </button>
@@ -442,7 +442,7 @@ export default function AuthPage() {
 
                   <button type="submit" disabled={forgotLoading}
                     className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 disabled:opacity-60"
-                    style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
+                    style={{ background: "linear-gradient(135deg, var(--color-olive), var(--color-olive))" }}>
                     {forgotLoading
                       ? <span className="flex items-center justify-center gap-2">
                           <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -458,10 +458,10 @@ export default function AuthPage() {
               {forgotStep === "password" && (
                 <form onSubmit={handleResetPassword} className="space-y-4">
                   <div className="mb-6">
-                    <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold">
+                    <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-2xl font-bold">
                       New Password
                     </h2>
-                    <p style={{ color: "#9c7a62" }} className="text-sm mt-1">
+                    <p style={{ color: "var(--color-olive)" }} className="text-sm mt-1">
                       Choose a strong password for your account
                     </p>
                   </div>
@@ -475,7 +475,7 @@ export default function AuthPage() {
                     icon={Lock}
                     rightEl={
                       <button type="button" onClick={() => setShowForgotPass(s => !s)}
-                        className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                        className="hover:opacity-70" style={{ color: "var(--color-olive)" }}>
                         {showForgotPass ? <EyeOff size={15} /> : <Eye size={15} />}
                       </button>
                     }
@@ -490,7 +490,7 @@ export default function AuthPage() {
                     icon={Lock}
                     rightEl={
                       <button type="button" onClick={() => setShowForgotConfirm(s => !s)}
-                        className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                        className="hover:opacity-70" style={{ color: "var(--color-olive)" }}>
                         {showForgotConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
                       </button>
                     }
@@ -505,7 +505,7 @@ export default function AuthPage() {
 
                   <button type="submit" disabled={forgotLoading}
                     className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 disabled:opacity-60"
-                    style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
+                    style={{ background: "linear-gradient(135deg, var(--color-olive), var(--color-olive))" }}>
                     {forgotLoading
                       ? <span className="flex items-center justify-center gap-2">
                           <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -527,17 +527,17 @@ export default function AuthPage() {
                     </div>
                   </div>
                   <div>
-                    <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold mb-2">
+                    <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-2xl font-bold mb-2">
                       Password Reset!
                     </h2>
-                    <p style={{ color: "#9c7a62" }} className="text-sm">
+                    <p style={{ color: "var(--color-olive)" }} className="text-sm">
                       Your password has been reset successfully. You can now sign in with your new password.
                     </p>
                   </div>
                   <button
                     onClick={resetForgot}
                     className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90"
-                    style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
+                    style={{ background: "linear-gradient(135deg, var(--color-olive), var(--color-olive))" }}>
                     Back to Login
                   </button>
                 </div>
@@ -547,23 +547,23 @@ export default function AuthPage() {
             /* ── NORMAL LOGIN / SIGNUP ── */
             <>
               {/* Tab toggle */}
-              <div className="flex rounded-2xl p-1 mb-8" style={{ background: "#f0e4d8" }}>
+              <div className="flex rounded-2xl p-1 mb-8" style={{ background: "var(--color-border)" }}>
                 {["login", "signup"].map(m => (
                   <button key={m} onClick={() => switchMode(m)}
                     className="flex-1 py-2.5 rounded-xl text-sm font-bold capitalize transition-all"
                     style={mode === m
-                      ? { background: "white", color: "#3a2416", boxShadow: "0 1px 4px rgba(0,0,0,0.1)" }
-                      : { color: "#9c7a62" }}>
+                      ? { background: "white", color: "var(--color-charcoal)", boxShadow: "0 1px 4px rgba(0,0,0,0.1)" }
+                      : { color: "var(--color-olive)" }}>
                     {m === "login" ? "Sign In" : "Create Account"}
                   </button>
                 ))}
               </div>
 
               <div className="mb-6">
-                <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold">
+                <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-2xl font-bold">
                   {mode === "login" ? "Welcome back" : "Join us today"}
                 </h2>
-                <p style={{ color: "#9c7a62" }} className="text-sm mt-1">
+                <p style={{ color: "var(--color-olive)" }} className="text-sm mt-1">
                   {mode === "login"
                     ? "Sign in to your account to continue"
                     : "Create your account to get started"}
@@ -590,7 +590,7 @@ export default function AuthPage() {
                         icon={Lock}
                         rightEl={
                           <button type="button" onClick={() => setShowPass(s => !s)}
-                            className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                            className="hover:opacity-70" style={{ color: "var(--color-olive)" }}>
                             {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
                           </button>
                         }
@@ -600,7 +600,7 @@ export default function AuthPage() {
                           type="button"
                           onClick={() => { setForgotEmail(form.email); setForgotStep("email"); }}
                           className="text-xs font-semibold hover:opacity-70 transition-opacity"
-                          style={{ color: "#c97d5b" }}
+                          style={{ color: "var(--color-olive)" }}
                         >
                           Forgot Password?
                         </button>
@@ -612,11 +612,11 @@ export default function AuthPage() {
                   <>
                     {/* Email row with Send OTP button */}
                     <div className="space-y-1.5">
-                      <label className="text-sm font-semibold" style={{ color: "#4a3728" }}>Email Address</label>
+                      <label className="text-sm font-semibold" style={{ color: "var(--color-charcoal)" }}>Email Address</label>
                       <div className="flex gap-2">
                         <div className="relative flex-1">
                           <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
-                            style={{ color: "#9c7a62" }} />
+                            style={{ color: "var(--color-olive)" }} />
                           <input
                             type="email"
                             value={form.email}
@@ -626,9 +626,9 @@ export default function AuthPage() {
                             className="w-full rounded-xl border px-4 py-3 text-sm outline-none transition-all"
                             style={{
                               paddingLeft: "2.5rem",
-                              borderColor: errors.email ? "#dc2626" : "#e8d5c4",
-                              background: signupOtpVerified ? "#f0e4d8" : errors.email ? "#fff5f5" : "white",
-                              color: "#3a2416",
+                              borderColor: errors.email ? "#dc2626" : "var(--color-border)",
+                              background: signupOtpVerified ? "var(--color-border)" : errors.email ? "#fff5f5" : "white",
+                              color: "var(--color-charcoal)",
                             }}
                           />
                         </div>
@@ -638,7 +638,7 @@ export default function AuthPage() {
                             onClick={handleSendSignupOtp}
                             disabled={signupOtpLoading || resendTimer > 0}
                             className="px-4 py-3 rounded-xl text-white text-sm font-bold transition-all hover:opacity-90 disabled:opacity-60 whitespace-nowrap"
-                            style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}
+                            style={{ background: "linear-gradient(135deg, var(--color-olive), var(--color-olive))" }}
                           >
                             {signupOtpLoading
                               ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
@@ -655,7 +655,7 @@ export default function AuthPage() {
                     {/* OTP input — shown after Send OTP, hidden after verified */}
                     {signupOtpSent && !signupOtpVerified && (
                       <div className="space-y-1.5">
-                        <label className="text-sm font-semibold" style={{ color: "#4a3728" }}>Enter OTP</label>
+                        <label className="text-sm font-semibold" style={{ color: "var(--color-charcoal)" }}>Enter OTP</label>
                         <div className="flex gap-2">
                           <input
                             type="text"
@@ -665,14 +665,14 @@ export default function AuthPage() {
                             onChange={e => { setSignupOtp(e.target.value.replace(/\D/g, "").slice(0, 6)); setSignupOtpError(null); }}
                             placeholder="6-digit OTP"
                             className="flex-1 rounded-xl border px-4 py-3 text-sm outline-none transition-all"
-                            style={{ borderColor: "#e8d5c4", color: "#3a2416" }}
+                            style={{ borderColor: "var(--color-border)", color: "var(--color-charcoal)" }}
                           />
                           <button
                             type="button"
                             onClick={handleVerifySignupOtp}
                             disabled={signupOtpLoading || signupOtp.length < 6}
                             className="px-4 py-3 rounded-xl text-white text-sm font-bold transition-all hover:opacity-90 disabled:opacity-60"
-                            style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}
+                            style={{ background: "linear-gradient(135deg, var(--color-olive), var(--color-olive))" }}
                           >
                             {signupOtpLoading
                               ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
@@ -680,7 +680,7 @@ export default function AuthPage() {
                             }
                           </button>
                         </div>
-                        <p className="text-xs" style={{ color: "#9c7a62" }}>OTP sent to {form.email}</p>
+                        <p className="text-xs" style={{ color: "var(--color-olive)" }}>OTP sent to {form.email}</p>
                       </div>
                     )}
 
@@ -713,13 +713,13 @@ export default function AuthPage() {
                       icon={Lock}
                       rightEl={
                         <button type="button" onClick={() => setShowPass(s => !s)}
-                          className="hover:opacity-70" style={{ color: "#9c7a62" }}>
+                          className="hover:opacity-70" style={{ color: "var(--color-olive)" }}>
                           {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
                         </button>
                       }
                     />
 
-                    <Field label="Contact Number" placeholder="+91 98765 43210"
+                    <Field label="Contact Number" placeholder="+91 98255 53565"
                       value={form.contactNumber} onChange={v => set("contactNumber", v)}
                       error={errors.contactNumber} icon={Phone} />
                   </>
@@ -743,7 +743,7 @@ export default function AuthPage() {
 
                 <button type="submit" disabled={loading || (mode === "signup" && !signupOtpVerified)}
                   className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:opacity-90 disabled:opacity-60 mt-2"
-                  style={{ background: "linear-gradient(135deg, #c97d5b, #a85d3e)" }}>
+                  style={{ background: "linear-gradient(135deg, var(--color-olive), var(--color-olive))" }}>
                   {loading
                     ? <span className="flex items-center justify-center gap-2">
                         <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -754,11 +754,11 @@ export default function AuthPage() {
                 </button>
               </form>
 
-              <p className="text-center text-sm mt-6" style={{ color: "#9c7a62" }}>
+              <p className="text-center text-sm mt-6" style={{ color: "var(--color-olive)" }}>
                 {mode === "login" ? "Don't have an account? " : "Already have an account? "}
                 <button onClick={() => switchMode(mode === "login" ? "signup" : "login")}
                   className="font-bold hover:opacity-70"
-                  style={{ color: "#c97d5b" }}>
+                  style={{ color: "var(--color-olive)" }}>
                   {mode === "login" ? "Sign up" : "Sign in"}
                 </button>
               </p>

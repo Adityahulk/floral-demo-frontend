@@ -8,6 +8,7 @@ import { useCart } from "../context/CartContext";
 import { isAuthenticated } from "../utils/auth";
 import { api } from "../api/client";
 import { API } from "../api/endpoints";
+import { COLORS } from "../theme/colors";
 
 const fmt = n => "₹" + n.toLocaleString("en-IN");
 const STEPS = ["Delivery", "Payment", "Confirmation"];
@@ -24,16 +25,16 @@ function StepBar({ step }) {
               style={i < step
                 ? { background: "#22c55e", borderColor: "#22c55e", color: "white" }
                 : i === step
-                  ? { background: "#c97d5b", borderColor: "#c97d5b", color: "white" }
-                  : { background: "white", borderColor: "#e8d5c4", color: "#9c7a62" }}>
+                  ? { background: "var(--color-olive)", borderColor: "var(--color-olive)", color: "white" }
+                  : { background: "white", borderColor: "var(--color-border)", color: "var(--color-olive)" }}>
               {i < step ? <Check size={14} /> : i + 1}
             </div>
             <p className="text-xs mt-1 font-medium"
-              style={{ color: i === step ? "#c97d5b" : i < step ? "#22c55e" : "#9c7a62" }}>{s}</p>
+              style={{ color: i === step ? "var(--color-olive)" : i < step ? "#22c55e" : "var(--color-olive)" }}>{s}</p>
           </div>
           {i < STEPS.length - 1 && (
             <div className="w-10 sm:w-24 h-0.5 mx-1 sm:mx-2 mb-5"
-              style={{ background: i < step ? "#22c55e" : "#e8d5c4" }} />
+              style={{ background: i < step ? "#22c55e" : "var(--color-border)" }} />
           )}
         </div>
       ))}
@@ -51,14 +52,14 @@ function OrderSummary({ items, coupon, setCoupon, couponApplied, onApplyCoupon, 
   const total     = subtotal + delivery - discount;
 
   return (
-    <div className="rounded-3xl overflow-hidden border" style={{ borderColor: "#e8d5c4", background: "white" }}>
+    <div className="rounded-3xl overflow-hidden border" style={{ borderColor: "var(--color-border)", background: "white" }}>
       <button onClick={() => setOpen(o => !o)}
         className="w-full flex items-center justify-between p-5 border-b"
-        style={{ borderColor: "#f0e4d8", background: "#fdf8f3" }}>
-        <span style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="font-bold text-lg">
+        style={{ borderColor: "var(--color-border)", background: "var(--color-beige)" }}>
+        <span style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="font-bold text-lg">
           Order Summary ({items.length} items)
         </span>
-        {open ? <ChevronUp size={18} style={{ color: "#c97d5b" }} /> : <ChevronDown size={18} style={{ color: "#9c7a62" }} />}
+        {open ? <ChevronUp size={18} style={{ color: "var(--color-olive)" }} /> : <ChevronDown size={18} style={{ color: "var(--color-olive)" }} />}
       </button>
 
       {open && (
@@ -69,58 +70,58 @@ function OrderSummary({ items, coupon, setCoupon, couponApplied, onApplyCoupon, 
                 <Link to={`/product/${item.product}`} className="relative shrink-0">
                   {item.img
                     ? <img src={item.img} alt={item.name} className="w-16 h-16 object-cover rounded-xl" />
-                    : <div className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl" style={{ background: "#f5ede5" }}>🌸</div>
+                    : <div className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl" style={{ background: "var(--color-beige)" }}>🌸</div>
                   }
                 </Link>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <Link to={`/product/${item.product}`} style={{ color: "#3a2416" }} className="text-sm font-semibold leading-snug hover:underline">{item.name}</Link>
+                    <Link to={`/product/${item.product}`} style={{ color: "var(--color-charcoal)" }} className="text-sm font-semibold leading-snug hover:underline">{item.name}</Link>
                     <button onClick={() => onRemove(item.key)} className="shrink-0 hover:opacity-70 transition-opacity mt-0.5">
                       <Trash2 size={13} style={{ color: "#dc2626" }} />
                     </button>
                   </div>
-                  {item.size && <p style={{ color: "#9c7a62" }} className="text-xs">{item.size}</p>}
+                  {item.size && <p style={{ color: "var(--color-olive)" }} className="text-xs">{item.size}</p>}
                   <div className="flex items-center justify-between mt-1.5">
-                    <div className="flex items-center gap-1.5 rounded-full border px-1.5 py-0.5" style={{ borderColor: "#e8d5c4" }}>
+                    <div className="flex items-center gap-1.5 rounded-full border px-1.5 py-0.5" style={{ borderColor: "var(--color-border)" }}>
                       <button onClick={() => item.qty > 1 ? onUpdateQty(item.key, item.qty - 1) : onRemove(item.key)}
-                        className="w-5 h-5 flex items-center justify-center hover:opacity-60" style={{ color: "#4a3728" }}>
+                        className="w-5 h-5 flex items-center justify-center hover:opacity-60" style={{ color: "var(--color-charcoal)" }}>
                         <Minus size={11} />
                       </button>
-                      <span style={{ color: "#4a3728" }} className="text-xs font-bold w-4 text-center">{item.qty}</span>
+                      <span style={{ color: "var(--color-charcoal)" }} className="text-xs font-bold w-4 text-center">{item.qty}</span>
                       <button onClick={() => onUpdateQty(item.key, item.qty + 1)}
-                        className="w-5 h-5 flex items-center justify-center hover:opacity-60" style={{ color: "#4a3728" }}>
+                        className="w-5 h-5 flex items-center justify-center hover:opacity-60" style={{ color: "var(--color-charcoal)" }}>
                         <Plus size={11} />
                       </button>
                     </div>
-                    <p style={{ color: "#4a3728" }} className="font-semibold text-sm">{fmt(item.price * item.qty)}</p>
+                    <p style={{ color: "var(--color-charcoal)" }} className="font-semibold text-sm">{fmt(item.price * item.qty)}</p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="flex gap-2 mb-5 p-3 rounded-2xl" style={{ background: "#fdf8f3", border: "1px solid #e8d5c4" }}>
-            <Tag size={16} style={{ color: "#c97d5b" }} className="shrink-0 mt-2.5" />
+          <div className="flex gap-2 mb-5 p-3 rounded-2xl" style={{ background: "var(--color-beige)", border: "1px solid var(--color-border)" }}>
+            <Tag size={16} style={{ color: "var(--color-olive)" }} className="shrink-0 mt-2.5" />
             <input value={coupon} onChange={e => setCoupon(e.target.value.toUpperCase())}
               placeholder="Enter coupon code"
               className="flex-1 bg-transparent text-sm outline-none"
-              style={{ color: "#4a3728" }} />
+              style={{ color: "var(--color-charcoal)" }} />
             <button onClick={onApplyCoupon}
               className="text-sm font-bold px-3 py-1.5 rounded-full transition-all"
               style={couponApplied
                 ? { background: "#dcfce7", color: "#16a34a" }
-                : { background: "#f5ede5", color: "#c97d5b" }}>
+                : { background: "var(--color-beige)", color: "var(--color-olive)" }}>
               {couponApplied ? "✓ Applied" : "Apply"}
             </button>
           </div>
 
-          <div className="space-y-2.5 text-sm border-t pt-4" style={{ borderColor: "#f0e4d8" }}>
-            <div className="flex justify-between" style={{ color: "#7a5c4a" }}>
+          <div className="space-y-2.5 text-sm border-t pt-4" style={{ borderColor: "var(--color-border)" }}>
+            <div className="flex justify-between" style={{ color: "var(--color-olive)" }}>
               <span>Subtotal</span><span>{fmt(subtotal)}</span>
             </div>
-            <div className="flex justify-between" style={{ color: "#7a5c4a" }}>
+            <div className="flex justify-between" style={{ color: "var(--color-olive)" }}>
               <span>Delivery</span>
-              <span style={{ color: delivery === 0 ? "#22c55e" : "#7a5c4a" }}>
+              <span style={{ color: delivery === 0 ? "#22c55e" : "var(--color-olive)" }}>
                 {delivery === 0 ? "FREE" : fmt(delivery)}
               </span>
             </div>
@@ -129,17 +130,17 @@ function OrderSummary({ items, coupon, setCoupon, couponApplied, onApplyCoupon, 
                 <span>Discount (BLOOM15)</span><span>-{fmt(discount)}</span>
               </div>
             )}
-            <div className="flex justify-between font-bold text-base pt-2 border-t" style={{ borderColor: "#f0e4d8", color: "#3a2416" }}>
+            <div className="flex justify-between font-bold text-base pt-2 border-t" style={{ borderColor: "var(--color-border)", color: "var(--color-charcoal)" }}>
               <span>Total</span>
-              <span style={{ color: "#c97d5b", fontFamily: "Georgia, serif" }}>{fmt(total)}</span>
+              <span style={{ color: "var(--color-olive)", fontFamily: "Georgia, serif" }}>{fmt(total)}</span>
             </div>
           </div>
         </div>
       )}
 
-      <div className="px-5 py-3 border-t flex items-center gap-2" style={{ borderColor: "#f0e4d8", background: "#fdf8f3" }}>
+      <div className="px-5 py-3 border-t flex items-center gap-2" style={{ borderColor: "var(--color-border)", background: "var(--color-beige)" }}>
         <ShieldCheck size={14} style={{ color: "#22c55e" }} />
-        <p className="text-xs" style={{ color: "#7a5c4a" }}>100% secure checkout. Your data is protected.</p>
+        <p className="text-xs" style={{ color: "var(--color-olive)" }}>100% secure checkout. Your data is protected.</p>
       </div>
     </div>
   );
@@ -156,19 +157,19 @@ function DeliveryForm({ data, onChange, touched }) {
     return (
       <div>
         <label className="block text-sm font-semibold mb-1.5"
-          style={{ color: isEmpty ? "#dc2626" : "#4a3728" }}>
+          style={{ color: isEmpty ? "#dc2626" : "var(--color-charcoal)" }}>
           {label}{isRequired && <span style={{ color:"#dc2626" }}> *</span>}
         </label>
         <input type={type} value={data[key]} onChange={e => onChange(key, e.target.value)}
           placeholder={placeholder}
           className="w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all"
           style={{
-            borderColor: isEmpty ? "#dc2626" : "#e8d5c4",
+            borderColor: isEmpty ? "#dc2626" : "var(--color-border)",
             background: isEmpty ? "#fff5f5" : "white",
-            color: "#3a2416"
+            color: "var(--color-charcoal)"
           }}
-          onFocus={e => e.target.style.borderColor = isEmpty ? "#dc2626" : "#c97d5b"}
-          onBlur={e => e.target.style.borderColor = isEmpty ? "#dc2626" : "#e8d5c4"} />
+          onFocus={e => e.target.style.borderColor = isEmpty ? "#dc2626" : "var(--color-olive)"}
+          onBlur={e => e.target.style.borderColor = isEmpty ? "#dc2626" : "var(--color-border)"} />
         {isEmpty && <p className="text-xs mt-1" style={{ color:"#dc2626" }}>This field is required</p>}
       </div>
     );
@@ -177,45 +178,45 @@ function DeliveryForm({ data, onChange, touched }) {
   return (
     <div className="space-y-5">
       <div>
-        <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold mb-1">Delivery Details</h2>
-        <p style={{ color: "#9c7a62" }} className="text-sm">Where should we deliver your flowers?</p>
+        <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-2xl font-bold mb-1">Delivery Details</h2>
+        <p style={{ color: "var(--color-olive)" }} className="text-sm">Where should we deliver your flowers?</p>
       </div>
 
       {field("Full Name", "fullName", "text", "Priya Sharma")}
-      {field("Phone Number", "phone", "tel", "+91 98765 43210")}
+      {field("Phone Number", "phone", "tel", "+91 98255 53565")}
       {field("Address Line 1", "address1", "text", "123 MG Road")}
       {field("Address Line 2 (Optional)", "address2", "text", "Apartment, suite, etc.")}
 
       <div className="grid grid-cols-2 gap-4">
-        {field("City",  "city",  "text", "Lucknow")}
-        {field("State", "state", "text", "Uttar Pradesh")}
+        {field("City",  "city",  "text", "Surat")}
+        {field("State", "state", "text", "Gujarat")}
       </div>
-      {field("Pincode", "pincode", "text", "226001")}
+      {field("Pincode", "pincode", "text", "395007")}
 
       <div>
-        <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">
-          Gift Note <span style={{ color: "#9c7a62" }} className="font-normal">(optional)</span>
+        <label style={{ color: "var(--color-charcoal)" }} className="block text-sm font-semibold mb-1.5">
+          Gift Note <span style={{ color: "var(--color-olive)" }} className="font-normal">(optional)</span>
         </label>
         <textarea value={data.note} onChange={e => onChange("note", e.target.value)}
           rows={3} placeholder="Add a personal message to go with your flowers..."
           className="w-full px-4 py-3 rounded-xl border text-sm outline-none resize-none"
-          style={{ borderColor: "#e8d5c4", color: "#3a2416" }}
-          onFocus={e => e.target.style.borderColor = "#c97d5b"}
-          onBlur={e => e.target.style.borderColor = "#e8d5c4"} />
+          style={{ borderColor: "var(--color-border)", color: "var(--color-charcoal)" }}
+          onFocus={e => e.target.style.borderColor = "var(--color-olive)"}
+          onBlur={e => e.target.style.borderColor = "var(--color-border)"} />
       </div>
 
       <div>
-        <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-2">Preferred Delivery Time</label>
+        <label style={{ color: "var(--color-charcoal)" }} className="block text-sm font-semibold mb-2">Preferred Delivery Time</label>
         <div className="grid grid-cols-3 gap-3">
           {[["🌅","Morning","8AM–12PM"],["☀️","Afternoon","12PM–5PM"],["🌙","Evening","5PM–9PM"]].map(([emoji, label, time]) => (
             <button key={label} onClick={() => onChange("slot", label)}
               className="flex flex-col items-center p-3 rounded-2xl border-2 text-center transition-all"
               style={data.slot === label
-                ? { borderColor: "#c97d5b", background: "#fdf8f3" }
-                : { borderColor: "#e8d5c4", background: "white" }}>
+                ? { borderColor: "var(--color-olive)", background: "var(--color-beige)" }
+                : { borderColor: "var(--color-border)", background: "white" }}>
               <span className="text-xl mb-1">{emoji}</span>
-              <span style={{ color: "#3a2416" }} className="text-xs font-bold">{label}</span>
-              <span style={{ color: "#9c7a62" }} className="text-xs">{time}</span>
+              <span style={{ color: "var(--color-charcoal)" }} className="text-xs font-bold">{label}</span>
+              <span style={{ color: "var(--color-olive)" }} className="text-xs">{time}</span>
             </button>
           ))}
         </div>
@@ -245,10 +246,10 @@ function PaymentForm({ method, setMethod }) {
   return (
     <div className="space-y-5">
       <div>
-        <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold mb-1">
+        <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-2xl font-bold mb-1">
           Payment Method
         </h2>
-        <p style={{ color: "#9c7a62" }} className="text-sm">Select how you'd like to pay</p>
+        <p style={{ color: "var(--color-olive)" }} className="text-sm">Select how you'd like to pay</p>
       </div>
 
       <div className="space-y-3">
@@ -256,19 +257,19 @@ function PaymentForm({ method, setMethod }) {
           <button key={o.id} onClick={() => setMethod(o.id)}
             className="w-full flex items-center gap-4 p-4 rounded-2xl border-2 text-left transition-all"
             style={method === o.id
-              ? { borderColor: "#c97d5b", background: "#fdf8f3" }
-              : { borderColor: "#e8d5c4", background: "white" }}>
+              ? { borderColor: "var(--color-olive)", background: "var(--color-beige)" }
+              : { borderColor: "var(--color-border)", background: "white" }}>
             <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl"
-              style={{ background: method === o.id ? "#f5ede5" : "#f9f6f3" }}>
+              style={{ background: method === o.id ? "var(--color-beige)" : "var(--color-beige)" }}>
               {o.icon}
             </div>
             <div className="flex-1 min-w-0">
-              <p style={{ color: "#3a2416" }} className="font-semibold">{o.label}</p>
-              <p style={{ color: "#9c7a62" }} className="text-xs mt-0.5">{o.sub}</p>
+              <p style={{ color: "var(--color-charcoal)" }} className="font-semibold">{o.label}</p>
+              <p style={{ color: "var(--color-olive)" }} className="text-xs mt-0.5">{o.sub}</p>
             </div>
             <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0"
-              style={{ borderColor: method === o.id ? "#c97d5b" : "#e8d5c4" }}>
-              {method === o.id && <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#c97d5b" }} />}
+              style={{ borderColor: method === o.id ? "var(--color-olive)" : "var(--color-border)" }}>
+              {method === o.id && <div className="w-2.5 h-2.5 rounded-full" style={{ background: "var(--color-olive)" }} />}
             </div>
           </button>
         ))}
@@ -286,31 +287,31 @@ function Confirmation({ orderId, form }) {
         style={{ background: "#dcfce7" }}>
         <Check size={40} style={{ color: "#16a34a" }} />
       </div>
-      <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-3xl font-bold mb-3">
+      <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-3xl font-bold mb-3">
         Order Confirmed! 🌸
       </h2>
-      <p style={{ color: "#7a5c4a" }} className="mb-2">
-        Your order <strong style={{ color: "#c97d5b" }}>#{orderId}</strong> has been placed.
+      <p style={{ color: "var(--color-olive)" }} className="mb-2">
+        Your order <strong style={{ color: "var(--color-olive)" }}>#{orderId}</strong> has been placed.
       </p>
-      <p style={{ color: "#9c7a62" }} className="text-sm mb-8">
+      <p style={{ color: "var(--color-olive)" }} className="text-sm mb-8">
         We'll start preparing your flowers right away!
       </p>
 
-      <div className="p-6 rounded-2xl mb-8 text-left" style={{ background: "#fdf8f3", border: "1px solid #e8d5c4" }}>
+      <div className="p-6 rounded-2xl mb-8 text-left" style={{ background: "var(--color-beige)", border: "1px solid var(--color-border)" }}>
         <div className="flex items-center gap-3 mb-4">
-          <MapPin size={18} style={{ color: "#c97d5b" }} />
-          <p style={{ color: "#4a3728" }} className="font-bold">Delivery Address</p>
+          <MapPin size={18} style={{ color: "var(--color-olive)" }} />
+          <p style={{ color: "var(--color-charcoal)" }} className="font-bold">Delivery Address</p>
         </div>
-        <p style={{ color: "#7a5c4a" }} className="text-sm">{form.fullName}</p>
-        <p style={{ color: "#7a5c4a" }} className="text-sm">{form.address1}{form.address2 ? `, ${form.address2}` : ""}</p>
-        <p style={{ color: "#7a5c4a" }} className="text-sm">{form.city}{form.state ? `, ${form.state}` : ""} {form.pincode}</p>
+        <p style={{ color: "var(--color-olive)" }} className="text-sm">{form.fullName}</p>
+        <p style={{ color: "var(--color-olive)" }} className="text-sm">{form.address1}{form.address2 ? `, ${form.address2}` : ""}</p>
+        <p style={{ color: "var(--color-olive)" }} className="text-sm">{form.city}{form.state ? `, ${form.state}` : ""} {form.pincode}</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Link to="/orders" style={{ background: "#c97d5b" }} className="text-white px-7 py-3 rounded-full font-bold hover:opacity-90 text-center">
+        <Link to="/orders" style={{ background: "var(--color-olive)" }} className="text-white px-7 py-3 rounded-full font-bold hover:opacity-90 text-center">
           View Orders
         </Link>
-        <Link to="/" style={{ border: "2px solid #c97d5b", color: "#c97d5b" }}
+        <Link to="/" style={{ border: "2px solid var(--color-olive)", color: "var(--color-olive)" }}
           className="px-7 py-3 rounded-full font-bold hover:opacity-70 text-center">
           Continue Shopping
         </Link>
@@ -442,7 +443,7 @@ export default function CheckoutPage() {
       order_id:  razorpayOrderId,
       name:      "The Floral Studio",
       description: "Order Payment",
-      theme:     { color: "#c97d5b" },
+      theme:     { color: COLORS.olive },
       handler: async ({ razorpay_payment_id, razorpay_order_id, razorpay_signature }) => {
         try {
           const data = await api(API.orders.confirm, {
@@ -484,10 +485,10 @@ export default function CheckoutPage() {
 
   if (cart.length === 0 && step < 2) {
     return (
-      <div style={{ background: "#fdf8f3", minHeight: "100vh" }} className="flex flex-col items-center justify-center gap-4">
+      <div style={{ background: "var(--color-beige)", minHeight: "100vh" }} className="flex flex-col items-center justify-center gap-4">
         <span className="text-5xl">🛒</span>
-        <h2 style={{ fontFamily: "Georgia, serif", color: "#3a2416" }} className="text-2xl font-bold">Your cart is empty</h2>
-        <Link to="/" style={{ background: "#c97d5b" }} className="text-white px-7 py-3 rounded-full font-bold hover:opacity-90">
+        <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-2xl font-bold">Your cart is empty</h2>
+        <Link to="/" style={{ background: "var(--color-olive)" }} className="text-white px-7 py-3 rounded-full font-bold hover:opacity-90">
           Start Shopping
         </Link>
       </div>
@@ -495,13 +496,13 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", background: "#fdf8f3", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "system-ui, sans-serif", background: "var(--color-beige)", minHeight: "100vh" }}>
       <div className="max-w-6xl mx-auto px-4 py-6 sm:py-10">
 {/* 
         {step < 2 && (
           <button onClick={() => step > 0 ? setStep(s => s - 1) : window.history.back()}
             className="flex items-center gap-2 mb-6 text-sm font-medium hover:opacity-70"
-            style={{ color: "#c97d5b" }}>
+            style={{ color: "var(--color-olive)" }}>
             <ArrowLeft size={16} /> {step > 0 ? "Back to Delivery" : "Back to Cart"}
           </button>
         )} */}
@@ -515,7 +516,7 @@ export default function CheckoutPage() {
         ) : (
           <div className="grid lg:grid-cols-[1fr_400px] gap-6 items-start">
 
-            <div className="order-2 lg:order-1 bg-white rounded-3xl p-5 sm:p-8 border" style={{ borderColor: "#e8d5c4" }}>
+            <div className="order-2 lg:order-1 bg-white rounded-3xl p-5 sm:p-8 border" style={{ borderColor: "var(--color-border)" }}>
               {step === 0
                 ? <DeliveryForm data={form} onChange={onChange} touched={touched} />
                 : <PaymentForm method={method} setMethod={setMethod} />
@@ -532,7 +533,7 @@ export default function CheckoutPage() {
                 }
                 disabled={placing}
                 className="w-full mt-6 py-4 rounded-full font-bold text-white text-base flex items-center justify-center gap-2 transition-all hover:opacity-90 hover:-translate-y-0.5 disabled:opacity-60"
-                style={{ background: "#c97d5b" }}>
+                style={{ background: "var(--color-olive)" }}>
                 {step === 0
                   ? <><Truck size={18} /> Continue to Payment</>
                   : placing

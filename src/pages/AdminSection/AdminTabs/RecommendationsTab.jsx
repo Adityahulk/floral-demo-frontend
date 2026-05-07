@@ -78,36 +78,36 @@ export default function RecommendationsTab() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="w-7 h-7 border-2 rounded-full animate-spin"
-          style={{ borderColor: "#c97d5b", borderTopColor: "transparent" }} />
+          style={{ borderColor: "var(--color-olive)", borderTopColor: "transparent" }} />
       </div>
     );
   }
 
   return (
     <div className="max-w-xl">
-      <div className="bg-white rounded-2xl border p-6" style={{ borderColor: "#e8d5c4" }}>
+      <div className="bg-white rounded-2xl border p-6" style={{ borderColor: "var(--color-border)" }}>
         <div className="flex items-center gap-3 mb-6">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-            style={{ background: "#f5e6d3" }}>
-            <Sparkles size={18} style={{ color: "#c97d5b" }} />
+            style={{ background: "var(--color-beige)" }}>
+            <Sparkles size={18} style={{ color: "var(--color-olive)" }} />
           </div>
           <div>
-            <h2 style={{ fontFamily: "Georgia,serif", color: "#3a2416" }} className="font-bold">Recommendations</h2>
-            <p style={{ color: "#9c7a62" }} className="text-xs">Choose up to 4 products shown in "You May Also Like"</p>
+            <h2 style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }} className="font-bold">Recommendations</h2>
+            <p style={{ color: "var(--color-olive)" }} className="text-xs">Choose up to 4 products shown in "You May Also Like"</p>
           </div>
         </div>
 
         <div className="space-y-4">
           {SLOTS.map((label, i) => (
             <div key={label}>
-              <label style={{ color: "#5c4033" }} className="block text-sm font-medium mb-1.5">
+              <label style={{ color: "var(--color-charcoal)" }} className="block text-sm font-medium mb-1.5">
                 {label}
               </label>
               <select
                 value={slots[i]}
                 onChange={e => updateSlot(i, e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border text-sm outline-none"
-                style={{ borderColor: "#e8d5c4", color: "#3a2416", background: "#fdf8f3" }}
+                style={{ borderColor: "var(--color-border)", color: "var(--color-charcoal)", background: "var(--color-beige)" }}
               >
                 <option value="">— Empty —</option>
                 {products.map(p => (
@@ -144,7 +144,7 @@ export default function RecommendationsTab() {
           onClick={handleSave}
           disabled={saving || hasDuplicate || hasNone}
           className="mt-6 flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity"
-          style={{ background: "#c97d5b", opacity: (saving || hasDuplicate || hasNone) ? 0.5 : 1 }}
+          style={{ background: "var(--color-olive)", opacity: (saving || hasDuplicate || hasNone) ? 0.5 : 1 }}
         >
           <Save size={14} />
           {saving ? "Saving..." : "Save Recommendations"}

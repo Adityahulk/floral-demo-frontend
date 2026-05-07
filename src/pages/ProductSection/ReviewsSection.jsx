@@ -41,11 +41,11 @@ function ReviewCard({ review, isOwn }) {
 
   return (
     <div className="rounded-2xl p-6 flex flex-col gap-4 h-full"
-      style={{ background:"#5c4033", outline: isOwn ? "2px solid #c97d5b" : "none" }}>
+      style={{ background:"var(--color-charcoal)", outline: isOwn ? "2px solid var(--color-olive)" : "none" }}>
 
       <Stars n={review.rating} size={16}/>
 
-      <p style={{ color:"#f5e6d3" }} className="text-sm leading-relaxed flex-1">
+      <p style={{ color:"var(--color-beige)" }} className="text-sm leading-relaxed flex-1">
         "{review.comment}"
       </p>
 
@@ -54,7 +54,7 @@ function ReviewCard({ review, isOwn }) {
           {review.user?.profileImage
             ? <img src={review.user.profileImage} alt={name}
                 className="w-9 h-9 rounded-full object-cover shrink-0"/>
-            : <div style={{ background:"#c97d5b" }}
+            : <div style={{ background:"var(--color-olive)" }}
                 className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
                 {initial}
               </div>
@@ -62,9 +62,9 @@ function ReviewCard({ review, isOwn }) {
           <div className="min-w-0">
             <p className="text-white font-semibold text-sm truncate">
               {name}
-              {isOwn && <span style={{ color:"#f5c8a8" }} className="ml-1 text-xs font-normal">(You)</span>}
+              {isOwn && <span style={{ color:"var(--color-sage)" }} className="ml-1 text-xs font-normal">(You)</span>}
             </p>
-            {dateStr && <p style={{ color:"#a08070" }} className="text-xs">{dateStr}</p>}
+            {dateStr && <p style={{ color:"var(--color-olive)" }} className="text-xs">{dateStr}</p>}
           </div>
         </div>
 
@@ -78,7 +78,7 @@ function ReviewCard({ review, isOwn }) {
           {/* {isOwn && (
             <button onClick={() => onEdit(review)} title="Edit"
               className="p-1.5 rounded-lg hover:opacity-70 transition-opacity"
-              style={{ background:"rgba(255,255,255,0.1)", color:"#f5e6d3" }}>
+              style={{ background:"rgba(255,255,255,0.1)", color:"var(--color-beige)" }}>
               <Edit2 size={13}/>
             </button>
           )} */}
@@ -204,25 +204,25 @@ export default function ReviewsSection({ productId }) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
         <div>
-          <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-3xl font-bold">
+          <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-3xl font-bold">
             Customer Reviews
           </h2>
           <div className="flex items-center gap-3 mt-2">
             <Stars n={avg} size={20} />
-            <span style={{ color:"#4a3728" }} className="font-bold text-lg">{Number(avg).toFixed(1)} / 5</span>
-            <span style={{ color:"#9c7a62" }}>({total} review{total !== 1 ? "s" : ""})</span>
+            <span style={{ color:"var(--color-charcoal)" }} className="font-bold text-lg">{Number(avg).toFixed(1)} / 5</span>
+            <span style={{ color:"var(--color-olive)" }}>({total} review{total !== 1 ? "s" : ""})</span>
           </div>
         </div>
 
         {!loggedIn ? (
           <a href="/login"
-            style={{ background:"#f5ede5", color:"#c97d5b" }}
+            style={{ background:"var(--color-beige)", color:"var(--color-olive)" }}
             className="px-5 py-2.5 rounded-full text-sm font-semibold hover:opacity-80 transition-opacity shrink-0">
             Login to Review
           </a>
         ) : !myReview ? (
           <button onClick={openWrite}
-            style={{ background:"#c97d5b" }}
+            style={{ background:"var(--color-olive)" }}
             className="text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity shrink-0">
             Write a Review
           </button>
@@ -232,13 +232,13 @@ export default function ReviewsSection({ productId }) {
       {/* Rating breakdown */}
       {total > 0 && (
         <div className="flex flex-col sm:flex-row gap-8 mb-8 p-6 rounded-3xl border"
-          style={{ borderColor:"#e8d5c4", background:"white" }}>
+          style={{ borderColor:"var(--color-border)", background:"white" }}>
           <div className="flex flex-col items-center justify-center shrink-0 text-center" style={{ minWidth:"110px" }}>
-            <p style={{ fontFamily:"Georgia, serif", color:"#3a2416", fontSize:"3.5rem", lineHeight:1 }} className="font-bold">
+            <p style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)", fontSize:"3.5rem", lineHeight:1 }} className="font-bold">
               {Number(avg).toFixed(1)}
             </p>
             <Stars n={avg} size={18} />
-            <p style={{ color:"#9c7a62" }} className="text-xs mt-1">{total} reviews</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-xs mt-1">{total} reviews</p>
           </div>
           <div className="flex-1 space-y-2.5">
             {[5,4,3,2,1].map(star => {
@@ -246,13 +246,13 @@ export default function ReviewsSection({ productId }) {
               const pct   = total > 0 ? Math.round((count / total) * 100) : 0;
               return (
                 <div key={star} className="flex items-center gap-3">
-                  <span style={{ color:"#7a5c4a" }} className="text-xs w-3 text-right shrink-0">{star}</span>
+                  <span style={{ color:"var(--color-olive)" }} className="text-xs w-3 text-right shrink-0">{star}</span>
                   <Star size={12} className="fill-amber-400 text-amber-400 shrink-0"/>
-                  <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background:"#f0e4d8" }}>
+                  <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background:"var(--color-border)" }}>
                     <div className="h-full rounded-full transition-all duration-700"
-                      style={{ width:`${pct}%`, background:"#c97d5b" }}/>
+                      style={{ width:`${pct}%`, background:"var(--color-olive)" }}/>
                   </div>
-                  <span style={{ color:"#9c7a62" }} className="text-xs w-8 shrink-0">{count}</span>
+                  <span style={{ color:"var(--color-olive)" }} className="text-xs w-8 shrink-0">{count}</span>
                 </div>
               );
             })}
@@ -264,22 +264,22 @@ export default function ReviewsSection({ productId }) {
       {showForm && (
         <form id="review-form" onSubmit={handleSubmit}
           className="mb-8 rounded-3xl border overflow-hidden"
-          style={{ borderColor:"#c97d5b" }}>
+          style={{ borderColor:"var(--color-olive)" }}>
 
           {/* Previous review preview (edit mode only) */}
           {editingId && myReview && (
-            <div className="px-6 pt-5 pb-4 border-b" style={{ borderColor:"#f0e4d8", background:"#fdf8f3" }}>
-              <p style={{ color:"#9c7a62" }} className="text-xs font-bold uppercase tracking-wide mb-3">
+            <div className="px-6 pt-5 pb-4 border-b" style={{ borderColor:"var(--color-border)", background:"var(--color-beige)" }}>
+              <p style={{ color:"var(--color-olive)" }} className="text-xs font-bold uppercase tracking-wide mb-3">
                 Your Previous Review
               </p>
               <div className="flex items-start gap-3">
-                <div style={{ background:"#f5ede5", color:"#c97d5b" }}
+                <div style={{ background:"var(--color-beige)", color:"var(--color-olive)" }}
                   className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0">
                   {(me?.name || "U")[0].toUpperCase()}
                 </div>
                 <div className="flex-1">
                   <Stars n={myReview.rating} size={14}/>
-                  <p style={{ color:"#5c4033" }} className="text-sm leading-relaxed mt-2">{myReview.comment}</p>
+                  <p style={{ color:"var(--color-charcoal)" }} className="text-sm leading-relaxed mt-2">{myReview.comment}</p>
                   {myReview.verifiedPurchase && (
                     <span className="inline-block mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-full"
                       style={{ background:"#dcfce7", color:"#16a34a" }}>
@@ -293,17 +293,17 @@ export default function ReviewsSection({ productId }) {
 
           {/* Form fields */}
           <div className="p-6" style={{ background:"white" }}>
-            <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg mb-5">
+            <h3 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg mb-5">
               {editingId ? "Update Your Review" : "Write a Review"}
             </h3>
 
             <div className="mb-5">
-              <label style={{ color:"#7a5c4a" }} className="text-sm font-semibold block mb-2">Rating</label>
+              <label style={{ color:"var(--color-olive)" }} className="text-sm font-semibold block mb-2">Rating</label>
               <StarPicker value={rating} onChange={setRating} />
             </div>
 
             <div className="mb-5">
-              <label style={{ color:"#7a5c4a" }} className="text-sm font-semibold block mb-2">
+              <label style={{ color:"var(--color-olive)" }} className="text-sm font-semibold block mb-2">
                 {editingId ? "Updated Review" : "Your Review"}
               </label>
               <textarea
@@ -312,7 +312,7 @@ export default function ReviewsSection({ productId }) {
                 rows={4}
                 placeholder="Share your experience with this product…"
                 className="w-full rounded-2xl border px-4 py-3 text-sm outline-none resize-none"
-                style={{ borderColor:"#e8d5c4", color:"#3a2416", background:"#fdf8f3" }}
+                style={{ borderColor:"var(--color-border)", color:"var(--color-charcoal)", background:"var(--color-beige)" }}
               />
             </div>
 
@@ -325,12 +325,12 @@ export default function ReviewsSection({ productId }) {
             <div className="flex gap-3">
               <button type="button" onClick={() => { setShowForm(false); setEditingId(null); }}
                 className="px-5 py-2 rounded-full border text-sm font-semibold"
-                style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                style={{ borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
                 Cancel
               </button>
               <button type="submit" disabled={submitting}
                 className="px-6 py-2 rounded-full text-sm font-semibold text-white disabled:opacity-60"
-                style={{ background:"#c97d5b" }}>
+                style={{ background:"var(--color-olive)" }}>
                 {submitting ? "Submitting…" : editingId ? "Update Review" : "Submit Review"}
               </button>
             </div>
@@ -342,23 +342,23 @@ export default function ReviewsSection({ productId }) {
       {loading && (
         <div className="flex justify-center py-12">
           <div className="w-6 h-6 border-2 rounded-full animate-spin"
-            style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }}/>
+            style={{ borderColor:"var(--color-olive)", borderTopColor:"transparent" }}/>
         </div>
       )}
 
       {/* Empty state */}
       {!loading && reviews.length === 0 && (
-        <div className="text-center py-14 rounded-3xl border" style={{ borderColor:"#e8d5c4", background:"white" }}>
+        <div className="text-center py-14 rounded-3xl border" style={{ borderColor:"var(--color-border)", background:"white" }}>
           <p className="text-4xl mb-3">🌸</p>
-          <p style={{ color:"#4a3728" }} className="font-semibold">No reviews yet</p>
-          <p style={{ color:"#9c7a62" }} className="text-sm mt-1">Be the first to share your experience!</p>
+          <p style={{ color:"var(--color-charcoal)" }} className="font-semibold">No reviews yet</p>
+          <p style={{ color:"var(--color-olive)" }} className="text-sm mt-1">Be the first to share your experience!</p>
         </div>
       )}
 
       {/* Horizontal scroll list — all reviews together */}
       {!loading && reviews.length > 0 && (
         <div className="flex gap-4 overflow-x-auto pb-3"
-          style={{ scrollbarWidth:"thin", scrollbarColor:"#e8d5c4 transparent" }}>
+          style={{ scrollbarWidth:"thin", scrollbarColor:"var(--color-border) transparent" }}>
           {reviews.map((review, i) => {
             const rid   = review._id || review.id || i;
             const isOwn = myId && (review.user?._id === myId || review.user?.id === myId);

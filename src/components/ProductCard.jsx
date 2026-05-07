@@ -26,8 +26,8 @@ export default function ProductCard({ p, wished, onWish, onCart }) {
       onMouseLeave={() => setHovered(false)}
       className="relative bg-white rounded-2xl overflow-hidden border transition-all duration-300 "
       style={{
-        borderColor: "#f0e4d8",
-        boxShadow: hovered ? "0 20px 40px rgba(58,36,22,0.12)" : "0 2px 8px rgba(58,36,22,0.06)",
+        borderColor: "var(--color-border)",
+        boxShadow: hovered ? "0 20px 40px rgba(46,46,46,0.12)" : "0 2px 8px rgba(46,46,46,0.06)",
         transform: hovered ? "translateY(-4px)" : "none",
       }}
     >
@@ -55,7 +55,7 @@ export default function ProductCard({ p, wished, onWish, onCart }) {
         >
           <button
             onClick={() => onCart(p)}
-            style={{ background: "#4a3728" }}
+            style={{ background: "var(--color-charcoal)" }}
             className="w-full py-3 text-white text-sm font-semibold flex items-center justify-center gap-2 hover:opacity-90"
           >
             <ShoppingCart size={14} /> Add to Cart
@@ -63,37 +63,37 @@ export default function ProductCard({ p, wished, onWish, onCart }) {
         </div>
       </div>
       <div className="p-4">
-        <p style={{ color: "#9c7a62" }} className="text-xs mb-1">
+        <p style={{ color: "var(--color-olive)" }} className="text-xs mb-1">
           {p.category?.name ?? ""}
         </p>
         <h3
-          style={{ fontFamily: "Georgia,serif", color: "#3a2416" }}
+          style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }}
           className="font-semibold text-sm mb-2 truncate"
         >
           {p.name}
         </h3>
         <div className="flex items-center gap-1.5 mb-3">
           <Stars n={p.rating?.average ?? 0} size={12} />
-          <span style={{ color: "#9c7a62" }} className="text-xs">({p.reviews ?? 0})</span>
+          <span style={{ color: "var(--color-olive)" }} className="text-xs">({p.reviews ?? 0})</span>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-baseline gap-1.5">
-            <span style={{ color: "#c97d5b" }} className="font-bold">{fmt(p.price)}</span>
+            <span style={{ color: "var(--color-olive)" }} className="font-bold">{fmt(p.price)}</span>
             {p.originalPrice && (
               <span className="text-xs text-stone-400 line-through">{fmt(p.originalPrice)}</span>
             )}
           </div>
           <button
             onClick={() => onCart(p)}
-            style={{ background: "#f5e6d3" }}
+            style={{ background: "var(--color-beige)" }}
             className="w-8 h-8 rounded-full flex items-center justify-center hover:opacity-70 transition-opacity"
           >
-            <ShoppingCart size={14} style={{ color: "#c97d5b" }} />
+            <ShoppingCart size={14} style={{ color: "var(--color-olive)" }} />
           </button>
         </div>
         <button
           onClick={() => navigate(`/category/${p.category?._id ?? p.category}/${p._id}`)}
-          style={{ background: "#4a3728" }}
+          style={{ background: "var(--color-charcoal)" }}
           className="w-full py-2 my-2 text-white text-sm font-semibold flex items-center justify-center gap-2 hover:opacity-90"
         >
           View Details

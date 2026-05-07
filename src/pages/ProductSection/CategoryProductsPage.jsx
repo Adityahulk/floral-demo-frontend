@@ -112,7 +112,7 @@ export default function CategoryProductsPage() {
     loading ? 
     <CategoryPageSkeleton/>
     :
-    <div style={{ fontFamily:"system-ui,sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
+    <div style={{ fontFamily:"system-ui,sans-serif", background:"var(--color-beige)", minHeight:"100vh" }}>
 
       {/* Cart Toast */}
       {added && (
@@ -133,19 +133,19 @@ export default function CategoryProductsPage() {
       {/* Category Hero Banner */}
       <div className="relative h-40 sm:h-52 overflow-hidden">
         <img src={category.img} alt={category.name} className="w-full h-full object-cover"/>
-        <div className="absolute inset-0" style={{ background:"linear-gradient(to right, rgba(58,36,22,0.85), rgba(58,36,22,0.3))" }}/>
+        <div className="absolute inset-0" style={{ background:"linear-gradient(to right, rgba(46,46,46,0.85), rgba(46,46,46,0.3))" }}/>
         <div className="absolute inset-0 flex items-center px-6 sm:px-10">
           <div>
             <button onClick={onBack}
               className="flex items-center gap-1.5 text-xs font-semibold mb-3 hover:opacity-70"
-              style={{ color:"#f5c8a8" }}>
+              style={{ color:"var(--color-sage)" }}>
               <ArrowLeft size={14}/> All Categories
             </button>
             <div className="flex items-center gap-3">
               <span className="text-4xl">{category.emoji}</span>
               <div>
-                <h1 style={{ fontFamily:"Georgia,serif", color:"#f5e6d3" }} className="text-3xl sm:text-4xl font-bold">{category.name}</h1>
-                <p style={{ color:"#c4a088" }} className="text-sm mt-1">{category.desc}</p>
+                <h1 style={{ fontFamily:"Georgia,serif", color:"var(--color-beige)" }} className="text-3xl sm:text-4xl font-bold">{category.name}</h1>
+                <p style={{ color:"var(--color-sage)" }} className="text-sm mt-1">{category.desc}</p>
               </div>
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function CategoryProductsPage() {
         {/* Cart bubble */}
         {cartCount > 0 && (
           <div className="absolute top-4 right-4 flex items-center gap-2 px-4 py-2 rounded-full"
-            style={{ background:"#c97d5b" }}>
+            style={{ background:"var(--color-olive)" }}>
             <ShoppingCart size={16} className="text-white"/>
             <span className="text-white text-sm font-bold">{cartCount}</span>
           </div>
@@ -166,39 +166,39 @@ export default function CategoryProductsPage() {
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           {/* Search */}
           <div className="relative flex-1">
-            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"#9c7a62" }}/>
+            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"var(--color-olive)" }}/>
             <input value={search} onChange={e => setSearch(e.target.value)}
               placeholder={`Search in ${category.name}...`}
               className="w-full pl-9 pr-4 py-2.5 rounded-full border text-sm outline-none"
-              style={{ borderColor:"#e8d5c4", background:"white", color:"#3a2416" }}/>
+              style={{ borderColor:"var(--color-border)", background:"white", color:"var(--color-charcoal)" }}/>
           </div>
 
           {/* Sort */}
           <div className="relative">
             <select value={sort} onChange={e => setSort(e.target.value)}
               className="appearance-none pl-4 pr-8 py-2.5 rounded-full border text-sm font-medium outline-none"
-              style={{ borderColor:"#e8d5c4", background:"white", color:"#4a3728" }}>
+              style={{ borderColor:"var(--color-border)", background:"white", color:"var(--color-charcoal)" }}>
               {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
-            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color:"#9c7a62" }}/>
+            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color:"var(--color-olive)" }}/>
           </div>
 
           {/* Filter */}
           <button onClick={() => setFilterOpen(o => !o)}
             className="flex items-center gap-2 px-4 py-2.5 rounded-full border font-medium text-sm transition-all"
             style={activeFilters > 0
-              ? { background:"#c97d5b", borderColor:"#c97d5b", color:"white" }
-              : { borderColor:"#e8d5c4", color:"#4a3728" }}>
+              ? { background:"var(--color-olive)", borderColor:"var(--color-olive)", color:"white" }
+              : { borderColor:"var(--color-border)", color:"var(--color-charcoal)" }}>
             <SlidersHorizontal size={15}/>
             Filters {activeFilters > 0 && `(${activeFilters})`}
           </button>
 
           {/* View Mode */}
-          {/* <div className="flex rounded-full border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+          {/* <div className="flex rounded-full border overflow-hidden" style={{ borderColor:"var(--color-border)" }}>
             {[["grid",<Grid3x3 size={16}/>],["list",<List size={16}/>]].map(([m, ico]) => (
               <button key={m} onClick={() => setViewMode(m)}
                 className="px-3 py-2 transition-all"
-                style={{ background: viewMode===m ? "#c97d5b" : "white", color: viewMode===m ? "white" : "#9c7a62" }}>
+                style={{ background: viewMode===m ? "var(--color-olive)" : "white", color: viewMode===m ? "white" : "var(--color-olive)" }}>
                 {ico}
               </button>
             ))}
@@ -207,18 +207,18 @@ export default function CategoryProductsPage() {
 
         {/* Filter Panel */}
         {filterOpen && (
-          <div className="mb-6 p-5 rounded-2xl border bg-white" style={{ borderColor:"#e8d5c4" }}>
+          <div className="mb-6 p-5 rounded-2xl border bg-white" style={{ borderColor:"var(--color-border)" }}>
             <div className="grid sm:grid-cols-3 gap-6">
               {/* Price */}
               <div>
-                <p style={{ color:"#4a3728" }} className="text-sm font-bold mb-3">Price Range</p>
+                <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-bold mb-3">Price Range</p>
                 <div className="space-y-2">
                   {PRICE_RANGES.map(r => (
                     <button key={r.label} onClick={() => setPriceRange(priceRange?.label===r.label ? null : r)}
                       className="flex items-center gap-2 text-sm w-full"
-                      style={{ color: priceRange?.label===r.label ? "#c97d5b" : "#5c4033" }}>
+                      style={{ color: priceRange?.label===r.label ? "var(--color-olive)" : "var(--color-charcoal)" }}>
                       <div className="w-4 h-4 rounded border-2 flex items-center justify-center shrink-0"
-                        style={{ borderColor: priceRange?.label===r.label ? "#c97d5b" : "#e8d5c4", background: priceRange?.label===r.label ? "#c97d5b" : "white" }}>
+                        style={{ borderColor: priceRange?.label===r.label ? "var(--color-olive)" : "var(--color-border)", background: priceRange?.label===r.label ? "var(--color-olive)" : "white" }}>
                         {priceRange?.label===r.label && <Check size={10} className="text-white"/>}
                       </div>
                       {r.label}
@@ -229,14 +229,14 @@ export default function CategoryProductsPage() {
 
               {/* Badge */}
               <div>
-                <p style={{ color:"#4a3728" }} className="text-sm font-bold mb-3">Product Type</p>
+                <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-bold mb-3">Product Type</p>
                 <div className="flex flex-wrap gap-2">
                   {["Sale","New","Popular","Premium"].map(b => (
                     <button key={b} onClick={() => setBadgeFilter(prev => prev.includes(b) ? prev.filter(x=>x!==b) : [...prev,b])}
                       className="px-3 py-1.5 rounded-full text-xs font-semibold border-2 transition-all"
                       style={badgeFilter.includes(b)
-                        ? { background:"#c97d5b", borderColor:"#c97d5b", color:"white" }
-                        : { borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                        ? { background:"var(--color-olive)", borderColor:"var(--color-olive)", color:"white" }
+                        : { borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
                       {b}
                     </button>
                   ))}
@@ -245,14 +245,14 @@ export default function CategoryProductsPage() {
 
               {/* Rating */}
               <div>
-                <p style={{ color:"#4a3728" }} className="text-sm font-bold mb-3">Minimum Rating</p>
+                <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-bold mb-3">Minimum Rating</p>
                 <div className="space-y-2">
                   {[4.5,4.0,3.5].map(r => (
                     <button key={r} onClick={() => setRatingFilter(ratingFilter===r ? null : r)}
                       className="flex items-center gap-2 text-sm w-full"
-                      style={{ color: ratingFilter===r ? "#c97d5b" : "#5c4033" }}>
+                      style={{ color: ratingFilter===r ? "var(--color-olive)" : "var(--color-charcoal)" }}>
                       <div className="w-4 h-4 rounded border-2 flex items-center justify-center shrink-0"
-                        style={{ borderColor: ratingFilter===r ? "#c97d5b" : "#e8d5c4", background: ratingFilter===r ? "#c97d5b" : "white" }}>
+                        style={{ borderColor: ratingFilter===r ? "var(--color-olive)" : "var(--color-border)", background: ratingFilter===r ? "var(--color-olive)" : "white" }}>
                         {ratingFilter===r && <Check size={10} className="text-white"/>}
                       </div>
                       <Stars n={r} size={13}/> <span className="ml-1">{r}+ stars</span>
@@ -280,8 +280,8 @@ export default function CategoryProductsPage() {
               onClick={() => setTagFilter(null)}
               className="px-3 py-1.5 rounded-full text-xs font-medium border transition-all"
               style={!tagFilter
-                ? { background:"#4a3728", borderColor:"#4a3728", color:"white" }
-                : { borderColor:"#e8d5c4", color:"#7a5c4a", background:"white" }}>
+                ? { background:"var(--color-charcoal)", borderColor:"var(--color-charcoal)", color:"white" }
+                : { borderColor:"var(--color-border)", color:"var(--color-olive)", background:"white" }}>
               All
             </button>
             {allTags.map(t => (
@@ -289,8 +289,8 @@ export default function CategoryProductsPage() {
                 onClick={() => setTagFilter(tagFilter === t ? null : t)}
                 className="px-3 py-1.5 rounded-full text-xs font-medium border transition-all"
                 style={tagFilter === t
-                  ? { background:"#c97d5b", borderColor:"#c97d5b", color:"white" }
-                  : { borderColor:"#e8d5c4", color:"#7a5c4a", background:"white" }}>
+                  ? { background:"var(--color-olive)", borderColor:"var(--color-olive)", color:"white" }
+                  : { borderColor:"var(--color-border)", color:"var(--color-olive)", background:"white" }}>
                 {t}
               </button>
             ))}
@@ -299,9 +299,9 @@ export default function CategoryProductsPage() {
 
         {/* Results Count */}
         <div className="flex items-center justify-between mb-5">
-          <p style={{ color:"#9c7a62" }} className="text-sm">
-            Showing <strong style={{ color:"#4a3728" }}>{filtered.length}</strong> products
-            {debouncedSearch && <span> for "<strong style={{ color:"#c97d5b" }}>{debouncedSearch}</strong>"</span>}
+          <p style={{ color:"var(--color-olive)" }} className="text-sm">
+            Showing <strong style={{ color:"var(--color-charcoal)" }}>{filtered.length}</strong> products
+            {debouncedSearch && <span> for "<strong style={{ color:"var(--color-olive)" }}>{debouncedSearch}</strong>"</span>}
           </p>
           {activeFilters > 0 && (
             <button onClick={() => { setPriceRange(null); setBadgeFilter([]); setRatingFilter(null); setTagFilter(null); }}
@@ -316,10 +316,10 @@ export default function CategoryProductsPage() {
         {filtered.length === 0 ? (
           <div className="text-center py-20">
             <span className="text-5xl block mb-4">🌸</span>
-            <h3 style={{ fontFamily:"Georgia,serif", color:"#3a2416" }} className="text-xl font-bold mb-2">No products found</h3>
-            <p style={{ color:"#9c7a62" }} className="mb-6">Try adjusting your filters or search term</p>
+            <h3 style={{ fontFamily:"Georgia,serif", color:"var(--color-charcoal)" }} className="text-xl font-bold mb-2">No products found</h3>
+            <p style={{ color:"var(--color-olive)" }} className="mb-6">Try adjusting your filters or search term</p>
             <button onClick={() => { setSearch(""); setPriceRange(null); setBadgeFilter([]); setRatingFilter(null); setTagFilter(null); }}
-              style={{ background:"#c97d5b" }}
+              style={{ background:"var(--color-olive)" }}
               className="text-white px-6 py-3 rounded-full font-semibold text-sm hover:opacity-90">
               Clear All Filters
             </button>

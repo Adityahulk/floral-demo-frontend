@@ -2,10 +2,10 @@ import ProductCardSkeleton from "./ProductCardSkeleton";
 
 export default function CategoryPageSkeleton() {
   return (
-    <div style={{ fontFamily:"system-ui,sans-serif", background:"#fdf8f3", minHeight:"100vh" }} className="animate-pulse">
+    <div style={{ fontFamily:"system-ui,sans-serif", background:"var(--color-beige)", minHeight:"100vh" }} className="animate-pulse">
 
       {/* Breadcrumb */}
-      <div style={{ background:"#f5ede5", borderBottom:"1px solid #e8d5c4" }} className="py-3">
+      <div style={{ background:"var(--color-beige)", borderBottom:"1px solid var(--color-border)" }} className="py-3">
         <div className="max-w-7xl mx-auto px-4 flex gap-2">
           <div className="h-3 w-16 bg-gray-200 rounded" />
           <div className="h-3 w-3 bg-gray-200 rounded" />
@@ -40,7 +40,7 @@ export default function CategoryPageSkeleton() {
         </div>
 
         {/* Filter Panel */}
-        {/* <div className="mb-6 p-5 rounded-2xl border bg-white" style={{ borderColor:"#e8d5c4" }}>
+        {/* <div className="mb-6 p-5 rounded-2xl border bg-white" style={{ borderColor:"var(--color-border)" }}>
           <div className="grid sm:grid-cols-3 gap-6">
             {[1,2,3].map(i => (
               <div key={i} className="space-y-3">

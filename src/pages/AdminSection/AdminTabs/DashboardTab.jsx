@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { BASE, fmt, fmtK } from "./shared";
 
-function BarChart({ data, labels, color = "#c97d5b" }) {
+function BarChart({ data, labels, color = "var(--color-olive)" }) {
   const max = Math.max(...data);
   return (
     <div className="flex items-end gap-1 h-24 w-full">
@@ -14,7 +14,7 @@ function BarChart({ data, labels, color = "#c97d5b" }) {
         <div key={i} className="flex-1 flex flex-col items-center gap-1">
           <div className="w-full rounded-t-md transition-all duration-500 hover:opacity-80"
             style={{ height:`${(v / max) * 96}px`, background: color, opacity: i === data.length - 1 ? 1 : 0.5 }} />
-          {labels && <span className="text-xs" style={{ color:"#9c7a62" }}>{labels[i]}</span>}
+          {labels && <span className="text-xs" style={{ color:"var(--color-olive)" }}>{labels[i]}</span>}
         </div>
       ))}
     </div>
@@ -27,7 +27,7 @@ const DASH_STATUS_COLORS = {
   confirmed:    { bg:"#dbeafe", color:"#2563eb" },
   processing:   { bg:"#dbeafe", color:"#2563eb" },
   cancelled:    { bg:"#fee2e2", color:"#dc2626" },
-  pending:      { bg:"#f5ede5", color:"#9c7a62" },
+  pending:      { bg:"var(--color-beige)", color:"var(--color-olive)" },
 };
 
 export default function Dashboard() {
@@ -96,7 +96,7 @@ export default function Dashboard() {
 
   const ov = dash?.overview;
   const stats = ov ? [
-    { label:"Total Revenue",   value: fmtK(ov.totalRevenue?.value ?? 0),             change: ov.totalRevenue?.change ?? 0,   icon:<IndianRupee size={20}/>, color:"#c97d5b" },
+    { label:"Total Revenue",   value: fmtK(ov.totalRevenue?.value ?? 0),             change: ov.totalRevenue?.change ?? 0,   icon:<IndianRupee size={20}/>, color:"var(--color-olive)" },
     { label:"Total Orders",    value: (ov.totalOrders?.value ?? 0).toLocaleString(),  change: ov.totalOrders?.change ?? 0,    icon:<ShoppingBag size={20}/>, color:"#8b5cf6" },
     { label:"New Customers",   value: (ov.newCustomers?.value ?? 0).toLocaleString(), change: ov.newCustomers?.change ?? 0,   icon:<Users size={20}/>,       color:"#06b6d4" },
     { label:"Avg Order Value", value: fmtK(ov.avgOrderValue?.value ?? 0),            change: ov.avgOrderValue?.change ?? 0,  icon:<TrendingUp size={20}/>,  color:"#f59e0b" },
@@ -111,7 +111,7 @@ export default function Dashboard() {
     return (
       <div className="flex justify-center py-20">
         <div className="w-7 h-7 border-2 rounded-full animate-spin"
-          style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
+          style={{ borderColor:"var(--color-olive)", borderTopColor:"transparent" }} />
       </div>
     );
   }
@@ -121,13 +121,13 @@ export default function Dashboard() {
 
       {/* KPI Cards */}
       <div>
-        <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold mb-4">
+        <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-xl font-bold mb-4">
           Key Performance Indicators
         </h2>
         <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {kpiCards.map(({ label, value, sub, pos }) => (
             <div key={label} className="rounded-2xl p-5" style={{ background:"#1e1410" }}>
-              <p style={{ color:"#a08070" }} className="text-xs font-semibold uppercase tracking-wide mb-2">{label}</p>
+              <p style={{ color:"var(--color-olive)" }} className="text-xs font-semibold uppercase tracking-wide mb-2">{label}</p>
               <p style={{ color:"white", fontFamily:"Georgia, serif" }} className="text-3xl font-bold mb-1">{value}</p>
               {sub && <p style={{ color: pos ? "#4ade80" : "#f87171" }} className="text-xs">{sub}</p>}
             </div>
@@ -137,12 +137,12 @@ export default function Dashboard() {
 
       {/* Period Toggle */}
       <div className="flex items-center justify-between">
-        <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold">Overview</h2>
-        <div className="flex gap-1 p-1 rounded-full" style={{ background:"#f5ede5" }}>
+        <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-xl font-bold">Overview</h2>
+        <div className="flex gap-1 p-1 rounded-full" style={{ background:"var(--color-beige)" }}>
           {["daily","weekly","monthly"].map(p => (
             <button key={p} onClick={() => changePeriod(p)}
               className="px-4 py-1.5 rounded-full text-xs font-bold capitalize transition-all"
-              style={period === p ? { background:"#c97d5b", color:"white" } : { color:"#9c7a62" }}>
+              style={period === p ? { background:"var(--color-olive)", color:"white" } : { color:"var(--color-olive)" }}>
               {p}
             </button>
           ))}
@@ -152,7 +152,7 @@ export default function Dashboard() {
       {dashLoading ? (
         <div className="flex justify-center py-8">
           <div className="w-6 h-6 border-2 rounded-full animate-spin"
-            style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
+            style={{ borderColor:"var(--color-olive)", borderTopColor:"transparent" }} />
         </div>
       ) : (
         <>
@@ -161,7 +161,7 @@ export default function Dashboard() {
             {stats.map(({ label, value, change, icon, color }) => {
               const up = change >= 0;
               return (
-                <div key={label} className="bg-white rounded-2xl p-5 border" style={{ borderColor:"#e8d5c4" }}>
+                <div key={label} className="bg-white rounded-2xl p-5 border" style={{ borderColor:"var(--color-border)" }}>
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center"
                       style={{ background:`${color}18`, color }}>
@@ -173,8 +173,8 @@ export default function Dashboard() {
                       {Math.abs(change)}%
                     </div>
                   </div>
-                  <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold mb-0.5">{value}</p>
-                  <p style={{ color:"#9c7a62" }} className="text-xs">{label}</p>
+                  <p style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-2xl font-bold mb-0.5">{value}</p>
+                  <p style={{ color:"var(--color-olive)" }} className="text-xs">{label}</p>
                 </div>
               );
             })}
@@ -182,15 +182,15 @@ export default function Dashboard() {
 
           {/* Revenue Bar Chart */}
           {chartValues.length > 0 && (
-            <div className="bg-white rounded-3xl p-6 border" style={{ borderColor:"#e8d5c4" }}>
+            <div className="bg-white rounded-3xl p-6 border" style={{ borderColor:"var(--color-border)" }}>
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">Revenue Chart</h3>
-                  <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">
+                  <h3 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg">Revenue Chart</h3>
+                  <p style={{ color:"var(--color-olive)" }} className="text-xs mt-0.5">
                     {period === "daily" ? "Last 7 days" : period === "weekly" ? "Last 7 weeks" : "Last 12 months"}
                   </p>
                 </div>
-                <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }} className="text-2xl font-bold">
+                <p style={{ color:"var(--color-olive)", fontFamily:"Georgia, serif" }} className="text-2xl font-bold">
                   {fmtK(ov?.totalRevenue?.value ?? 0)}
                 </p>
               </div>
@@ -200,11 +200,11 @@ export default function Dashboard() {
 
           {/* Recent Orders */}
           {recentOrders.length > 0 && (
-            <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+            <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"var(--color-border)" }}>
               <div className="flex items-center justify-between px-6 py-4 border-b"
-                style={{ borderColor:"#f0e4d8", background:"#fdf8f3" }}>
-                <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">Recent Orders</h3>
-                <button style={{ color:"#c97d5b" }} className="text-sm font-semibold flex items-center gap-1 hover:opacity-70">
+                style={{ borderColor:"var(--color-border)", background:"var(--color-beige)" }}>
+                <h3 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg">Recent Orders</h3>
+                <button style={{ color:"var(--color-olive)" }} className="text-sm font-semibold flex items-center gap-1 hover:opacity-70">
                   View All <ChevronRight size={14}/>
                 </button>
               </div>
@@ -220,22 +220,22 @@ export default function Dashboard() {
                   return (
                     <div key={id} className="flex items-center gap-4 px-6 py-4 transition-colors"
                       style={{ background:"white" }}
-                      onMouseEnter={e => e.currentTarget.style.background="#fdf8f3"}
+                      onMouseEnter={e => e.currentTarget.style.background="var(--color-beige)"}
                       onMouseLeave={e => e.currentTarget.style.background="white"}>
                       {imgSrc
                         ? <img src={imgSrc} alt={product} className="w-10 h-10 object-cover rounded-xl shrink-0" />
                         : <div className="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-lg"
-                            style={{ background:"#f5ede5" }}>🌸</div>
+                            style={{ background:"var(--color-beige)" }}>🌸</div>
                       }
                       <div className="flex-1 min-w-0">
-                        <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{product}</p>
-                        <p style={{ color:"#9c7a62" }} className="text-xs">{customer}</p>
+                        <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold truncate">{product}</p>
+                        <p style={{ color:"var(--color-olive)" }} className="text-xs">{customer}</p>
                       </div>
                       <span className="text-xs font-bold px-2.5 py-1 rounded-full capitalize"
                         style={{ background: sc.bg, color: sc.color }}>
                         {statusLabel}
                       </span>
-                      <p style={{ color:"#c97d5b" }} className="font-bold text-sm shrink-0">{fmt(amount)}</p>
+                      <p style={{ color:"var(--color-olive)" }} className="font-bold text-sm shrink-0">{fmt(amount)}</p>
                     </div>
                   );
                 })}

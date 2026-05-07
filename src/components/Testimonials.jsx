@@ -55,15 +55,15 @@ export default function Testimonials() {
 
   if (loading) {
     return (
-      <section style={{ background:"#4a3728" }} className="py-16">
+      <section style={{ background:"var(--color-charcoal)" }} className="py-16">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p style={{ color:"#f5c8a8" }} className="text-xs uppercase tracking-widest font-semibold mb-2">Testimonials</p>
+          <p style={{ color:"var(--color-sage)" }} className="text-xs uppercase tracking-widest font-semibold mb-2">Testimonials</p>
           <h2 style={{ fontFamily:"Georgia, serif" }} className="text-3xl sm:text-4xl font-bold text-white mb-10">
             What Our Customers Say
           </h2>
           <div className="flex justify-center py-6">
             <div className="w-7 h-7 border-2 rounded-full animate-spin"
-              style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }}/>
+              style={{ borderColor:"var(--color-olive)", borderTopColor:"transparent" }}/>
           </div>
         </div>
       </section>
@@ -73,11 +73,11 @@ export default function Testimonials() {
   if (reviews.length === 0) return null;
 
   return (
-    <section style={{ background:"#4a3728" }} className="py-16">
+    <section style={{ background:"var(--color-charcoal)" }} className="py-16">
       <div className="max-w-7xl mx-auto px-4">
 
         <div className="text-center mb-10">
-          <p style={{ color:"#f5c8a8" }} className="text-xs uppercase tracking-widest font-semibold mb-2">
+          <p style={{ color:"var(--color-sage)" }} className="text-xs uppercase tracking-widest font-semibold mb-2">
             Real Customer Reviews
           </p>
           <h2 style={{ fontFamily:"Georgia, serif" }} className="text-3xl sm:text-4xl font-bold text-white">
@@ -94,11 +94,11 @@ export default function Testimonials() {
               : "";
 
             return (
-              <div key={review._id || i} style={{ background:"#5c4033" }} className="rounded-2xl p-6 flex flex-col gap-4">
+              <div key={review._id || i} style={{ background:"rgba(95,111,82,0.2)" }} className="rounded-2xl p-6 flex flex-col gap-4">
 
                 <Stars n={review.rating} size={16}/>
 
-                <p style={{ color:"#f5e6d3" }} className="text-sm leading-relaxed flex-1">
+                <p style={{ color:"var(--color-beige)" }} className="text-sm leading-relaxed flex-1">
                   "{review.comment}"
                 </p>
 
@@ -107,14 +107,15 @@ export default function Testimonials() {
                     {review.user?.profileImage
                       ? <img src={review.user.profileImage} alt={name}
                           className="w-9 h-9 rounded-full object-cover shrink-0"/>
-                      : <div style={{ background:"#c97d5b" }}
+                      : <div style={{ background:"var(--color-olive)" }}
                           className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
                           {initial}
                         </div>
                     }
                     <div className="min-w-0">
                       <p className="text-white font-semibold text-sm truncate">{name}</p>
-                      {dateStr && <p style={{ color:"#a08070" }} className="text-xs">{dateStr}</p>}
+                      {dateStr && <p style={{ color:"var(--color-olive)" }} className="text-xs">{dateStr}</p>}
+
                     </div>
                   </div>
 

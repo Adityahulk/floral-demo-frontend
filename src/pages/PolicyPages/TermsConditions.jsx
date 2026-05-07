@@ -12,21 +12,21 @@ import CookiePolicy from "./CookiePolicy";
 
 function PageHero({ icon, tag, title, subtitle, updated }) {
   return (
-    <section className="relative overflow-hidden py-16" style={{ background:"#4a3728" }}>
-      <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full opacity-10" style={{ background:"#c97d5b" }} />
-      <div className="absolute -bottom-8 -left-8 w-48 h-48 rounded-full opacity-10"  style={{ background:"#f5e6d3" }} />
+    <section className="relative overflow-hidden py-16" style={{ background:"var(--color-charcoal)" }}>
+      <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full opacity-10" style={{ background:"var(--color-olive)" }} />
+      <div className="absolute -bottom-8 -left-8 w-48 h-48 rounded-full opacity-10"  style={{ background:"var(--color-beige)" }} />
       <div className="relative max-w-4xl mx-auto px-4 text-center">
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
-          style={{ background:"rgba(201,125,91,0.2)" }}>
-          <span style={{ color:"#f5c8a8" }}>{icon}</span>
+          style={{ background:"rgba(95,111,82,0.2)" }}>
+          <span style={{ color:"var(--color-sage)" }}>{icon}</span>
         </div>
-        <span style={{ background:"rgba(201,125,91,0.2)", color:"#f5c8a8" }}
+        <span style={{ background:"rgba(95,111,82,0.2)", color:"var(--color-sage)" }}
           className="inline-block text-xs uppercase tracking-widest font-semibold px-3 py-1 rounded-full mb-4">
           {tag}
         </span>
-        <h1 style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="text-4xl sm:text-5xl font-bold mb-4">{title}</h1>
-        <p style={{ color:"#c4a088" }} className="text-base leading-relaxed max-w-xl mx-auto mb-4">{subtitle}</p>
-        <p style={{ color:"#7a5c4a" }} className="text-xs">Last updated: {updated}</p>
+        <h1 style={{ fontFamily:"Georgia, serif", color:"var(--color-beige)" }} className="text-4xl sm:text-5xl font-bold mb-4">{title}</h1>
+        <p style={{ color:"var(--color-sage)" }} className="text-base leading-relaxed max-w-xl mx-auto mb-4">{subtitle}</p>
+        <p style={{ color:"var(--color-olive)" }} className="text-xs">Last updated: {updated}</p>
       </div>
     </section>
   );
@@ -35,24 +35,24 @@ function PageHero({ icon, tag, title, subtitle, updated }) {
 function Section({ title, icon, children }) {
   const [open, setOpen] = useState(true);
   return (
-    <div className="mb-4 rounded-2xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+    <div className="mb-4 rounded-2xl border overflow-hidden" style={{ borderColor:"var(--color-border)" }}>
       <button onClick={() => setOpen(o => !o)}
         className="w-full flex items-center justify-between px-6 py-4 text-left"
-        style={{ background: open ? "#fdf8f3" : "white" }}>
+        style={{ background: open ? "var(--color-beige)" : "white" }}>
         <div className="flex items-center gap-3">
-          <div style={{ background:"#f5ede5", color:"#c97d5b" }}
+          <div style={{ background:"var(--color-beige)", color:"var(--color-olive)" }}
             className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0">
             {icon}
           </div>
-          <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">{title}</h2>
+          <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg">{title}</h2>
         </div>
         {open
-          ? <ChevronUp size={18} style={{ color:"#c97d5b" }} />
-          : <ChevronDown size={18} style={{ color:"#9c7a62" }} />}
+          ? <ChevronUp size={18} style={{ color:"var(--color-olive)" }} />
+          : <ChevronDown size={18} style={{ color:"var(--color-olive)" }} />}
       </button>
       {open && (
         <div className="px-6 pb-6 pt-2 bg-white">
-          <div style={{ color:"#5c4033" }} className="text-sm leading-relaxed space-y-3">
+          <div style={{ color:"var(--color-charcoal)" }} className="text-sm leading-relaxed space-y-3">
             {children}
           </div>
         </div>
@@ -83,7 +83,7 @@ function BulletList({ items }) {
     <ul className="space-y-2 mt-2">
       {items.map((item, i) => (
         <li key={i} className="flex items-start gap-2">
-          <span style={{ color:"#c97d5b" }} className="mt-1 shrink-0">•</span>
+          <span style={{ color:"var(--color-olive)" }} className="mt-1 shrink-0">•</span>
           <span>{item}</span>
         </li>
       ))}
@@ -93,30 +93,30 @@ function BulletList({ items }) {
 
 function ContactCard() {
   return (
-    <div className="mt-10 p-6 rounded-3xl" style={{ background:"#4a3728" }}>
-      <h3 style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="font-bold text-xl mb-2 text-center">
+    <div className="mt-10 p-6 rounded-3xl" style={{ background:"var(--color-charcoal)" }}>
+      <h3 style={{ fontFamily:"Georgia, serif", color:"var(--color-beige)" }} className="font-bold text-xl mb-2 text-center">
         Have Questions?
       </h3>
-      <p style={{ color:"#b89c8a" }} className="text-sm text-center mb-6">
+      <p style={{ color:"var(--color-sage)" }} className="text-sm text-center mb-6">
         Our team is happy to help clarify anything in this policy.
       </p>
       <div className="grid sm:grid-cols-2 gap-4">
         <a href="mailto:thefloralstudiosurat@gmail.com"
           className="flex items-center gap-3 p-4 rounded-2xl hover:opacity-90 transition-opacity"
-          style={{ background:"rgba(201,125,91,0.2)" }}>
-          <Mail size={18} style={{ color:"#f5c8a8" }} />
+          style={{ background:"rgba(95,111,82,0.2)" }}>
+          <Mail size={18} style={{ color:"var(--color-sage)" }} />
           <div>
-            <p style={{ color:"#f5e6d3" }} className="text-sm font-semibold">Email Us</p>
-            <p style={{ color:"#9c7a62" }} className="text-xs">thefloralstudiosurat@gmail.com</p>
+            <p style={{ color:"var(--color-beige)" }} className="text-sm font-semibold">Email Us</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-xs">thefloralstudiosurat@gmail.com</p>
           </div>
         </a>
-        <a href="tel:+919876543210"
+        <a href="tel:+919825553565"
           className="flex items-center gap-3 p-4 rounded-2xl hover:opacity-90 transition-opacity"
-          style={{ background:"rgba(201,125,91,0.2)" }}>
-          <Phone size={18} style={{ color:"#f5c8a8" }} />
+          style={{ background:"rgba(95,111,82,0.2)" }}>
+          <Phone size={18} style={{ color:"var(--color-sage)" }} />
           <div>
-            <p style={{ color:"#f5e6d3" }} className="text-sm font-semibold">Call Us</p>
-            <p style={{ color:"#9c7a62" }} className="text-xs">+91 98765 43210</p>
+            <p style={{ color:"var(--color-beige)" }} className="text-sm font-semibold">Call Us</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-xs">+91 98255 53565</p>
           </div>
         </a>
       </div>
@@ -278,13 +278,13 @@ export default function TermsConditions() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ fontFamily:"system-ui, sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
+    <div style={{ fontFamily:"system-ui, sans-serif", background:"var(--color-beige)", minHeight:"100vh" }}>
       <TermsOfService />
 
       {/* Footer Links */}
-      <div className="border-t py-8" style={{ borderColor:"#e8d5c4", background:"#f5ede5" }}>
+      <div className="border-t py-8" style={{ borderColor:"var(--color-border)", background:"var(--color-beige)" }}>
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <p style={{ color:"#9c7a62" }} className="text-sm mb-4">Also read our other policies:</p>
+          <p style={{ color:"var(--color-olive)" }} className="text-sm mb-4">Also read our other policies:</p>
           <div className="flex justify-center gap-4 flex-wrap">
             {TABS.filter(t => t.id !== active).map(t => (
               <button key={t.id} onClick={() => { 
@@ -292,7 +292,7 @@ export default function TermsConditions() {
                 window.scrollTo({ top:0, behavior:"smooth" });
              }}
                 className="flex items-center gap-1.5 text-sm font-semibold hover:opacity-70 transition-opacity"
-                style={{ color:"#c97d5b" }}>
+                style={{ color:"var(--color-olive)" }}>
                 {t.icon} {t.label} <ChevronRight size={13}/>
               </button>
             ))}

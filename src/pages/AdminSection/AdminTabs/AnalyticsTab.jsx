@@ -61,7 +61,7 @@ export default function AnalyticsTab() {
     return (
       <div className="flex justify-center py-16">
         <div className="w-6 h-6 border-2 rounded-full animate-spin"
-          style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
+          style={{ borderColor:"var(--color-olive)", borderTopColor:"transparent" }} />
       </div>
     );
   }
@@ -69,45 +69,45 @@ export default function AnalyticsTab() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold">Product Analytics</h2>
-        <p style={{ color:"#9c7a62" }} className="text-sm">Top selling products & performance metrics</p>
+        <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-xl font-bold">Product Analytics</h2>
+        <p style={{ color:"var(--color-olive)" }} className="text-sm">Top selling products & performance metrics</p>
       </div>
 
       {/* Summary Cards */}
       <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {[
-          { label:"Total Products", value: summary?.totalProducts ?? products.length,                         unit:"",  color:"#c97d5b" },
+          { label:"Total Products", value: summary?.totalProducts ?? products.length,                         unit:"",  color:"var(--color-olive)" },
           { label:"Total Revenue",  value: fmtK(summary?.totalRevenue ?? 0),                                  unit:"",  color:"#8b5cf6" },
           { label:"Units Sold",     value: (summary?.unitsSold ?? 0).toLocaleString(),                        unit:"",  color:"#06b6d4" },
           { label:"Avg Rating",     value: summary?.avgRating != null ? Number(summary.avgRating).toFixed(1) : "—", unit:"★", color:"#f59e0b" },
         ].map(({ label, value, unit, color }) => (
-          <div key={label} className="bg-white rounded-2xl p-5 border" style={{ borderColor:"#e8d5c4" }}>
+          <div key={label} className="bg-white rounded-2xl p-5 border" style={{ borderColor:"var(--color-border)" }}>
             <p style={{ color, fontFamily:"Georgia, serif" }} className="text-3xl font-bold">{value}{unit}</p>
-            <p style={{ color:"#9c7a62" }} className="text-sm mt-1">{label}</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-sm mt-1">{label}</p>
           </div>
         ))}
       </div>
 
       {/* Revenue Share */}
       {revByProd.length > 0 && (
-        <div className="bg-white rounded-3xl p-6 border" style={{ borderColor:"#e8d5c4" }}>
-          <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold mb-5">Revenue Share by Product</h3>
+        <div className="bg-white rounded-3xl p-6 border" style={{ borderColor:"var(--color-border)" }}>
+          <h3 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold mb-5">Revenue Share by Product</h3>
           <div className="space-y-3">
             {revByProd.slice(0, 5).map((p, i) => {
-              const colors = ["#c97d5b","#8b5cf6","#06b6d4","#f59e0b","#22c55e"];
+              const colors = ["var(--color-olive)","#8b5cf6","#06b6d4","#f59e0b","#22c55e"];
               return (
                 <div key={p.productId?.toString() || String(i)}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
                       <div className="w-2.5 h-2.5 rounded-full" style={{ background: colors[i] }} />
-                      <span style={{ color:"#4a3728" }} className="text-sm font-medium">{p.name}</span>
+                      <span style={{ color:"var(--color-charcoal)" }} className="text-sm font-medium">{p.name}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span style={{ color:"#9c7a62" }} className="text-xs">{p.percentage}%</span>
-                      <span style={{ color:"#c97d5b" }} className="text-sm font-bold">{fmtK(p.revenue ?? 0)}</span>
+                      <span style={{ color:"var(--color-olive)" }} className="text-xs">{p.percentage}%</span>
+                      <span style={{ color:"var(--color-olive)" }} className="text-sm font-bold">{fmtK(p.revenue ?? 0)}</span>
                     </div>
                   </div>
-                  <div className="h-2 rounded-full" style={{ background:"#f5ede5" }}>
+                  <div className="h-2 rounded-full" style={{ background:"var(--color-beige)" }}>
                     <div className="h-full rounded-full transition-all duration-700"
                       style={{ width:`${p.percentage ?? 0}%`, background: colors[i] }} />
                   </div>
@@ -119,17 +119,17 @@ export default function AnalyticsTab() {
       )}
 
       {/* Products Table */}
-      <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+      <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"var(--color-border)" }}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 py-4 border-b"
-          style={{ borderColor:"#f0e4d8", background:"#fdf8f3" }}>
-          <h3 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">All Products</h3>
+          style={{ borderColor:"var(--color-border)", background:"var(--color-beige)" }}>
+          <h3 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg">All Products</h3>
           <div className="flex gap-2 flex-wrap">
             {cats.map(c => (
               <button key={c} onClick={() => setFilter(c)}
                 className="px-3 py-1 rounded-full text-xs font-semibold border transition-all"
                 style={filter === c
-                  ? { background:"#c97d5b", borderColor:"#c97d5b", color:"white" }
-                  : { borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                  ? { background:"var(--color-olive)", borderColor:"var(--color-olive)", color:"white" }
+                  : { borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
                 {c}
               </button>
             ))}
@@ -137,7 +137,7 @@ export default function AnalyticsTab() {
         </div>
 
         <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-3 border-b text-xs font-bold uppercase tracking-wide"
-          style={{ borderColor:"#f0e4d8", background:"#fafaf9", color:"#9c7a62" }}>
+          style={{ borderColor:"var(--color-border)", background:"#fafaf9", color:"var(--color-olive)" }}>
           <span>Product</span>
           <span>Price</span>
           <button onClick={() => toggleSort("totalSold")} className="flex items-center gap-1 hover:opacity-70">
@@ -154,7 +154,7 @@ export default function AnalyticsTab() {
 
         {sorted.length === 0 ? (
           <div className="text-center py-12">
-            <p style={{ color:"#9c7a62" }} className="text-sm">No products found</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-sm">No products found</p>
           </div>
         ) : sorted.map((p, i) => {
           const pid      = p._id || p.id || i;
@@ -165,32 +165,32 @@ export default function AnalyticsTab() {
           return (
             <div key={pid}
               className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-4 items-center border-b hover:bg-amber-50 transition-colors"
-              style={{ borderColor:"#f0e4d8" }}>
+              style={{ borderColor:"var(--color-border)" }}>
               <div className="flex items-center gap-3 min-w-0">
                 <div className="relative shrink-0">
                   {imgSrc
                     ? <img src={imgSrc} alt={p.name} className="w-10 h-10 object-cover rounded-xl" />
-                    : <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style={{ background:"#f5ede5" }}>🌸</div>
+                    : <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style={{ background:"var(--color-beige)" }}>🌸</div>
                   }
                   <span className="absolute -top-1 -left-1 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold"
-                    style={{ background:"#4a3728", fontSize:"10px" }}>#{i+1}</span>
+                    style={{ background:"var(--color-charcoal)", fontSize:"10px" }}>#{i+1}</span>
                 </div>
                 <div className="min-w-0">
-                  <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{p.name}</p>
-                  {getCat(p) && <span style={{ color:"#d4b5a0" }} className="text-xs">{getCat(p)}</span>}
+                  <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold truncate">{p.name}</p>
+                  {getCat(p) && <span style={{ color:"var(--color-sage)" }} className="text-xs">{getCat(p)}</span>}
                 </div>
               </div>
-              <p style={{ color:"#4a3728" }} className="text-sm font-medium">{fmt(p.price ?? 0)}</p>
-              <p style={{ color:"#4a3728" }} className="text-sm font-medium">{(p.totalSold ?? 0).toLocaleString()}</p>
-              <p style={{ color:"#c97d5b" }} className="text-sm font-bold">{fmtK(p.revenue ?? 0)}</p>
+              <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-medium">{fmt(p.price ?? 0)}</p>
+              <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-medium">{(p.totalSold ?? 0).toLocaleString()}</p>
+              <p style={{ color:"var(--color-olive)" }} className="text-sm font-bold">{fmtK(p.revenue ?? 0)}</p>
               <div>
-                <p style={{ color: qty != null && qty < 10 ? "#dc2626" : "#4a3728" }} className="text-sm font-medium">
+                <p style={{ color: qty != null && qty < 10 ? "#dc2626" : "var(--color-charcoal)" }} className="text-sm font-medium">
                   {qty ?? "—"}
                 </p>
                 {qty != null && qty < 10 && <p style={{ color:"#dc2626" }} className="text-xs">Low stock!</p>}
               </div>
               <div className="flex items-center gap-1 text-xs font-bold"
-                style={{ color: trendUp ? "#16a34a" : trendDown ? "#dc2626" : "#9c7a62" }}>
+                style={{ color: trendUp ? "#16a34a" : trendDown ? "#dc2626" : "var(--color-olive)" }}>
                 {trendUp ? <ArrowUpRight size={14}/> : trendDown ? <ArrowDownRight size={14}/> : <span>—</span>}
                 {p.trend ?? "stable"}
               </div>

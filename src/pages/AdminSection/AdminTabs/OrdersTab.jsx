@@ -90,22 +90,22 @@ export default function AdminOrdersTab() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold">Orders</h2>
-          <p style={{ color:"#9c7a62" }} className="text-sm mt-0.5">{orders.length} total · {fmtK(totalRevenue)} revenue</p>
+          <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-2xl font-bold">Orders</h2>
+          <p style={{ color:"var(--color-olive)" }} className="text-sm mt-0.5">{orders.length} total · {fmtK(totalRevenue)} revenue</p>
         </div>
         <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"#9c7a62" }} />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"var(--color-olive)" }} />
           <input value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Search ID, name, phone…"
             className="pl-9 pr-4 py-2 rounded-full border text-sm outline-none w-64"
-            style={{ borderColor:"#e8d5c4", background:"white", color:"#3a2416" }} />
+            style={{ borderColor:"var(--color-border)", background:"white", color:"var(--color-charcoal)" }} />
         </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-7 gap-3 mb-6">
         {[
-          { key:"all",        label:"Total",      value:counts.all,        color:"#c97d5b", bg:"#fdf8f3" },
+          { key:"all",        label:"Total",      value:counts.all,        color:"var(--color-olive)", bg:"var(--color-beige)" },
           { key:"pending",    label:"Pending",    value:counts.pending,    color:"#2563eb", bg:"#dbeafe" },
           { key:"confirmed",  label:"Confirmed",  value:counts.confirmed,  color:"#0284c7", bg:"#e0f2fe" },
           { key:"processing", label:"Processing", value:counts.processing, color:"#d97706", bg:"#fef3c7" },
@@ -117,10 +117,10 @@ export default function AdminOrdersTab() {
             className="rounded-2xl p-3 text-center border-2 transition-all"
             style={{
               background: filter === key ? bg : "white",
-              borderColor: filter === key ? color : "#e8d5c4",
+              borderColor: filter === key ? color : "var(--color-border)",
             }}>
             <p className="text-xl font-bold" style={{ color, fontFamily:"Georgia, serif" }}>{value}</p>
-            <p className="text-xs mt-0.5" style={{ color: filter === key ? color : "#9c7a62" }}>{label}</p>
+            <p className="text-xs mt-0.5" style={{ color: filter === key ? color : "var(--color-olive)" }}>{label}</p>
           </button>
         ))}
       </div>
@@ -129,22 +129,22 @@ export default function AdminOrdersTab() {
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <div className="w-7 h-7 border-2 border-t-transparent rounded-full animate-spin"
-            style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
+            style={{ borderColor:"var(--color-olive)", borderTopColor:"transparent" }} />
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-20">
           <span className="text-4xl block mb-3">📦</span>
-          <p style={{ color:"#9c7a62" }}>No orders found</p>
+          <p style={{ color:"var(--color-olive)" }}>No orders found</p>
         </div>
       ) : (
-        <div className="rounded-2xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+        <div className="rounded-2xl border overflow-hidden" style={{ borderColor:"var(--color-border)" }}>
           <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] border-collapse">
             <thead className="hidden sm:table-header-group">
-              <tr style={{ background:"#fdf8f3", borderBottom:"1px solid #f0e4d8" }}>
+              <tr style={{ background:"var(--color-beige)", borderBottom:"1px solid var(--color-border)" }}>
                 {["Order","Customer","Items","Amount","Status",""].map(h => (
                   <th key={h} className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
-                    style={{ color:"#9c7a62" }}>{h}</th>
+                    style={{ color:"var(--color-olive)" }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -162,7 +162,7 @@ export default function AdminOrdersTab() {
 
             return (
               <tr key={order._id}
-                style={{ borderBottom: idx < filtered.length - 1 || isExp ? "1px solid #f0e4d8" : "none" }}>
+                style={{ borderBottom: idx < filtered.length - 1 || isExp ? "1px solid var(--color-border)" : "none" }}>
 
                 {/* Row */}
                 <td colSpan={6} style={{ padding: 0 }}>
@@ -171,29 +171,29 @@ export default function AdminOrdersTab() {
                   onClick={() => setExpanded(isExp ? null : order._id)}>
 
                   <div>
-                    <p style={{ color:"#3a2416" }} className="text-sm font-bold">
+                    <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-bold">
                       #{order._id.slice(-8).toUpperCase()}
                     </p>
-                    <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">{date}</p>
+                    <p style={{ color:"var(--color-olive)" }} className="text-xs mt-0.5">{date}</p>
                   </div>
 
                   <div className="hidden sm:block min-w-0">
-                    <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">
+                    <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold truncate">
                       {addr.name || order.user?.name || "—"}
                     </p>
                     {addr.phone && (
-                      <p style={{ color:"#7a5c4a" }} className="text-xs truncate">📞 {addr.phone}</p>
+                      <p style={{ color:"var(--color-olive)" }} className="text-xs truncate">📞 {addr.phone}</p>
                     )}
-                    <p style={{ color:"#9c7a62" }} className="text-xs truncate">
+                    <p style={{ color:"var(--color-olive)" }} className="text-xs truncate">
                       {[addr.city, addr.state].filter(Boolean).join(", ") || "—"}
                     </p>
                   </div>
 
                   <div className="hidden sm:block">
-                    <p style={{ color:"#4a3728" }} className="text-sm">{order.items?.length || 0} item{order.items?.length !== 1 ? "s" : ""}</p>
+                    <p style={{ color:"var(--color-charcoal)" }} className="text-sm">{order.items?.length || 0} item{order.items?.length !== 1 ? "s" : ""}</p>
                   </div>
 
-                  <p className="hidden sm:block font-bold text-sm whitespace-nowrap" style={{ color:"#c97d5b" }}>
+                  <p className="hidden sm:block font-bold text-sm whitespace-nowrap" style={{ color:"var(--color-olive)" }}>
                     {fmt(total)}
                   </p>
 
@@ -204,22 +204,22 @@ export default function AdminOrdersTab() {
                   <div className="flex items-center gap-2">
                     <span className="sm:hidden"><OrderStatusBadge status={st} /></span>
                     <div className="w-7 h-7 rounded-full flex items-center justify-center"
-                      style={{ background:"#f5ede5" }}>
+                      style={{ background:"var(--color-beige)" }}>
                       {isExp
-                        ? <ChevronUp size={14} style={{ color:"#c97d5b" }} />
-                        : <ChevronDown size={14} style={{ color:"#c97d5b" }} />}
+                        ? <ChevronUp size={14} style={{ color:"var(--color-olive)" }} />
+                        : <ChevronDown size={14} style={{ color:"var(--color-olive)" }} />}
                     </div>
                   </div>
                 </div>
 
                 {/* Expanded Detail */}
                 {isExp && (
-                  <div className="border-t px-5 pb-6 pt-5 sm:col-span-6" style={{ borderColor:"#f0e4d8", background:"#fdfaf7" }}>
+                  <div className="border-t px-5 pb-6 pt-5 sm:col-span-6" style={{ borderColor:"var(--color-border)", background:"var(--color-beige)" }}>
                     <div className="grid md:grid-cols-2 gap-6">
 
                       <div className="space-y-5">
                         <div>
-                          <p style={{ color:"#4a3728" }} className="text-xs font-bold uppercase tracking-wide mb-3">Order Items</p>
+                          <p style={{ color:"var(--color-charcoal)" }} className="text-xs font-bold uppercase tracking-wide mb-3">Order Items</p>
                           <div className="space-y-3">
                             {(order.items || []).map((item, i) => {
                               const p    = item.product;
@@ -228,22 +228,22 @@ export default function AdminOrdersTab() {
                               const price= p?.price  || 0;
                               return (
                                 <div key={i} className="flex gap-3 items-center p-3 rounded-xl border"
-                                  style={{ borderColor:"#e8d5c4", background:"white" }}>
+                                  style={{ borderColor:"var(--color-border)", background:"white" }}>
                                   {img
                                     ? <img src={img} alt={name} className="w-12 h-12 object-cover rounded-lg shrink-0"/>
                                     : <div className="w-12 h-12 rounded-lg shrink-0 flex items-center justify-center text-xl"
-                                        style={{ background:"#f5ede5" }}>🌸</div>
+                                        style={{ background:"var(--color-beige)" }}>🌸</div>
                                   }
                                   <div className="flex-1 min-w-0">
-                                    <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{name}</p>
+                                    <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold truncate">{name}</p>
                                     <div className="flex gap-2 mt-0.5 flex-wrap">
-                                      {item.size && <span style={{ background:"#f5ede5", color:"#9c7a62" }} className="text-xs px-2 py-0.5 rounded-full">{item.size}</span>}
-                                      {item.color?.length > 0 && <span style={{ background:"#f5ede5", color:"#9c7a62" }} className="text-xs px-2 py-0.5 rounded-full">{item.color.join(", ")}</span>}
+                                      {item.size && <span style={{ background:"var(--color-beige)", color:"var(--color-olive)" }} className="text-xs px-2 py-0.5 rounded-full">{item.size}</span>}
+                                      {item.color?.length > 0 && <span style={{ background:"var(--color-beige)", color:"var(--color-olive)" }} className="text-xs px-2 py-0.5 rounded-full">{item.color.join(", ")}</span>}
                                     </div>
-                                    <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">Qty: {item.quantity}</p>
+                                    <p style={{ color:"var(--color-olive)" }} className="text-xs mt-0.5">Qty: {item.quantity}</p>
                                   </div>
                                   {price > 0 && (
-                                    <p style={{ color:"#c97d5b" }} className="text-sm font-bold shrink-0">{fmt(price * item.quantity)}</p>
+                                    <p style={{ color:"var(--color-olive)" }} className="text-sm font-bold shrink-0">{fmt(price * item.quantity)}</p>
                                   )}
                                 </div>
                               );
@@ -251,18 +251,18 @@ export default function AdminOrdersTab() {
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl border" style={{ borderColor:"#e8d5c4", background:"white" }}>
-                          <p style={{ color:"#4a3728" }} className="text-xs font-bold uppercase tracking-wide mb-2">Delivery Address</p>
-                          <p style={{ color:"#3a2416" }} className="text-sm font-semibold">{addr.name}</p>
-                          <p style={{ color:"#7a5c4a" }} className="text-sm">{addr.street}</p>
-                          <p style={{ color:"#7a5c4a" }} className="text-sm">{[addr.city, addr.state, addr.pincode || addr.zipCode].filter(Boolean).join(", ")}</p>
-                          {addr.phone && <p style={{ color:"#9c7a62" }} className="text-xs mt-1">📞 {addr.phone}</p>}
+                        <div className="p-4 rounded-xl border" style={{ borderColor:"var(--color-border)", background:"white" }}>
+                          <p style={{ color:"var(--color-charcoal)" }} className="text-xs font-bold uppercase tracking-wide mb-2">Delivery Address</p>
+                          <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold">{addr.name}</p>
+                          <p style={{ color:"var(--color-olive)" }} className="text-sm">{addr.street}</p>
+                          <p style={{ color:"var(--color-olive)" }} className="text-sm">{[addr.city, addr.state, addr.pincode || addr.zipCode].filter(Boolean).join(", ")}</p>
+                          {addr.phone && <p style={{ color:"var(--color-olive)" }} className="text-xs mt-1">📞 {addr.phone}</p>}
                         </div>
                       </div>
 
                       <div className="space-y-5">
-                        <div className="p-4 rounded-xl border" style={{ borderColor:"#e8d5c4", background:"white" }}>
-                          <p style={{ color:"#4a3728" }} className="text-xs font-bold uppercase tracking-wide mb-4">Order Status Pipeline</p>
+                        <div className="p-4 rounded-xl border" style={{ borderColor:"var(--color-border)", background:"white" }}>
+                          <p style={{ color:"var(--color-charcoal)" }} className="text-xs font-bold uppercase tracking-wide mb-4">Order Status Pipeline</p>
                           <div className="flex flex-col gap-2">
                             {ORDER_STATUSES.filter(s => s !== "cancelled").map((s, i) => {
                               const past    = ORDER_STATUSES.indexOf(st) > i && st !== "cancelled";
@@ -272,13 +272,13 @@ export default function AdminOrdersTab() {
                                 <div key={s} className="flex items-center gap-3">
                                   <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs font-bold"
                                     style={{
-                                      background: current ? scfg.color : past ? "#22c55e" : "#e8d5c4",
-                                      color: (current || past) ? "white" : "#9c7a62",
+                                      background: current ? scfg.color : past ? "#22c55e" : "var(--color-border)",
+                                      color: (current || past) ? "white" : "var(--color-olive)",
                                     }}>
                                     {past ? "✓" : i + 1}
                                   </div>
                                   <span className="text-sm font-medium capitalize"
-                                    style={{ color: current ? scfg.color : past ? "#16a34a" : "#9c7a62" }}>
+                                    style={{ color: current ? scfg.color : past ? "#16a34a" : "var(--color-olive)" }}>
                                     {scfg.label}
                                   </span>
                                   {current && <OrderStatusBadge status={s} />}
@@ -296,8 +296,8 @@ export default function AdminOrdersTab() {
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl border space-y-3" style={{ borderColor:"#e8d5c4", background:"white" }}>
-                          <p style={{ color:"#4a3728" }} className="text-xs font-bold uppercase tracking-wide">Order Info</p>
+                        <div className="p-4 rounded-xl border space-y-3" style={{ borderColor:"var(--color-border)", background:"white" }}>
+                          <p style={{ color:"var(--color-charcoal)" }} className="text-xs font-bold uppercase tracking-wide">Order Info</p>
                           <div className="space-y-2 text-sm">
                             {[
                               ["Order ID",       `#${order._id.slice(-8).toUpperCase()}`],
@@ -306,15 +306,15 @@ export default function AdminOrdersTab() {
                               ["Items",          `${order.items?.length || 0} item(s)`],
                             ].map(([k, v]) => (
                               <div key={k} className="flex justify-between">
-                                <span style={{ color:"#9c7a62" }}>{k}</span>
-                                <span style={{ color:"#4a3728" }} className="font-semibold">{v}</span>
+                                <span style={{ color:"var(--color-olive)" }}>{k}</span>
+                                <span style={{ color:"var(--color-charcoal)" }} className="font-semibold">{v}</span>
                               </div>
                             ))}
                           </div>
 
                           {nextStatuses.length > 0 && (
-                            <div className="pt-3 border-t" style={{ borderColor:"#f0e4d8" }}>
-                              <p style={{ color:"#4a3728" }} className="text-xs font-bold mb-2">Move to Next Status</p>
+                            <div className="pt-3 border-t" style={{ borderColor:"var(--color-border)" }}>
+                              <p style={{ color:"var(--color-charcoal)" }} className="text-xs font-bold mb-2">Move to Next Status</p>
                               <div className="flex gap-2 flex-wrap">
                                 {nextStatuses.map(ns => {
                                   const ncfg = ORDER_STATUS_CFG[ns];
@@ -332,14 +332,14 @@ export default function AdminOrdersTab() {
                             </div>
                           )}
 
-                          <div className="pt-3 border-t" style={{ borderColor:"#f0e4d8" }}>
-                            <p style={{ color:"#9c7a62" }} className="text-xs mb-2">Manual Override</p>
+                          <div className="pt-3 border-t" style={{ borderColor:"var(--color-border)" }}>
+                            <p style={{ color:"var(--color-olive)" }} className="text-xs mb-2">Manual Override</p>
                             <select
                               value={order.status}
                               disabled={updating === order._id}
                               onChange={e => updateStatus(order._id, e.target.value)}
                               className="w-full text-sm rounded-xl border px-3 py-2 outline-none cursor-pointer"
-                              style={{ borderColor:"#e8d5c4", color:"#4a3728", background:"white" }}>
+                              style={{ borderColor:"var(--color-border)", color:"var(--color-charcoal)", background:"white" }}>
                               {ORDER_STATUSES.map(s => (
                                 <option key={s} value={s}>{ORDER_STATUS_CFG[s].label}</option>
                               ))}

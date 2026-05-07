@@ -1,7 +1,7 @@
 export default function ProductDetailSkeleton() {
   return (
     <div
-      style={{ fontFamily: "system-ui, sans-serif", background: "#fdf8f3", minHeight: "100vh" }}
+      style={{ fontFamily: "system-ui, sans-serif", background: "var(--color-beige)", minHeight: "100vh" }}
       className="animate-pulse"
     >
       {/* Breadcrumb */}

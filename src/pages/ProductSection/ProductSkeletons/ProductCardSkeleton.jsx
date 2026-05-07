@@ -1,7 +1,7 @@
 export default function ProductCardSkeleton() {
   return (
     <div className="bg-white rounded-2xl overflow-hidden border animate-pulse"
-      style={{ borderColor: "#f0e4d8" }}>
+      style={{ borderColor: "var(--color-border)" }}>
       
       {/* Image */}
       <div style={{ aspectRatio: "4/5" }} className="bg-gray-200 w-full" />

@@ -95,25 +95,25 @@ export default function CustomersTab() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold">Customers</h2>
-          <p style={{ color:"#9c7a62" }} className="text-sm">{total} total users</p>
+          <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-xl font-bold">Customers</h2>
+          <p style={{ color:"var(--color-olive)" }} className="text-sm">{total} total users</p>
         </div>
         <div className="flex gap-2 flex-wrap">
           {[["all","All"],["true","Active"],["false","Inactive"]].map(([val, label]) => (
             <button key={val} onClick={() => changeFilter(val)}
               className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all"
               style={activeFilter === val
-                ? { background:"#4a3728", borderColor:"#4a3728", color:"white" }
-                : { borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                ? { background:"var(--color-charcoal)", borderColor:"var(--color-charcoal)", color:"white" }
+                : { borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
               {label}
             </button>
           ))}
           <div className="relative">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"#9c7a62" }} />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:"var(--color-olive)" }} />
             <input value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Name, email, phone…"
               className="pl-9 pr-4 py-2 rounded-full border text-sm outline-none w-48"
-              style={{ borderColor:"#e8d5c4", background:"white", color:"#3a2416" }} />
+              style={{ borderColor:"var(--color-border)", background:"white", color:"var(--color-charcoal)" }} />
           </div>
         </div>
       </div>
@@ -121,14 +121,14 @@ export default function CustomersTab() {
       <div className="grid lg:grid-cols-[1fr_360px] gap-5 items-start">
 
         {/* Table */}
-        <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+        <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"var(--color-border)" }}>
           <div className="overflow-x-auto">
           <table className="w-full min-w-[580px] border-collapse">
             <thead>
-              <tr style={{ background:"#fdf8f3", borderBottom:"1px solid #f0e4d8" }}>
+              <tr style={{ background:"var(--color-beige)", borderBottom:"1px solid var(--color-border)" }}>
                 {["Customer","Phone","Orders","Spent","Status",""].map(h => (
                   <th key={h} className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
-                    style={{ color:"#9c7a62" }}>{h}</th>
+                    style={{ color:"var(--color-olive)" }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -137,14 +137,14 @@ export default function CustomersTab() {
             <tr><td colSpan={6}>
               <div className="flex items-center justify-center py-16">
                 <div className="w-6 h-6 border-2 border-t-transparent rounded-full animate-spin"
-                  style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }} />
+                  style={{ borderColor:"var(--color-olive)", borderTopColor:"transparent" }} />
               </div>
             </td></tr>
           ) : filtered.length === 0 ? (
             <tr><td colSpan={6}>
               <div className="text-center py-12">
                 <span className="text-3xl block mb-2">👤</span>
-                <p style={{ color:"#9c7a62" }} className="text-sm">No users found</p>
+                <p style={{ color:"var(--color-olive)" }} className="text-sm">No users found</p>
               </div>
             </td></tr>
           ) : filtered.map((u, idx) => {
@@ -155,35 +155,35 @@ export default function CustomersTab() {
                 onClick={() => { setSelected(isSelected ? null : u); setEditing(false); }}
                 className="cursor-pointer transition-colors"
                 style={{
-                  background: isSelected ? "#fdf8f3" : "white",
-                  borderBottom: idx === filtered.length - 1 ? "none" : "1px solid #f0e4d8",
-                  boxShadow: isSelected ? "inset 3px 0 0 #c97d5b" : "none",
+                  background: isSelected ? "var(--color-beige)" : "white",
+                  borderBottom: idx === filtered.length - 1 ? "none" : "1px solid var(--color-border)",
+                  boxShadow: isSelected ? "inset 3px 0 0 var(--color-olive)" : "none",
                 }}>
 
                 <td className="px-5 py-3.5">
                   <div className="flex items-center gap-3 min-w-0">
                     {u.profileImage
                       ? <img src={u.profileImage} alt={u.name} className="w-9 h-9 rounded-full object-cover shrink-0"/>
-                      : <div style={{ background: u.active ? "#c97d5b" : "#d4b5a0" }}
+                      : <div style={{ background: u.active ? "var(--color-olive)" : "var(--color-sage)" }}
                           className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
                           {initials(u.name) || "?"}
                         </div>
                     }
                     <div className="min-w-0">
-                      <p style={{ color:"#3a2416" }} className="text-sm font-semibold truncate">{u.name || "—"}</p>
-                      <p style={{ color:"#9c7a62" }} className="text-xs truncate">{u.email}</p>
+                      <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold truncate">{u.name || "—"}</p>
+                      <p style={{ color:"var(--color-olive)" }} className="text-xs truncate">{u.email}</p>
                     </div>
                   </div>
                 </td>
 
                 <td className="px-5 py-3.5 whitespace-nowrap">
-                  <p style={{ color:"#5c4033" }} className="text-xs">{u.contactNumber || "—"}</p>
+                  <p style={{ color:"var(--color-charcoal)" }} className="text-xs">{u.contactNumber || "—"}</p>
                 </td>
                 <td className="px-5 py-3.5 text-center">
-                  <p style={{ color:"#4a3728" }} className="text-sm font-semibold">{u.totalOrders ?? "—"}</p>
+                  <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold">{u.totalOrders ?? "—"}</p>
                 </td>
                 <td className="px-5 py-3.5 whitespace-nowrap">
-                  <p style={{ color:"#c97d5b" }} className="text-xs font-bold">
+                  <p style={{ color:"var(--color-olive)" }} className="text-xs font-bold">
                     {u.totalSpent != null ? fmtK(u.totalSpent) : "—"}
                   </p>
                 </td>
@@ -195,16 +195,16 @@ export default function CustomersTab() {
                     className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full transition-all hover:opacity-80 disabled:opacity-50 whitespace-nowrap"
                     style={u.active
                       ? { background:"#dcfce7", color:"#16a34a" }
-                      : { background:"#f5f5f4", color:"#9c7a62" }}>
+                      : { background:"#f5f5f4", color:"var(--color-olive)" }}>
                     {isTog
                       ? <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"/>
-                      : <span className="w-1.5 h-1.5 rounded-full" style={{ background: u.active ? "#16a34a" : "#9c7a62" }}/>
+                      : <span className="w-1.5 h-1.5 rounded-full" style={{ background: u.active ? "#16a34a" : "var(--color-olive)" }}/>
                     }
                     {u.active ? "Active" : "Inactive"}
                   </button>
                 </td>
                 <td className="px-5 py-3.5">
-                  <ChevronRight size={14} style={{ color: isSelected ? "#c97d5b" : "#d4b5a0" }} />
+                  <ChevronRight size={14} style={{ color: isSelected ? "var(--color-olive)" : "var(--color-sage)" }} />
                 </td>
               </tr>
             );
@@ -214,17 +214,17 @@ export default function CustomersTab() {
           </div>
 
           {totalPages > 1 && (
-            <div className="flex items-center justify-between px-5 py-3 border-t" style={{ borderColor:"#f0e4d8" }}>
-              <p style={{ color:"#9c7a62" }} className="text-xs">Page {page} of {totalPages}</p>
+            <div className="flex items-center justify-between px-5 py-3 border-t" style={{ borderColor:"var(--color-border)" }}>
+              <p style={{ color:"var(--color-olive)" }} className="text-xs">Page {page} of {totalPages}</p>
               <div className="flex gap-2">
                 <button disabled={page === 1} onClick={() => handlePageChange(page - 1)}
                   className="px-3 py-1 rounded-full text-xs font-semibold border disabled:opacity-40"
-                  style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                  style={{ borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
                   ← Prev
                 </button>
                 <button disabled={page === totalPages} onClick={() => handlePageChange(page + 1)}
                   className="px-3 py-1 rounded-full text-xs font-semibold border disabled:opacity-40"
-                  style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                  style={{ borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
                   Next →
                 </button>
               </div>
@@ -234,23 +234,23 @@ export default function CustomersTab() {
 
         {/* Detail / Edit Panel */}
         {selected ? (
-          <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
-            <div className="p-5 border-b" style={{ borderColor:"#f0e4d8", background:"#fdf8f3" }}>
+          <div className="bg-white rounded-3xl border overflow-hidden" style={{ borderColor:"var(--color-border)" }}>
+            <div className="p-5 border-b" style={{ borderColor:"var(--color-border)", background:"var(--color-beige)" }}>
               <div className="flex items-center justify-between mb-4">
-                <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold">
+                <p style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold">
                   {editing ? "Edit User" : "User Profile"}
                 </p>
                 <div className="flex items-center gap-2">
                   {!editing && (
                     <button onClick={() => openEdit(selected)}
                       className="p-1.5 rounded-lg border hover:opacity-70"
-                      style={{ borderColor:"#e8d5c4", color:"#5c4033" }}
+                      style={{ borderColor:"var(--color-border)", color:"var(--color-charcoal)" }}
                       title="Edit">
                       <Edit2 size={13}/>
                     </button>
                   )}
                   <button onClick={() => { setSelected(null); setEditing(false); }} className="p-1 hover:opacity-70">
-                    <X size={15} style={{ color:"#9c7a62" }} />
+                    <X size={15} style={{ color:"var(--color-olive)" }} />
                   </button>
                 </div>
               </div>
@@ -258,22 +258,22 @@ export default function CustomersTab() {
                 {selected.profileImage
                   ? <img src={selected.profileImage} alt={selected.name}
                       className="w-16 h-16 rounded-full object-cover border-2 mx-auto mb-3"
-                      style={{ borderColor:"#c97d5b" }}/>
-                  : <div style={{ background: selected.active ? "#c97d5b" : "#d4b5a0" }}
+                      style={{ borderColor:"var(--color-olive)" }}/>
+                  : <div style={{ background: selected.active ? "var(--color-olive)" : "var(--color-sage)" }}
                       className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
                       {initials(selected.name) || "?"}
                     </div>
                 }
-                <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg">{selected.name || "—"}</p>
-                <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">{selected.email}</p>
+                <p style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg">{selected.name || "—"}</p>
+                <p style={{ color:"var(--color-olive)" }} className="text-xs mt-0.5">{selected.email}</p>
                 {selected.contactNumber && (
-                  <p style={{ color:"#9c7a62" }} className="text-xs">📞 {selected.contactNumber}</p>
+                  <p style={{ color:"var(--color-olive)" }} className="text-xs">📞 {selected.contactNumber}</p>
                 )}
                 <div className="flex items-center justify-center gap-2 mt-2">
                   <span className="text-xs font-bold px-2.5 py-0.5 rounded-full"
                     style={selected.role === "admin"
                       ? { background:"#fef3c7", color:"#d97706" }
-                      : { background:"#f5ede5", color:"#9c7a62" }}>
+                      : { background:"var(--color-beige)", color:"var(--color-olive)" }}>
                     {selected.role === "admin" ? "Admin" : "User"}
                   </span>
                   <span className="text-xs font-bold px-2.5 py-0.5 rounded-full"
@@ -285,13 +285,13 @@ export default function CustomersTab() {
                 </div>
                 {(selected.totalOrders != null || selected.totalSpent != null) && (
                   <div className="grid grid-cols-2 gap-2 mt-4">
-                    <div className="rounded-xl py-2" style={{ background:"#f5ede5" }}>
-                      <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }} className="font-bold text-lg">{selected.totalOrders ?? 0}</p>
-                      <p style={{ color:"#9c7a62" }} className="text-xs">Orders</p>
+                    <div className="rounded-xl py-2" style={{ background:"var(--color-beige)" }}>
+                      <p style={{ color:"var(--color-olive)", fontFamily:"Georgia, serif" }} className="font-bold text-lg">{selected.totalOrders ?? 0}</p>
+                      <p style={{ color:"var(--color-olive)" }} className="text-xs">Orders</p>
                     </div>
-                    <div className="rounded-xl py-2" style={{ background:"#f5ede5" }}>
-                      <p style={{ color:"#c97d5b", fontFamily:"Georgia, serif" }} className="font-bold text-lg">{selected.totalSpent != null ? fmtK(selected.totalSpent) : "—"}</p>
-                      <p style={{ color:"#9c7a62" }} className="text-xs">Spent</p>
+                    <div className="rounded-xl py-2" style={{ background:"var(--color-beige)" }}>
+                      <p style={{ color:"var(--color-olive)", fontFamily:"Georgia, serif" }} className="font-bold text-lg">{selected.totalSpent != null ? fmtK(selected.totalSpent) : "—"}</p>
+                      <p style={{ color:"var(--color-olive)" }} className="text-xs">Spent</p>
                     </div>
                   </div>
                 )}
@@ -309,9 +309,9 @@ export default function CustomersTab() {
                   ["Total Spent",  selected.totalSpent != null ? fmt(selected.totalSpent) : "—"],
                   ["Member Since", selected.createdAt ? new Date(selected.createdAt).toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric" }) : "—"],
                 ].map(([k, v]) => (
-                  <div key={k} className="flex justify-between text-sm border-b pb-2" style={{ borderColor:"#f5ede5" }}>
-                    <span style={{ color:"#9c7a62" }}>{k}</span>
-                    <span style={{ color:"#4a3728" }} className="font-semibold text-right max-w-[55%] truncate">{v}</span>
+                  <div key={k} className="flex justify-between text-sm border-b pb-2" style={{ borderColor:"var(--color-beige)" }}>
+                    <span style={{ color:"var(--color-olive)" }}>{k}</span>
+                    <span style={{ color:"var(--color-charcoal)" }} className="font-semibold text-right max-w-[55%] truncate">{v}</span>
                   </div>
                 ))}
                 <button
@@ -339,21 +339,21 @@ export default function CustomersTab() {
                   { key:"contactNumber", label:"Phone",     type:"tel"   },
                 ].map(({ key, label, type }) => (
                   <div key={key}>
-                    <label style={{ color:"#7a5c4a" }} className="text-xs font-semibold block mb-1">{label}</label>
+                    <label style={{ color:"var(--color-olive)" }} className="text-xs font-semibold block mb-1">{label}</label>
                     <input
                       type={type}
                       value={editForm[key]}
                       onChange={e => setEditForm(f => ({ ...f, [key]: e.target.value }))}
                       className="w-full text-sm rounded-xl border px-3 py-2 outline-none"
-                      style={{ borderColor:"#e8d5c4", color:"#3a2416" }} />
+                      style={{ borderColor:"var(--color-border)", color:"var(--color-charcoal)" }} />
                   </div>
                 ))}
                 <div>
-                  <label style={{ color:"#7a5c4a" }} className="text-xs font-semibold block mb-1">Role</label>
+                  <label style={{ color:"var(--color-olive)" }} className="text-xs font-semibold block mb-1">Role</label>
                   <select value={editForm.role}
                     onChange={e => setEditForm(f => ({ ...f, role: e.target.value }))}
                     className="w-full text-sm rounded-xl border px-3 py-2 outline-none cursor-pointer"
-                    style={{ borderColor:"#e8d5c4", color:"#3a2416" }}>
+                    style={{ borderColor:"var(--color-border)", color:"var(--color-charcoal)" }}>
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
                   </select>
@@ -361,12 +361,12 @@ export default function CustomersTab() {
                 <div className="flex gap-2 pt-1">
                   <button onClick={() => setEditing(false)}
                     className="flex-1 py-2 rounded-full border text-sm font-semibold"
-                    style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                    style={{ borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
                     Cancel
                   </button>
                   <button onClick={handleSave} disabled={saving}
                     className="flex-1 py-2 rounded-full text-sm font-semibold text-white disabled:opacity-60"
-                    style={{ background:"#c97d5b" }}>
+                    style={{ background:"var(--color-olive)" }}>
                     {saving ? "Saving…" : "Save Changes"}
                   </button>
                 </div>
@@ -375,10 +375,10 @@ export default function CustomersTab() {
           </div>
         ) : (
           <div className="bg-white rounded-3xl border flex flex-col items-center justify-center py-16 text-center"
-            style={{ borderColor:"#e8d5c4" }}>
+            style={{ borderColor:"var(--color-border)" }}>
             <span className="text-4xl mb-3">👤</span>
-            <p style={{ color:"#4a3728" }} className="font-semibold">Select a user</p>
-            <p style={{ color:"#9c7a62" }} className="text-sm mt-1">to view profile & manage account</p>
+            <p style={{ color:"var(--color-charcoal)" }} className="font-semibold">Select a user</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-sm mt-1">to view profile & manage account</p>
           </div>
         )}
       </div>

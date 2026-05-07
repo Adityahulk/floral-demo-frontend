@@ -94,7 +94,7 @@ export default function AdminPanel() {
   };
 
   return (
-    <div style={{ fontFamily:"system-ui, sans-serif", background:"#fdf8f3", minHeight:"100vh" }} className="flex">
+    <div style={{ fontFamily:"system-ui, sans-serif", background:"var(--color-beige)", minHeight:"100vh" }} className="flex">
 
       {/* Mobile overlay */}
       {sidebarOpen && <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />}
@@ -103,14 +103,14 @@ export default function AdminPanel() {
       <aside className="fixed top-0 left-0 h-full z-40 flex flex-col transition-transform duration-300 lg:translate-x-0"
         style={{
           width:"220px",
-          background:"#3a2416",
+          background:"var(--color-charcoal)",
           transform: sidebarOpen ? "translateX(0)" : undefined,
         }}>
-        <div className="flex items-center gap-2.5 px-5 py-5 border-b" style={{ borderColor:"#4a3728" }}>
-          <img src={FloralLogo} alt="The Floral Studio" style={{ width:"3rem", borderRadius:"50%", border:"2px solid #3a2416" }} />
+        <div className="flex items-center gap-2.5 px-5 py-5 border-b" style={{ borderColor:"var(--color-charcoal)" }}>
+          <img src={FloralLogo} alt="The Floral Studio" style={{ width:"3rem", borderRadius:"50%", border:"2px solid var(--color-charcoal)" }} />
           <div>
-            <p style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="font-bold leading-none">The Floral Studio</p>
-            <p style={{ color:"#9c7a62" }} className="text-xs">Admin Panel</p>
+            <p style={{ fontFamily:"Georgia, serif", color:"var(--color-beige)" }} className="font-bold leading-none">The Floral Studio</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-xs">Admin Panel</p>
           </div>
         </div>
 
@@ -119,29 +119,29 @@ export default function AdminPanel() {
             <button key={id} onClick={() => navTo(id)}
               className="w-full flex items-center gap-3 px-5 py-3 text-sm font-medium transition-all text-left"
               style={{
-                color:      activeNav === id ? "#f5e6d3" : "#9c7a62",
-                background: activeNav === id ? "rgba(201,125,91,0.2)" : "transparent",
-                borderLeft: activeNav === id ? "3px solid #c97d5b" : "3px solid transparent",
+                color:      activeNav === id ? "var(--color-beige)" : "var(--color-olive)",
+                background: activeNav === id ? "rgba(95,111,82,0.2)" : "transparent",
+                borderLeft: activeNav === id ? "3px solid var(--color-olive)" : "3px solid transparent",
               }}>
-              <span style={{ color: activeNav === id ? "#c97d5b" : "#7a5c4a" }}>{icon}</span>
+              <span style={{ color: activeNav === id ? "var(--color-olive)" : "var(--color-olive)" }}>{icon}</span>
               {label}
             </button>
           ))}
         </nav>
 
-        <div className="p-4 border-t" style={{ borderColor:"#4a3728" }}>
+        <div className="p-4 border-t" style={{ borderColor:"var(--color-charcoal)" }}>
           <div className="flex items-center gap-2 mb-3">
-            <div style={{ background:"#c97d5b" }} className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
+            <div style={{ background:"var(--color-olive)" }} className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
               {adminInitial}
             </div>
             <div className="min-w-0">
-              <p style={{ color:"#f5e6d3" }} className="text-xs font-semibold truncate">{adminName}</p>
-              <p style={{ color:"#7a5c4a" }} className="text-xs">Admin</p>
+              <p style={{ color:"var(--color-beige)" }} className="text-xs font-semibold truncate">{adminName}</p>
+              <p style={{ color:"var(--color-olive)" }} className="text-xs">Admin</p>
             </div>
           </div>
           <button onClick={() => { clearAuth(); navigate("/login"); }}
             className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium hover:opacity-70"
-            style={{ color:"#9c7a62" }}>
+            style={{ color:"var(--color-olive)" }}>
             <LogOut size={14}/> Sign Out
           </button>
         </div>
@@ -151,28 +151,28 @@ export default function AdminPanel() {
       <div className="flex-1 flex flex-col min-h-screen" style={{ marginLeft:"220px" }}>
 
         <header className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 border-b"
-          style={{ background:"white", borderColor:"#e8d5c4" }}>
+          style={{ background:"white", borderColor:"var(--color-border)" }}>
           <div className="flex items-center gap-3">
             <button onClick={() => setSidebarOpen(o => !o)} className="lg:hidden p-1.5 rounded-lg hover:opacity-70"
-              style={{ color:"#5c4033" }}>
+              style={{ color:"var(--color-charcoal)" }}>
               <Menu size={20}/>
             </button>
             <div>
-              <h1 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold capitalize">
+              <h1 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold capitalize">
                 {headerLabel}
               </h1>
-              <p style={{ color:"#9c7a62" }} className="text-xs">
+              <p style={{ color:"var(--color-olive)" }} className="text-xs">
                 {new Date().toLocaleDateString("en-IN", { weekday:"long", day:"numeric", month:"long", year:"numeric" })}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {/* <button className="relative p-2 rounded-full hover:opacity-70" style={{ color:"#5c4033" }}>
+            {/* <button className="relative p-2 rounded-full hover:opacity-70" style={{ color:"var(--color-charcoal)" }}>
               <Bell size={18}/>
               <span style={{ background:"#dc2626" }} className="absolute top-1 right-1 w-2 h-2 rounded-full" />
             </button> */}
             <a href="/" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
-              style={{ background:"#f5ede5", color:"#c97d5b" }}>
+              style={{ background:"var(--color-beige)", color:"var(--color-olive)" }}>
               <Home size={13}/> View Store
             </a>
           </div>

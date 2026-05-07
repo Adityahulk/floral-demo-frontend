@@ -88,18 +88,18 @@ function ProfileTab({ user, onUpdate }) {
   function field(label, key, type = "text", icon, readOnly = false) {
     return (
       <div>
-        <label style={{ color:"#4a3728" }} className="flex items-center gap-2 text-sm font-semibold mb-1.5">
+        <label style={{ color:"var(--color-charcoal)" }} className="flex items-center gap-2 text-sm font-semibold mb-1.5">
           {icon} {label}
         </label>
         {edit && !readOnly ? (
           <input type={type} value={draft[key] || ""} onChange={e => setDraft(d => ({ ...d, [key]: e.target.value }))}
             className="w-full px-4 py-3 rounded-xl border text-sm outline-none"
-            style={{ borderColor:"#c97d5b", background:"#fdf8f3", color:"#3a2416" }} />
+            style={{ borderColor:"var(--color-olive)", background:"var(--color-beige)", color:"var(--color-charcoal)" }} />
         ) : (
           <div className="px-4 py-3 rounded-xl text-sm flex items-center justify-between"
-            style={{ background:"#f5ede5", color:"#4a3728" }}>
+            style={{ background:"var(--color-beige)", color:"var(--color-charcoal)" }}>
             <span>{(key === "phone" ? user.phone : user[key]) || <span style={{ color:"#bbb" }}>Not provided</span>}</span>
-            {readOnly && <span style={{ color:"#9c7a62" }} className="text-xs">Cannot edit</span>}
+            {readOnly && <span style={{ color:"var(--color-olive)" }} className="text-xs">Cannot edit</span>}
           </div>
         )}
       </div>
@@ -116,25 +116,25 @@ function ProfileTab({ user, onUpdate }) {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold">My Profile</h2>
-          <p style={{ color:"#9c7a62" }} className="text-sm mt-1">Manage your personal information</p>
+          <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-2xl font-bold">My Profile</h2>
+          <p style={{ color:"var(--color-olive)" }} className="text-sm mt-1">Manage your personal information</p>
         </div>
         {!edit ? (
           <button onClick={() => setEdit(true)}
             className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold hover:opacity-80"
-            style={{ background:"#f5ede5", color:"#c97d5b" }}>
+            style={{ background:"var(--color-beige)", color:"var(--color-olive)" }}>
             <Edit2 size={14}/> Edit Profile
           </button>
         ) : (
           <div className="flex gap-2">
             <button onClick={handleCancel}
               className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold border"
-              style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+              style={{ borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
               <X size={14}/> Cancel
             </button>
             <button onClick={handleSave} disabled={saving}
               className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white disabled:opacity-60"
-              style={{ background:"#c97d5b" }}>
+              style={{ background:"var(--color-olive)" }}>
               <Save size={14}/> {saving ? "Saving…" : "Save"}
             </button>
           </div>
@@ -149,16 +149,16 @@ function ProfileTab({ user, onUpdate }) {
       )}
 
       {/* Avatar */}
-      <div className="flex items-center gap-5 mb-8 p-5 rounded-2xl" style={{ background:"#f5ede5" }}>
+      <div className="flex items-center gap-5 mb-8 p-5 rounded-2xl" style={{ background:"var(--color-beige)" }}>
         <div className="relative">
           {avatarSrc
-            ? <img src={avatarSrc} alt="avatar" className="w-20 h-20 rounded-full object-cover border-2" style={{ borderColor:"#c97d5b" }}/>
-            : <div style={{ background:"#c97d5b" }} className="w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold">
+            ? <img src={avatarSrc} alt="avatar" className="w-20 h-20 rounded-full object-cover border-2" style={{ borderColor:"var(--color-olive)" }}/>
+            : <div style={{ background:"var(--color-olive)" }} className="w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold">
                 {user.name?.charAt(0)?.toUpperCase() || "?"}
               </div>
           }
           {edit && (
-            <label htmlFor="avatarInput" style={{ background:"#4a3728" }}
+            <label htmlFor="avatarInput" style={{ background:"var(--color-charcoal)" }}
               className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:opacity-80">
               <Camera size={13} className="text-white"/>
               <input id="avatarInput" type="file" accept="image/*" className="hidden" onChange={handleImgChange}/>
@@ -166,8 +166,8 @@ function ProfileTab({ user, onUpdate }) {
           )}
         </div>
         <div>
-          <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold">{user.name}</p>
-          <p style={{ color:"#9c7a62" }} className="text-sm">Member since {joinedDate}</p>
+          <p style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-xl font-bold">{user.name}</p>
+          <p style={{ color:"var(--color-olive)" }} className="text-sm">Member since {joinedDate}</p>
           <div className="flex items-center gap-1 mt-1">
             <Shield size={13} style={{ color:"#22c55e" }}/>
             <span style={{ color:"#22c55e" }} className="text-xs font-medium">Verified Account</span>
@@ -181,9 +181,9 @@ function ProfileTab({ user, onUpdate }) {
           [user.totalOrders ?? "—", "Total Orders"],
           [user.totalSpent != null ? fmt(user.totalSpent) : "—", "Total Spent"],
         ].map(([n, l]) => (
-          <div key={l} className="text-center p-4 rounded-2xl border" style={{ borderColor:"#e8d5c4", background:"white" }}>
-            <p style={{ fontFamily:"Georgia, serif", color:"#c97d5b" }} className="text-2xl font-bold">{n}</p>
-            <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">{l}</p>
+          <div key={l} className="text-center p-4 rounded-2xl border" style={{ borderColor:"var(--color-border)", background:"white" }}>
+            <p style={{ fontFamily:"Georgia, serif", color:"var(--color-olive)" }} className="text-2xl font-bold">{n}</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-xs mt-0.5">{l}</p>
           </div>
         ))}
       </div>
@@ -213,19 +213,19 @@ function OrdersTab() {
   return (
     <div>
       <div className="mb-2">
-        <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold">My Orders</h2>
+        <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-2xl font-bold">My Orders</h2>
       </div>
-      <p style={{ color:"#9c7a62" }} className="text-sm mb-8">Your recent orders</p>
+      <p style={{ color:"var(--color-olive)" }} className="text-sm mb-8">Your recent orders</p>
 
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <div className="w-7 h-7 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }}/>
+          <div className="w-7 h-7 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor:"var(--color-olive)", borderTopColor:"transparent" }}/>
         </div>
       ) : orders.length === 0 ? (
         <div className="text-center py-16">
           <span className="text-5xl block mb-4">📦</span>
-          <p style={{ color:"#9c7a62" }} className="mb-4">You haven't placed any orders yet.</p>
-          <Link to="/" style={{ background:"#c97d5b" }} className="text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90">
+          <p style={{ color:"var(--color-olive)" }} className="mb-4">You haven't placed any orders yet.</p>
+          <Link to="/" style={{ background:"var(--color-olive)" }} className="text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90">
             Start Shopping 🌸
           </Link>
         </div>
@@ -243,16 +243,16 @@ function OrdersTab() {
             return (
               <Link to={`/orders/${order._id}`} key={order._id}
                 className="flex gap-4 p-4 rounded-2xl border items-center hover:shadow-sm transition-shadow"
-                style={{ borderColor:"#e8d5c4", background:"white" }}>
+                style={{ borderColor:"var(--color-border)", background:"white" }}>
                 {img
                   ? <img src={img} alt={itemName} className="w-16 h-16 object-cover rounded-xl shrink-0"/>
-                  : <div className="w-16 h-16 rounded-xl shrink-0 flex items-center justify-center text-2xl" style={{ background:"#f5ede5" }}>🌸</div>
+                  : <div className="w-16 h-16 rounded-xl shrink-0 flex items-center justify-center text-2xl" style={{ background:"var(--color-beige)" }}>🌸</div>
                 }
                 <div className="flex-1 min-w-0">
-                  <p style={{ color:"#3a2416" }} className="font-semibold text-sm truncate">
+                  <p style={{ color:"var(--color-charcoal)" }} className="font-semibold text-sm truncate">
                     {itemName}{extraCount > 0 ? ` +${extraCount} more` : ""}
                   </p>
-                  <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">
+                  <p style={{ color:"var(--color-olive)" }} className="text-xs mt-0.5">
                     #{order._id.slice(-8).toUpperCase()} · {date}
                   </p>
                   <div className="flex items-center gap-2 mt-2">
@@ -260,12 +260,12 @@ function OrdersTab() {
                       style={{ background:s.bg, color:s.color }}>
                       {s.label}
                     </span>
-                    <span style={{ color:"#c97d5b" }} className="text-sm font-bold">
+                    <span style={{ color:"var(--color-olive)" }} className="text-sm font-bold">
                       {fmt(order.totalAmount || order.totalPrice || 0)}
                     </span>
                   </div>
                 </div>
-                <ChevronRight size={20} style={{ color:"#c97d5b" }} className="shrink-0"/>
+                <ChevronRight size={20} style={{ color:"var(--color-olive)" }} className="shrink-0"/>
               </Link>
             );
           })}
@@ -291,16 +291,16 @@ function SecurityErrorBox({ error }) {
 function SecurityPwInput({ label, value, onChange, show, onToggle, onClearError }) {
   return (
     <div>
-      <label style={{ color:"#4a3728" }} className="block text-sm font-semibold mb-1.5">{label}</label>
+      <label style={{ color:"var(--color-charcoal)" }} className="block text-sm font-semibold mb-1.5">{label}</label>
       <div className="relative">
         <input type={show ? "text" : "password"} value={value}
           onChange={e => { onChange(e.target.value); onClearError(); }}
           placeholder="••••••••"
           className="w-full px-4 py-3 pr-11 rounded-xl border text-sm outline-none"
-          style={{ borderColor:"#e8d5c4", background:"#fdf8f3", color:"#3a2416" }} />
+          style={{ borderColor:"var(--color-border)", background:"var(--color-beige)", color:"var(--color-charcoal)" }} />
         <button type="button" onClick={onToggle}
           className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-60"
-          style={{ color:"#9c7a62" }}>
+          style={{ color:"var(--color-olive)" }}>
           {show ? <EyeOff size={16}/> : <Eye size={16}/>}
         </button>
       </div>
@@ -373,8 +373,8 @@ function SecurityTab({ email }) {
 
   return (
     <div>
-      <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold mb-2">Change Password</h2>
-      <p style={{ color:"#9c7a62" }} className="text-sm mb-8">Keep your account secure with OTP verification</p>
+      <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-2xl font-bold mb-2">Change Password</h2>
+      <p style={{ color:"var(--color-olive)" }} className="text-sm mb-8">Keep your account secure with OTP verification</p>
 
       {/* Step indicator */}
       {step !== "done" && (
@@ -383,15 +383,15 @@ function SecurityTab({ email }) {
             <div key={s} className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all"
                 style={{
-                  background: step === s ? "#c97d5b" : ["send","otp","password"].indexOf(step) > i ? "#dcfce7" : "#f0e4d8",
-                  color:      step === s ? "white"   : ["send","otp","password"].indexOf(step) > i ? "#16a34a" : "#9c7a62",
+                  background: step === s ? "var(--color-olive)" : ["send","otp","password"].indexOf(step) > i ? "#dcfce7" : "var(--color-border)",
+                  color:      step === s ? "white"   : ["send","otp","password"].indexOf(step) > i ? "#16a34a" : "var(--color-olive)",
                 }}>
                 {["send","otp","password"].indexOf(step) > i ? "✓" : i + 1}
               </div>
-              {i < 2 && <div className="w-8 h-0.5 rounded" style={{ background: ["send","otp","password"].indexOf(step) > i ? "#c97d5b" : "#e8d5c4" }}/>}
+              {i < 2 && <div className="w-8 h-0.5 rounded" style={{ background: ["send","otp","password"].indexOf(step) > i ? "var(--color-olive)" : "var(--color-border)" }}/>}
             </div>
           ))}
-          <span style={{ color:"#9c7a62" }} className="text-xs ml-2">{stepLabel}</span>
+          <span style={{ color:"var(--color-olive)" }} className="text-xs ml-2">{stepLabel}</span>
         </div>
       )}
 
@@ -400,13 +400,13 @@ function SecurityTab({ email }) {
         {/* Step 1: Send OTP */}
         {step === "send" && (
           <>
-            <div className="px-4 py-4 rounded-2xl" style={{ background:"#f5ede5" }}>
-              <p style={{ color:"#9c7a62" }} className="text-xs mb-1">OTP will be sent to</p>
-              <p style={{ color:"#3a2416" }} className="font-semibold text-sm">{email || "your registered email"}</p>
+            <div className="px-4 py-4 rounded-2xl" style={{ background:"var(--color-beige)" }}>
+              <p style={{ color:"var(--color-olive)" }} className="text-xs mb-1">OTP will be sent to</p>
+              <p style={{ color:"var(--color-charcoal)" }} className="font-semibold text-sm">{email || "your registered email"}</p>
             </div>
             <SecurityErrorBox error={error} />
             <button onClick={handleSendOtp} disabled={loading}
-              style={{ background:"#c97d5b" }}
+              style={{ background:"var(--color-olive)" }}
               className="w-full py-3 rounded-full text-white font-bold hover:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2">
               {loading
                 ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/>Sending...</>
@@ -419,24 +419,24 @@ function SecurityTab({ email }) {
         {/* Step 2: Verify OTP */}
         {step === "otp" && (
           <>
-            <div className="px-4 py-3 rounded-2xl text-sm" style={{ background:"#f5ede5", color:"#7a5c4a" }}>
+            <div className="px-4 py-3 rounded-2xl text-sm" style={{ background:"var(--color-beige)", color:"var(--color-olive)" }}>
               OTP sent to <strong>{email}</strong>
             </div>
             <div>
-              <label style={{ color:"#4a3728" }} className="block text-sm font-semibold mb-1.5">One-Time Password</label>
+              <label style={{ color:"var(--color-charcoal)" }} className="block text-sm font-semibold mb-1.5">One-Time Password</label>
               <input
                 type="text" inputMode="numeric" maxLength={6}
                 value={otp}
                 onChange={e => { setOtp(e.target.value.replace(/\D/g, "").slice(0, 6)); setError(null); }}
                 placeholder="Enter 6-digit OTP"
                 className="w-full px-4 py-3 rounded-xl border text-sm outline-none tracking-widest"
-                style={{ borderColor:"#e8d5c4", background:"#fdf8f3", color:"#3a2416" }}
+                style={{ borderColor:"var(--color-border)", background:"var(--color-beige)", color:"var(--color-charcoal)" }}
               />
             </div>
-            <p style={{ color:"#9c7a62" }} className="text-sm">
+            <p style={{ color:"var(--color-olive)" }} className="text-sm">
               Didn't receive it?{" "}
               <button type="button" onClick={async () => { setOtp(""); setError(null); await handleSendOtp(); }}
-                className="font-bold hover:opacity-70" style={{ color:"#c97d5b" }}>
+                className="font-bold hover:opacity-70" style={{ color:"var(--color-olive)" }}>
                 Resend OTP
               </button>
             </p>
@@ -444,11 +444,11 @@ function SecurityTab({ email }) {
             <div className="flex gap-3">
               <button onClick={() => { setStep("send"); setError(null); }}
                 className="flex-1 py-3 rounded-full font-bold text-sm border hover:opacity-70"
-                style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                style={{ borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
                 Back
               </button>
               <button onClick={handleVerifyOtp} disabled={loading}
-                style={{ background:"#c97d5b" }}
+                style={{ background:"var(--color-olive)" }}
                 className="flex-1 py-3 rounded-full text-white font-bold text-sm hover:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2">
                 {loading
                   ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/>Verifying...</>
@@ -470,11 +470,11 @@ function SecurityTab({ email }) {
             <div className="flex gap-3">
               <button onClick={() => { setStep("otp"); setError(null); }}
                 className="flex-1 py-3 rounded-full font-bold text-sm border hover:opacity-70"
-                style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                style={{ borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
                 Back
               </button>
               <button onClick={handleResetPassword} disabled={loading}
-                style={{ background:"#c97d5b" }}
+                style={{ background:"var(--color-olive)" }}
                 className="flex-1 py-3 rounded-full text-white font-bold text-sm hover:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2">
                 {loading
                   ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/>Updating...</>
@@ -493,10 +493,10 @@ function SecurityTab({ email }) {
               ✅
             </div>
             <div>
-              <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-xl font-bold mb-1">Password Updated!</p>
-              <p style={{ color:"#9c7a62" }} className="text-sm">Your password has been changed successfully.</p>
+              <p style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-xl font-bold mb-1">Password Updated!</p>
+              <p style={{ color:"var(--color-olive)" }} className="text-sm">Your password has been changed successfully.</p>
             </div>
-            <button onClick={reset} style={{ background:"#c97d5b" }}
+            <button onClick={reset} style={{ background:"var(--color-olive)" }}
               className="px-8 py-3 rounded-full text-white font-bold text-sm hover:opacity-90">
               Done
             </button>
@@ -528,20 +528,20 @@ function NotificationsTab() {
 
   return (
     <div>
-      <h2 style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="text-2xl font-bold mb-2">Notifications</h2>
-      <p style={{ color:"#9c7a62" }} className="text-sm mb-8">Choose what you want to hear from us</p>
+      <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-2xl font-bold mb-2">Notifications</h2>
+      <p style={{ color:"var(--color-olive)" }} className="text-sm mb-8">Choose what you want to hear from us</p>
 
       <div className="space-y-3 mb-6">
         {items.map(({ key, label, sub }) => (
           <div key={key} className="flex items-center justify-between p-4 rounded-2xl border"
-            style={{ borderColor:"#e8d5c4", background:"white" }}>
+            style={{ borderColor:"var(--color-border)", background:"white" }}>
             <div>
-              <p style={{ color:"#3a2416" }} className="font-semibold text-sm">{label}</p>
-              <p style={{ color:"#9c7a62" }} className="text-xs mt-0.5">{sub}</p>
+              <p style={{ color:"var(--color-charcoal)" }} className="font-semibold text-sm">{label}</p>
+              <p style={{ color:"var(--color-olive)" }} className="text-xs mt-0.5">{sub}</p>
             </div>
             <button onClick={() => toggle(key)}
               className="w-12 h-6 rounded-full transition-all relative shrink-0"
-              style={{ background: prefs[key] ? "#c97d5b" : "#e8d5c4" }}>
+              style={{ background: prefs[key] ? "var(--color-olive)" : "var(--color-border)" }}>
               <div className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all"
                 style={{ left: prefs[key] ? "calc(100% - 22px)" : "2px" }}/>
             </button>
@@ -556,7 +556,7 @@ function NotificationsTab() {
         </div>
       )}
       <button onClick={() => { setSaved(true); setTimeout(() => setSaved(false), 2500); }}
-        style={{ background:"#c97d5b" }}
+        style={{ background:"var(--color-olive)" }}
         className="px-6 py-2.5 rounded-full text-white text-sm font-bold hover:opacity-90">
         Save Preferences
       </button>
@@ -602,14 +602,14 @@ export default function ProfilePage({ initialTab = "profile" }) {
   const TABS = {
     profile:  user
       ? <ProfileTab user={user} onUpdate={setUser} />
-      : <div className="text-center py-16"><p style={{ color:"#9c7a62" }}>Please log in to view your profile.</p></div>,
+      : <div className="text-center py-16"><p style={{ color:"var(--color-olive)" }}>Please log in to view your profile.</p></div>,
     orders:   <OrdersTab />,
     security: <SecurityTab email={user?.email} />,
     // notif:    <NotificationsTab />,
   };
 
   return (
-    <div style={{ fontFamily:"system-ui, sans-serif", background:"#fdf8f3", minHeight:"100vh" }}>
+    <div style={{ fontFamily:"system-ui, sans-serif", background:"var(--color-beige)", minHeight:"100vh" }}>
 
       <Breadcrumb paths={[
         { id: 1, name: "Home", path: "/" },
@@ -617,18 +617,18 @@ export default function ProfilePage({ initialTab = "profile" }) {
       ]} />
 
       {/* ── Mobile: sticky tab bar ── */}
-      <div className="lg:hidden sticky top-0 z-20 border-b" style={{ background:"#fdf8f3", borderColor:"#e8d5c4" }}>
+      <div className="lg:hidden sticky top-0 z-20 border-b" style={{ background:"var(--color-beige)", borderColor:"var(--color-border)" }}>
         {/* compact user strip */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b" style={{ borderColor:"#e8d5c4" }}>
+        <div className="flex items-center gap-3 px-4 py-3 border-b" style={{ borderColor:"var(--color-border)" }}>
           {user?.profileImage
-            ? <img src={user.profileImage} alt="avatar" className="w-9 h-9 rounded-full object-cover flex-shrink-0" style={{ border:"2px solid #c97d5b" }}/>
-            : <div style={{ background:"#c97d5b" }} className="w-9 h-9 rounded-full flex items-center justify-center text-white text-base font-bold flex-shrink-0">
+            ? <img src={user.profileImage} alt="avatar" className="w-9 h-9 rounded-full object-cover flex-shrink-0" style={{ border:"2px solid var(--color-olive)" }}/>
+            : <div style={{ background:"var(--color-olive)" }} className="w-9 h-9 rounded-full flex items-center justify-center text-white text-base font-bold flex-shrink-0">
                 {user?.name?.charAt(0)?.toUpperCase() || "?"}
               </div>
           }
           <div className="min-w-0">
-            <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-semibold text-sm truncate">{user?.name || "User"}</p>
-            <p style={{ color:"#9c7a62" }} className="text-xs truncate">{user?.email || ""}</p>
+            <p style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-semibold text-sm truncate">{user?.name || "User"}</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-xs truncate">{user?.email || ""}</p>
           </div>
           <button onClick={handleLogout} className="ml-auto flex-shrink-0 flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border" style={{ color:"#dc2626", borderColor:"#fca5a5" }}>
             <LogOut size={13}/> Logout
@@ -640,11 +640,11 @@ export default function ProfilePage({ initialTab = "profile" }) {
             <button key={id} onClick={() => { setActive(id); navigate(path); }}
               className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex-shrink-0 transition-all"
               style={{
-                background: active === id ? "#4a3728" : "white",
-                color:      active === id ? "white"   : "#5c4033",
-                border:     `1px solid ${active === id ? "#4a3728" : "#e8d5c4"}`,
+                background: active === id ? "var(--color-charcoal)" : "white",
+                color:      active === id ? "white"   : "var(--color-charcoal)",
+                border:     `1px solid ${active === id ? "var(--color-charcoal)" : "var(--color-border)"}`,
               }}>
-              <span style={{ color: active === id ? "white" : "#9c7a62" }}>{icon}</span>
+              <span style={{ color: active === id ? "white" : "var(--color-olive)" }}>{icon}</span>
               {label}
             </button>
           ))}
@@ -656,48 +656,48 @@ export default function ProfilePage({ initialTab = "profile" }) {
         {/* ── Desktop: sidebar + content ── */}
         <div className="hidden lg:grid lg:grid-cols-[280px_1fr] gap-8 items-start">
           <div className="lg:sticky lg:top-6">
-            <div className="p-5 rounded-3xl mb-4 text-center" style={{ background:"#4a3728" }}>
+            <div className="p-5 rounded-3xl mb-4 text-center" style={{ background:"var(--color-charcoal)" }}>
               {user?.profileImage
                 ? <img src={user.profileImage} alt="avatar"
                     className="w-16 h-16 rounded-full object-cover border-2 mx-auto mb-3"
-                    style={{ borderColor:"#c97d5b" }}/>
-                : <div style={{ background:"#c97d5b" }}
+                    style={{ borderColor:"var(--color-olive)" }}/>
+                : <div style={{ background:"var(--color-olive)" }}
                     className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
                     {user?.name?.charAt(0)?.toUpperCase() || "?"}
                   </div>
               }
-              <p style={{ fontFamily:"Georgia, serif", color:"#f5e6d3" }} className="font-bold text-lg truncate">{user?.name || "User"}</p>
-              <p style={{ color:"#b89c8a" }} className="text-xs truncate">{user?.email || ""}</p>
+              <p style={{ fontFamily:"Georgia, serif", color:"var(--color-beige)" }} className="font-bold text-lg truncate">{user?.name || "User"}</p>
+              <p style={{ color:"var(--color-sage)" }} className="text-xs truncate">{user?.email || ""}</p>
             </div>
-            <div className="bg-white rounded-3xl overflow-hidden border" style={{ borderColor:"#e8d5c4" }}>
+            <div className="bg-white rounded-3xl overflow-hidden border" style={{ borderColor:"var(--color-border)" }}>
               {MENU.map(({ id, path, icon, label }) => (
                 <button key={id} onClick={() => { setActive(id); navigate(path); }}
                   className="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-medium text-left transition-all border-b last:border-0"
                   style={{
-                    borderColor:"#f0e4d8",
-                    background:  active === id ? "#fdf8f3" : "white",
-                    color:       active === id ? "#c97d5b" : "#5c4033",
-                    borderLeft:  active === id ? "3px solid #c97d5b" : "3px solid transparent",
+                    borderColor:"var(--color-border)",
+                    background:  active === id ? "var(--color-beige)" : "white",
+                    color:       active === id ? "var(--color-olive)" : "var(--color-charcoal)",
+                    borderLeft:  active === id ? "3px solid var(--color-olive)" : "3px solid transparent",
                   }}>
-                  <span style={{ color: active === id ? "#c97d5b" : "#9c7a62" }}>{icon}</span>
+                  <span style={{ color: active === id ? "var(--color-olive)" : "var(--color-olive)" }}>{icon}</span>
                   {label}
-                  <ChevronRight size={14} className="ml-auto" style={{ color: active === id ? "#c97d5b" : "#d0b8a8" }}/>
+                  <ChevronRight size={14} className="ml-auto" style={{ color: active === id ? "var(--color-olive)" : "#d0b8a8" }}/>
                 </button>
               ))}
               <button onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-5 py-3.5 text-sm font-medium border-t hover:bg-red-50 transition-colors"
-                style={{ borderColor:"#f0e4d8", color:"#dc2626" }}>
+                style={{ borderColor:"var(--color-border)", color:"#dc2626" }}>
                 <LogOut size={18}/> Log Out
               </button>
             </div>
           </div>
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border" style={{ borderColor:"#e8d5c4" }}>
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border" style={{ borderColor:"var(--color-border)" }}>
             {TABS[active]}
           </div>
         </div>
 
         {/* ── Mobile: full-width content ── */}
-        <div className="lg:hidden bg-white rounded-3xl p-5 border" style={{ borderColor:"#e8d5c4" }}>
+        <div className="lg:hidden bg-white rounded-3xl p-5 border" style={{ borderColor:"var(--color-border)" }}>
           {TABS[active]}
         </div>
 

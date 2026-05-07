@@ -4,8 +4,8 @@ const Breadcrumb = ({ paths }) => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ background: "#f5ede5", borderBottom: "1px solid #e8d5c4" }} className="py-3">
-      <div className="max-w-7xl mx-auto px-4 flex items-center gap-2 text-sm" style={{ color: "#9c7a62" }}>
+    <div style={{ background: "var(--color-beige)", borderBottom: "1px solid var(--color-border)" }} className="py-3">
+      <div className="max-w-7xl mx-auto px-4 flex items-center gap-2 text-sm" style={{ color: "var(--color-olive)" }}>
         {paths.map((p, i) => {
           // 🔥 yaha magic ho raha hai
           const fullPath = paths

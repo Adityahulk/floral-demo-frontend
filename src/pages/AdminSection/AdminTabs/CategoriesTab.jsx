@@ -3,7 +3,7 @@ import { Plus, Edit2, Trash2, Search, X, Check, Tag, Layers, Upload } from "luci
 import { api } from "../../../api/client";
 import { API } from "../../../api/endpoints";
 
-const EMPTY = { name: "", emoji: "", desc: "", img: "", color: "#c97d5b", tags: "" };
+const EMPTY = { name: "", emoji: "", desc: "", img: "", color: "var(--color-olive)", tags: "" };
 
 function Toast({ msg, onClose }) {
   if (!msg) return null;
@@ -72,19 +72,19 @@ function CategoryImageUploader({ value, onChange, onUploadingChange, hasError })
       <div>
         <div className="relative w-fit">
           <img src={value} alt="" className="h-32 w-52 object-cover rounded-xl border"
-            style={{ borderColor: "#e8d5c4" }} />
+            style={{ borderColor: "var(--color-border)" }} />
           {uploading && (
             <div className="absolute inset-0 flex items-center justify-center rounded-xl"
               style={{ background: "rgba(255,255,255,0.75)" }}>
               <div className="w-6 h-6 border-2 rounded-full animate-spin"
-                style={{ borderColor: "#c97d5b", borderTopColor: "transparent" }} />
+                style={{ borderColor: "var(--color-olive)", borderTopColor: "transparent" }} />
             </div>
           )}
         </div>
         <div className="flex gap-2 mt-2">
           <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading}
             className="text-xs px-3 py-1.5 rounded-lg font-semibold border disabled:opacity-60"
-            style={{ borderColor: "#e8d5c4", color: "#5c4033" }}>
+            style={{ borderColor: "var(--color-border)", color: "var(--color-charcoal)" }}>
             Replace
           </button>
           <button type="button" onClick={() => { onChange(""); setUploadError(""); }} disabled={uploading}
@@ -108,22 +108,22 @@ function CategoryImageUploader({ value, onChange, onUploadingChange, hasError })
         onDragLeave={() => setDragOver(false)}
         className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed cursor-pointer py-8 select-none"
         style={{
-          borderColor:  hasError ? "#dc2626" : dragOver ? "#c97d5b" : "#e8d5c4",
-          background:   dragOver ? "#fdf3ee" : "#fdf8f3",
+          borderColor:  hasError ? "#dc2626" : dragOver ? "var(--color-olive)" : "var(--color-border)",
+          background:   dragOver ? "var(--color-beige)" : "var(--color-beige)",
         }}
       >
         {uploading ? (
           <div className="w-7 h-7 border-2 rounded-full animate-spin"
-            style={{ borderColor: "#c97d5b", borderTopColor: "transparent" }} />
+            style={{ borderColor: "var(--color-olive)", borderTopColor: "transparent" }} />
         ) : (
           <>
             <div className="w-10 h-10 rounded-full flex items-center justify-center"
-              style={{ background: "#f5e6d3" }}>
-              <Upload size={18} style={{ color: "#c97d5b" }} />
+              style={{ background: "var(--color-beige)" }}>
+              <Upload size={18} style={{ color: "var(--color-olive)" }} />
             </div>
             <div className="text-center">
-              <p className="text-sm font-semibold" style={{ color: "#3a2416" }}>Click or drag image here</p>
-              <p className="text-xs mt-0.5" style={{ color: "#9c7a62" }}>PNG, JPG, WEBP supported</p>
+              <p className="text-sm font-semibold" style={{ color: "var(--color-charcoal)" }}>Click or drag image here</p>
+              <p className="text-xs mt-0.5" style={{ color: "var(--color-olive)" }}>PNG, JPG, WEBP supported</p>
             </div>
           </>
         )}
@@ -183,7 +183,7 @@ export default function CategoriesTab() {
       emoji: cat.emoji || "",
       desc:  cat.desc  || "",
       img:   cat.img   || "",
-      color: cat.color || "#c97d5b",
+      color: cat.color || "var(--color-olive)",
       tags:  (cat.tags || []).join(", "),
     });
     setTouched(false);
@@ -266,17 +266,17 @@ export default function CategoriesTab() {
 
       {/* ── Form ── */}
       {editing !== null && (
-        <div ref={formRef} className="bg-white rounded-2xl border mb-6 overflow-hidden" style={{ borderColor: "#e8d5c4" }}>
-          <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: "#f0e4d8", background: "#fdf8f3" }}>
+        <div ref={formRef} className="bg-white rounded-2xl border mb-6 overflow-hidden" style={{ borderColor: "var(--color-border)" }}>
+          <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: "var(--color-border)", background: "var(--color-beige)" }}>
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "#f5e6d3" }}>
-                <Layers size={16} style={{ color: "#c97d5b" }} />
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "var(--color-beige)" }}>
+                <Layers size={16} style={{ color: "var(--color-olive)" }} />
               </div>
-              <h2 style={{ fontFamily: "Georgia,serif", color: "#3a2416" }} className="font-bold">
+              <h2 style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }} className="font-bold">
                 {isNew ? "Add New Category" : "Edit Category"}
               </h2>
             </div>
-            <button onClick={cancelEdit} className="p-1.5 rounded-full hover:opacity-60" style={{ color: "#9c7a62" }}>
+            <button onClick={cancelEdit} className="p-1.5 rounded-full hover:opacity-60" style={{ color: "var(--color-olive)" }}>
               <X size={18} />
             </button>
           </div>
@@ -284,7 +284,7 @@ export default function CategoriesTab() {
           <div className="p-6 grid sm:grid-cols-2 gap-5">
             {/* Name */}
             <div>
-              <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">
+              <label style={{ color: "var(--color-charcoal)" }} className="block text-sm font-semibold mb-1.5">
                 Name <span style={{ color: "#dc2626" }}>*</span>
               </label>
               <input
@@ -292,26 +292,26 @@ export default function CategoriesTab() {
                 onChange={e => setField("name", e.target.value)}
                 placeholder="e.g. Fresh Bouquets"
                 className="w-full px-4 py-2.5 rounded-xl border text-sm outline-none"
-                style={{ borderColor: touched && !form.name.trim() ? "#dc2626" : "#e8d5c4", background: "#fdf8f3", color: "#3a2416" }}
+                style={{ borderColor: touched && !form.name.trim() ? "#dc2626" : "var(--color-border)", background: "var(--color-beige)", color: "var(--color-charcoal)" }}
               />
               <FieldError show={touched && !form.name.trim()} text="Name is required" />
             </div>
 
             {/* Emoji */}
             <div>
-              <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">Emoji</label>
+              <label style={{ color: "var(--color-charcoal)" }} className="block text-sm font-semibold mb-1.5">Emoji</label>
               <input
                 value={form.emoji}
                 onChange={e => setField("emoji", e.target.value)}
                 placeholder="e.g. 💐"
                 className="w-full px-4 py-2.5 rounded-xl border text-sm outline-none"
-                style={{ borderColor: "#e8d5c4", background: "#fdf8f3", color: "#3a2416" }}
+                style={{ borderColor: "var(--color-border)", background: "var(--color-beige)", color: "var(--color-charcoal)" }}
               />
             </div>
 
             {/* Description — full width */}
             <div className="sm:col-span-2">
-              <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">
+              <label style={{ color: "var(--color-charcoal)" }} className="block text-sm font-semibold mb-1.5">
                 Description <span style={{ color: "#dc2626" }}>*</span>
               </label>
               <textarea
@@ -320,14 +320,14 @@ export default function CategoriesTab() {
                 rows={2}
                 placeholder="Short description shown on the category page"
                 className="w-full px-4 py-2.5 rounded-xl border text-sm outline-none resize-none"
-                style={{ borderColor: touched && !form.desc.trim() ? "#dc2626" : "#e8d5c4", background: "#fdf8f3", color: "#3a2416" }}
+                style={{ borderColor: touched && !form.desc.trim() ? "#dc2626" : "var(--color-border)", background: "var(--color-beige)", color: "var(--color-charcoal)" }}
               />
               <FieldError show={touched && !form.desc.trim()} text="Description is required" />
             </div>
 
             {/* Image upload — full width */}
             <div className="sm:col-span-2">
-              <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">
+              <label style={{ color: "var(--color-charcoal)" }} className="block text-sm font-semibold mb-1.5">
                 Image <span style={{ color: "#dc2626" }}>*</span>
               </label>
               <CategoryImageUploader
@@ -341,7 +341,7 @@ export default function CategoriesTab() {
 
             {/* Color */}
             <div>
-              <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">
+              <label style={{ color: "var(--color-charcoal)" }} className="block text-sm font-semibold mb-1.5">
                 Accent Color <span style={{ color: "#dc2626" }}>*</span>
               </label>
               <div className="flex items-center gap-2">
@@ -350,24 +350,24 @@ export default function CategoriesTab() {
                   value={form.color}
                   onChange={e => setField("color", e.target.value)}
                   className="w-10 h-10 rounded-lg border cursor-pointer"
-                  style={{ borderColor: "#e8d5c4", padding: "2px" }}
+                  style={{ borderColor: "var(--color-border)", padding: "2px" }}
                 />
                 <input
                   value={form.color}
                   onChange={e => setField("color", e.target.value)}
-                  placeholder="#c97d5b"
+                  placeholder="var(--color-olive)"
                   maxLength={7}
                   className="flex-1 px-4 py-2.5 rounded-xl border text-sm outline-none font-mono"
-                  style={{ borderColor: "#e8d5c4", background: "#fdf8f3", color: "#3a2416" }}
+                  style={{ borderColor: "var(--color-border)", background: "var(--color-beige)", color: "var(--color-charcoal)" }}
                 />
               </div>
             </div>
 
             {/* Tags */}
             <div>
-              <label style={{ color: "#4a3728" }} className="block text-sm font-semibold mb-1.5">
+              <label style={{ color: "var(--color-charcoal)" }} className="block text-sm font-semibold mb-1.5">
                 Tags <span style={{ color: "#dc2626" }}>*</span>
-                <span style={{ color: "#9c7a62" }} className="font-normal ml-1">(comma separated)</span>
+                <span style={{ color: "var(--color-olive)" }} className="font-normal ml-1">(comma separated)</span>
               </label>
               <input
                 value={form.tags}
@@ -375,8 +375,8 @@ export default function CategoriesTab() {
                 placeholder="Birthday, Wedding, Romance"
                 className="w-full px-4 py-2.5 rounded-xl border text-sm outline-none"
                 style={{
-                  borderColor: touched && tagsArr.length === 0 ? "#dc2626" : "#e8d5c4",
-                  background: "#fdf8f3", color: "#3a2416"
+                  borderColor: touched && tagsArr.length === 0 ? "#dc2626" : "var(--color-border)",
+                  background: "var(--color-beige)", color: "var(--color-charcoal)"
                 }}
               />
               <FieldError show={touched && tagsArr.length === 0} text="At least one tag is required" />
@@ -384,7 +384,7 @@ export default function CategoriesTab() {
                 <div className="flex flex-wrap gap-1 mt-2">
                   {tagsArr.map(t => (
                     <span key={t} className="px-2 py-0.5 rounded-full text-xs font-medium"
-                      style={{ background: "#f5ede5", color: "#c97d5b" }}>{t}</span>
+                      style={{ background: "var(--color-beige)", color: "var(--color-olive)" }}>{t}</span>
                   ))}
                 </div>
               )}
@@ -394,7 +394,7 @@ export default function CategoriesTab() {
           <div className="flex items-center gap-3 px-6 pb-5">
             <button onClick={handleSave} disabled={saving || imgUploading}
               className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-60"
-              style={{ background: "#c97d5b" }}>
+              style={{ background: "var(--color-olive)" }}>
               {imgUploading
                 ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Uploading…</>
                 : saving
@@ -404,7 +404,7 @@ export default function CategoriesTab() {
             </button>
             <button onClick={cancelEdit}
               className="px-5 py-2.5 rounded-xl text-sm font-semibold border"
-              style={{ borderColor: "#e8d5c4", color: "#7a5c4a" }}>
+              style={{ borderColor: "var(--color-border)", color: "var(--color-olive)" }}>
               Cancel
             </button>
           </div>
@@ -414,19 +414,19 @@ export default function CategoriesTab() {
       {/* ── List header ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
         <div className="relative">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#9c7a62" }} />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "var(--color-olive)" }} />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search categories…"
             className="pl-9 pr-4 py-2.5 rounded-full border text-sm outline-none w-56"
-            style={{ borderColor: "#e8d5c4", background: "white", color: "#3a2416" }}
+            style={{ borderColor: "var(--color-border)", background: "white", color: "var(--color-charcoal)" }}
           />
         </div>
         {editing === null && (
           <button onClick={openNew}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
-            style={{ background: "#c97d5b" }}>
+            style={{ background: "var(--color-olive)" }}>
             <Plus size={15} /> Add Category
           </button>
         )}
@@ -436,17 +436,17 @@ export default function CategoriesTab() {
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <div className="w-7 h-7 border-2 rounded-full animate-spin"
-            style={{ borderColor: "#c97d5b", borderTopColor: "transparent" }} />
+            style={{ borderColor: "var(--color-olive)", borderTopColor: "transparent" }} />
         </div>
       ) : error ? (
         <div className="text-center py-16">
           <p style={{ color: "#dc2626" }} className="font-semibold mb-3">{error}</p>
-          <button onClick={loadCategories} style={{ color: "#c97d5b" }} className="text-sm font-semibold hover:underline">Retry</button>
+          <button onClick={loadCategories} style={{ color: "var(--color-olive)" }} className="text-sm font-semibold hover:underline">Retry</button>
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16">
           <span className="text-5xl block mb-4">🌸</span>
-          <p style={{ color: "#9c7a62" }}>
+          <p style={{ color: "var(--color-olive)" }}>
             {search ? `No categories matching "${search}"` : "No categories yet. Add your first one!"}
           </p>
         </div>
@@ -455,7 +455,7 @@ export default function CategoriesTab() {
           {filtered.map(cat => (
             <div key={cat._id}
               className="bg-white rounded-2xl border overflow-hidden transition-shadow hover:shadow-md"
-              style={{ borderColor: "#e8d5c4" }}>
+              style={{ borderColor: "var(--color-border)" }}>
 
               {/* Image */}
               <div className="relative h-36 overflow-hidden">
@@ -479,25 +479,25 @@ export default function CategoriesTab() {
 
               {/* Body */}
               <div className="p-4">
-                <p style={{ color: "#7a5c4a" }} className="text-xs leading-relaxed mb-3 line-clamp-2">{cat.desc}</p>
+                <p style={{ color: "var(--color-olive)" }} className="text-xs leading-relaxed mb-3 line-clamp-2">{cat.desc}</p>
                 <div className="flex flex-wrap gap-1 mb-4">
                   {(cat.tags || []).slice(0, 4).map(t => (
                     <span key={t} className="flex items-center gap-0.5 text-xs px-2 py-0.5 rounded-full"
-                      style={{ background: "#f5ede5", color: "#c97d5b" }}>
+                      style={{ background: "var(--color-beige)", color: "var(--color-olive)" }}>
                       <Tag size={9} /> {t}
                     </span>
                   ))}
                   {(cat.tags || []).length > 4 && (
                     <span className="text-xs px-2 py-0.5 rounded-full"
-                      style={{ background: "#f5ede5", color: "#9c7a62" }}>
+                      style={{ background: "var(--color-beige)", color: "var(--color-olive)" }}>
                       +{cat.tags.length - 4}
                     </span>
                   )}
                 </div>
-                <div className="flex gap-2 pt-3 border-t" style={{ borderColor: "#f0e4d8" }}>
+                <div className="flex gap-2 pt-3 border-t" style={{ borderColor: "var(--color-border)" }}>
                   <button onClick={() => openEdit(cat)}
                     className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold border transition-all hover:opacity-80"
-                    style={{ borderColor: "#e8d5c4", color: "#5c4033" }}>
+                    style={{ borderColor: "var(--color-border)", color: "var(--color-charcoal)" }}>
                     <Edit2 size={13} /> Edit
                   </button>
                   <button onClick={() => setDeleteConfirm(cat._id)}
@@ -520,11 +520,11 @@ export default function CategoriesTab() {
               style={{ background: "#fee2e2" }}>
               <Trash2 size={22} style={{ color: "#dc2626" }} />
             </div>
-            <h3 style={{ fontFamily: "Georgia,serif", color: "#3a2416" }}
+            <h3 style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }}
               className="font-bold text-lg text-center mb-2">Delete Category?</h3>
-            <p style={{ color: "#7a5c4a" }} className="text-sm text-center mb-5">
+            <p style={{ color: "var(--color-olive)" }} className="text-sm text-center mb-5">
               This will permanently remove{" "}
-              <strong style={{ color: "#3a2416" }}>
+              <strong style={{ color: "var(--color-charcoal)" }}>
                 {categories.find(c => c._id === deleteConfirm)?.name}
               </strong>
               . This action cannot be undone.
@@ -532,7 +532,7 @@ export default function CategoriesTab() {
             <div className="flex gap-3">
               <button onClick={() => setDeleteConfirm(null)}
                 className="flex-1 py-2.5 rounded-xl text-sm font-semibold border"
-                style={{ borderColor: "#e8d5c4", color: "#7a5c4a" }}>
+                style={{ borderColor: "var(--color-border)", color: "var(--color-olive)" }}>
                 Cancel
               </button>
               <button onClick={() => handleDelete(deleteConfirm)} disabled={deleting}

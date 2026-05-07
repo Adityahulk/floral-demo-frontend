@@ -122,15 +122,15 @@ export default function ReviewsTab() {
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <form className="flex-1 flex items-center gap-2 px-3 py-2 rounded-xl border"
-          style={{ borderColor:"#e8d5c4", background:"white" }}
+          style={{ borderColor:"var(--color-border)", background:"white" }}
           onSubmit={e => { e.preventDefault(); setSearch(inputVal.trim()); }}>
-          <Search size={15} style={{ color:"#9c7a62" }}/>
+          <Search size={15} style={{ color:"var(--color-olive)" }}/>
           <input
             value={inputVal}
             onChange={e => { setInputVal(e.target.value); if (!e.target.value) setSearch(""); }}
             placeholder="Search by reviewer, product, or comment…"
             className="flex-1 text-sm outline-none bg-transparent"
-            style={{ color:"#3a2416" }}
+            style={{ color:"var(--color-charcoal)" }}
           />
         </form>
 
@@ -138,7 +138,7 @@ export default function ReviewsTab() {
           value={filterRating}
           onChange={e => setFilterRating(e.target.value)}
           className="px-3 py-2 rounded-xl border text-sm outline-none"
-          style={{ borderColor:"#e8d5c4", background:"white", color:"#3a2416" }}>
+          style={{ borderColor:"var(--color-border)", background:"white", color:"var(--color-charcoal)" }}>
           <option value="all">All Ratings</option>
           {[5,4,3,2,1].map(n => (
             <option key={n} value={n}>{n} Star{n !== 1 ? "s" : ""}</option>
@@ -147,14 +147,14 @@ export default function ReviewsTab() {
 
         <button onClick={load}
           className="flex items-center gap-1.5 px-4 py-2 rounded-xl border text-sm font-medium hover:opacity-70"
-          style={{ borderColor:"#e8d5c4", background:"white", color:"#7a5c4a" }}>
+          style={{ borderColor:"var(--color-border)", background:"white", color:"var(--color-olive)" }}>
           <RefreshCw size={14}/> Refresh
         </button>
       </div>
 
       {/* Summary */}
       <div className="flex items-center gap-2 mb-4">
-        <p style={{ color:"#9c7a62" }} className="text-sm">
+        <p style={{ color:"var(--color-olive)" }} className="text-sm">
           {loading ? "Loading…" : `${filtered.length} review${filtered.length !== 1 ? "s" : ""}${search || filterRating !== "all" ? " (filtered)" : ""}`}
         </p>
       </div>
@@ -170,21 +170,21 @@ export default function ReviewsTab() {
       {loading && (
         <div className="flex justify-center py-16">
           <div className="w-6 h-6 border-2 rounded-full animate-spin"
-            style={{ borderColor:"#c97d5b", borderTopColor:"transparent" }}/>
+            style={{ borderColor:"var(--color-olive)", borderTopColor:"transparent" }}/>
         </div>
       )}
 
       {/* Empty */}
       {!loading && filtered.length === 0 && (
-        <div className="text-center py-16 rounded-3xl border" style={{ borderColor:"#e8d5c4", background:"white" }}>
+        <div className="text-center py-16 rounded-3xl border" style={{ borderColor:"var(--color-border)", background:"white" }}>
           <p className="text-3xl mb-2">🌸</p>
-          <p style={{ color:"#4a3728" }} className="font-semibold">No reviews found</p>
+          <p style={{ color:"var(--color-charcoal)" }} className="font-semibold">No reviews found</p>
         </div>
       )}
 
       {/* Table */}
       {!loading && filtered.length > 0 && (
-        <div className="rounded-2xl border overflow-hidden" style={{ borderColor:"#e8d5c4" }}>
+        <div className="rounded-2xl border overflow-hidden" style={{ borderColor:"var(--color-border)" }}>
           <table className="w-full text-sm table-fixed">
             <colgroup>
               <col style={{ width:"160px" }}/>
@@ -196,14 +196,14 @@ export default function ReviewsTab() {
               <col style={{ width:"90px" }}/>
             </colgroup>
             <thead>
-              <tr style={{ background:"#fdf8f3", borderBottom:"1px solid #e8d5c4" }}>
-                <th className="text-left px-4 py-3 font-semibold" style={{ color:"#7a5c4a" }}>Reviewer</th>
-                <th className="text-left px-4 py-3 font-semibold" style={{ color:"#7a5c4a" }}>Product</th>
-                <th className="text-left px-4 py-3 font-semibold" style={{ color:"#7a5c4a" }}>Rating</th>
-                <th className="text-left px-4 py-3 font-semibold" style={{ color:"#7a5c4a" }}>Comment</th>
-                <th className="text-left px-4 py-3 font-semibold" style={{ color:"#7a5c4a" }}>Date</th>
-                <th className="text-left px-4 py-3 font-semibold" style={{ color:"#7a5c4a" }}>Verified</th>
-                <th className="text-left px-4 py-3 font-semibold" style={{ color:"#7a5c4a" }}>Actions</th>
+              <tr style={{ background:"var(--color-beige)", borderBottom:"1px solid var(--color-border)" }}>
+                <th className="text-left px-4 py-3 font-semibold" style={{ color:"var(--color-olive)" }}>Reviewer</th>
+                <th className="text-left px-4 py-3 font-semibold" style={{ color:"var(--color-olive)" }}>Product</th>
+                <th className="text-left px-4 py-3 font-semibold" style={{ color:"var(--color-olive)" }}>Rating</th>
+                <th className="text-left px-4 py-3 font-semibold" style={{ color:"var(--color-olive)" }}>Comment</th>
+                <th className="text-left px-4 py-3 font-semibold" style={{ color:"var(--color-olive)" }}>Date</th>
+                <th className="text-left px-4 py-3 font-semibold" style={{ color:"var(--color-olive)" }}>Verified</th>
+                <th className="text-left px-4 py-3 font-semibold" style={{ color:"var(--color-olive)" }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -217,7 +217,7 @@ export default function ReviewsTab() {
 
                 return (
                   <tr key={rid || i}
-                    style={{ borderBottom: i < filtered.length - 1 ? "1px solid #f5ede5" : "none", background:"white" }}
+                    style={{ borderBottom: i < filtered.length - 1 ? "1px solid var(--color-beige)" : "none", background:"white" }}
                     className="hover:bg-stone-50 transition-colors">
 
                     {/* Reviewer */}
@@ -226,38 +226,38 @@ export default function ReviewsTab() {
                         {review.user?.profileImage
                           ? <img src={review.user.profileImage} alt={name}
                               className="w-7 h-7 rounded-full object-cover shrink-0"/>
-                          : <div style={{ background:"#c97d5b" }}
+                          : <div style={{ background:"var(--color-olive)" }}
                               className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
                               {initial}
                             </div>
                         }
-                        <span style={{ color:"#3a2416" }} className="text-xs font-medium truncate">{name}</span>
+                        <span style={{ color:"var(--color-charcoal)" }} className="text-xs font-medium truncate">{name}</span>
                       </div>
                     </td>
 
                     {/* Product */}
                     <td className="px-4 py-3 overflow-hidden">
-                      <span style={{ color:"#5c4033" }} className="text-xs truncate block">{review.productName || "—"}</span>
+                      <span style={{ color:"var(--color-charcoal)" }} className="text-xs truncate block">{review.productName || "—"}</span>
                     </td>
 
                     {/* Rating */}
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5">
                         <Stars n={review.rating}/>
-                        <span style={{ color:"#7a5c4a" }} className="text-xs font-semibold">{review.rating}</span>
+                        <span style={{ color:"var(--color-olive)" }} className="text-xs font-semibold">{review.rating}</span>
                       </div>
                     </td>
 
                     {/* Comment */}
                     <td className="px-4 py-3">
-                      <p style={{ color:"#5c4033" }} className="text-xs leading-relaxed line-clamp-2">
+                      <p style={{ color:"var(--color-charcoal)" }} className="text-xs leading-relaxed line-clamp-2">
                         {review.comment || "—"}
                       </p>
                     </td>
 
                     {/* Date */}
                     <td className="px-4 py-3">
-                      <span style={{ color:"#9c7a62" }} className="text-xs whitespace-nowrap">{dateStr}</span>
+                      <span style={{ color:"var(--color-olive)" }} className="text-xs whitespace-nowrap">{dateStr}</span>
                     </td>
 
                     {/* Verified */}
@@ -265,7 +265,7 @@ export default function ReviewsTab() {
                       {review.verifiedPurchase
                         ? <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
                             style={{ background:"#dcfce7", color:"#16a34a" }}>✓ Yes</span>
-                        : <span className="text-xs" style={{ color:"#9c7a62" }}>—</span>
+                        : <span className="text-xs" style={{ color:"var(--color-olive)" }}>—</span>
                       }
                     </td>
 
@@ -274,7 +274,7 @@ export default function ReviewsTab() {
                       <div className="flex items-center gap-1.5">
                         <button onClick={() => openEdit(review)}
                           className="p-1.5 rounded-lg hover:opacity-70 transition-opacity"
-                          style={{ background:"#f5ede5", color:"#c97d5b" }}
+                          style={{ background:"var(--color-beige)", color:"var(--color-olive)" }}
                           title="Edit review">
                           <Edit2 size={13}/>
                         </button>
@@ -299,12 +299,12 @@ export default function ReviewsTab() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <form onSubmit={saveEdit}
             className="bg-white rounded-3xl p-7 shadow-xl w-full max-w-md mx-4">
-            <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg mb-5">
+            <p style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg mb-5">
               Edit Review
             </p>
 
             <div className="mb-4">
-              <label style={{ color:"#7a5c4a" }} className="text-sm font-semibold block mb-2">Rating</label>
+              <label style={{ color:"var(--color-olive)" }} className="text-sm font-semibold block mb-2">Rating</label>
               <div className="flex gap-1">
                 {[1,2,3,4,5].map(i => (
                   <button key={i} type="button" onClick={() => setEditRating(i)}>
@@ -316,13 +316,13 @@ export default function ReviewsTab() {
             </div>
 
             <div className="mb-5">
-              <label style={{ color:"#7a5c4a" }} className="text-sm font-semibold block mb-2">Comment</label>
+              <label style={{ color:"var(--color-olive)" }} className="text-sm font-semibold block mb-2">Comment</label>
               <textarea
                 value={editComment}
                 onChange={e => setEditComment(e.target.value)}
                 rows={4}
                 className="w-full rounded-2xl border px-4 py-3 text-sm outline-none resize-none"
-                style={{ borderColor:"#e8d5c4", color:"#3a2416", background:"#fdf8f3" }}
+                style={{ borderColor:"var(--color-border)", color:"var(--color-charcoal)", background:"var(--color-beige)" }}
               />
             </div>
 
@@ -335,12 +335,12 @@ export default function ReviewsTab() {
             <div className="flex gap-3">
               <button type="button" onClick={() => setEditReview(null)}
                 className="flex-1 px-4 py-2 rounded-full border text-sm font-semibold"
-                style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                style={{ borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
                 Cancel
               </button>
               <button type="submit" disabled={saving}
                 className="flex-1 px-4 py-2 rounded-full text-sm font-semibold text-white disabled:opacity-60"
-                style={{ background:"#c97d5b" }}>
+                style={{ background:"var(--color-olive)" }}>
                 {saving ? "Saving…" : "Save Changes"}
               </button>
             </div>
@@ -352,16 +352,16 @@ export default function ReviewsTab() {
       {deleteId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-3xl p-7 shadow-xl max-w-sm w-full mx-4">
-            <p style={{ fontFamily:"Georgia, serif", color:"#3a2416" }} className="font-bold text-lg mb-2">
+            <p style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg mb-2">
               Delete Review?
             </p>
-            <p style={{ color:"#7a5c4a" }} className="text-sm mb-6">
+            <p style={{ color:"var(--color-olive)" }} className="text-sm mb-6">
               This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button onClick={() => setDeleteId(null)}
                 className="flex-1 px-4 py-2 rounded-full border text-sm font-semibold"
-                style={{ borderColor:"#e8d5c4", color:"#7a5c4a" }}>
+                style={{ borderColor:"var(--color-border)", color:"var(--color-olive)" }}>
                 Cancel
               </button>
               <button onClick={confirmDelete} disabled={deleting}
