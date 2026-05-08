@@ -59,10 +59,10 @@ export function getTokenPayload() {
   }
 }
 
-export function authFetch(url, options = {}) {
+export async function authFetch(url, options = {}) {
   const token = getToken();
   const { headers, ...rest } = options;
-  return fetch(url, {
+  const res = await fetch(url, {
     ...rest,
     headers: {
       "Content-Type": "application/json",
@@ -70,4 +70,13 @@ export function authFetch(url, options = {}) {
       ...headers,
     },
   });
+
+  if (res.status === 401 && token) {
+    clearAuth();
+    if (window.location.pathname !== "/login") {
+      window.location.href = "/login";
+    }
+  }
+
+  return res;
 }
