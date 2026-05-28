@@ -39,7 +39,7 @@ export default function CartDrawer({ open, onClose }) {
               <div key={item.key} className="flex gap-3">
                 {item.img
                   ? <img src={item.img} alt={item.name} className="w-16 h-16 object-cover rounded-xl shrink-0" />
-                  : <div className="w-16 h-16 rounded-xl shrink-0 flex items-center justify-center text-2xl" style={{ background: "var(--color-beige)" }}>🌸</div>
+                  : <div className="w-16 h-16 rounded-xl shrink-0 flex items-center justify-center text-2xl" style={{ background: "var(--color-beige)" }}>⌨</div>
                 }
                 <div className="flex-1 min-w-0">
                   <p style={{ color: "var(--color-charcoal)" }} className="text-sm font-semibold truncate">{item.name}</p>

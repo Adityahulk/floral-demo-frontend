@@ -189,7 +189,7 @@ export default function OrderDetail() {
                       <div className="flex gap-3">
                         {img
                           ? <img src={img} alt={name} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-2xl shrink-0" />
-                          : <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl shrink-0 flex items-center justify-center text-2xl" style={{ background:"var(--color-beige)" }}>🌸</div>
+                          : <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl shrink-0 flex items-center justify-center text-2xl" style={{ background:"var(--color-beige)" }}>⌨</div>
                         }
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">

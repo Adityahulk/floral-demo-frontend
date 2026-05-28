@@ -226,7 +226,7 @@ function OrdersTab() {
           <span className="text-5xl block mb-4">📦</span>
           <p style={{ color:"var(--color-olive)" }} className="mb-4">You haven't placed any orders yet.</p>
           <Link to="/" style={{ background:"var(--color-olive)" }} className="text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90">
-            Start Shopping 🌸
+            Start Shopping
           </Link>
         </div>
       ) : (
@@ -246,7 +246,7 @@ function OrdersTab() {
                 style={{ borderColor:"var(--color-border)", background:"white" }}>
                 {img
                   ? <img src={img} alt={itemName} className="w-16 h-16 object-cover rounded-xl shrink-0"/>
-                  : <div className="w-16 h-16 rounded-xl shrink-0 flex items-center justify-center text-2xl" style={{ background:"var(--color-beige)" }}>🌸</div>
+                  : <div className="w-16 h-16 rounded-xl shrink-0 flex items-center justify-center text-2xl" style={{ background:"var(--color-beige)" }}>⌨</div>
                 }
                 <div className="flex-1 min-w-0">
                   <p style={{ color:"var(--color-charcoal)" }} className="font-semibold text-sm truncate">

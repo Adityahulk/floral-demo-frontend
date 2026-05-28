@@ -445,7 +445,7 @@ export default function CategoriesTab() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16">
-          <span className="text-5xl block mb-4">🌸</span>
+          <span className="text-5xl block mb-4">⌕</span>
           <p style={{ color: "var(--color-olive)" }}>
             {search ? `No categories matching "${search}"` : "No categories yet. Add your first one!"}
           </p>
@@ -465,7 +465,7 @@ export default function CategoriesTab() {
                 />
                 <div className="hidden w-full h-full items-center justify-center text-4xl"
                   style={{ background: cat.color + "22" }}>
-                  {cat.emoji || "🌸"}
+                  {cat.emoji || "💻"}
                 </div>
                 <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent)" }} />
                 <div className="absolute bottom-2 left-3 flex items-center gap-1.5">

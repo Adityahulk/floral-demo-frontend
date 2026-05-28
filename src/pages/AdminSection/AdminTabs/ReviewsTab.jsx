@@ -177,7 +177,7 @@ export default function ReviewsTab() {
       {/* Empty */}
       {!loading && filtered.length === 0 && (
         <div className="text-center py-16 rounded-3xl border" style={{ borderColor:"var(--color-border)", background:"white" }}>
-          <p className="text-3xl mb-2">🌸</p>
+          <p className="text-3xl mb-2">⌕</p>
           <p style={{ color:"var(--color-charcoal)" }} className="font-semibold">No reviews found</p>
         </div>
       )}

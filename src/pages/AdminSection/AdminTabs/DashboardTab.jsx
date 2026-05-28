@@ -225,7 +225,7 @@ export default function Dashboard() {
                       {imgSrc
                         ? <img src={imgSrc} alt={product} className="w-10 h-10 object-cover rounded-xl shrink-0" />
                         : <div className="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-lg"
-                            style={{ background:"var(--color-beige)" }}>🌸</div>
+                            style={{ background:"var(--color-beige)" }}>⌨</div>
                       }
                       <div className="flex-1 min-w-0">
                         <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold truncate">{product}</p>

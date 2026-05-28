@@ -9,23 +9,23 @@ import OurStories from "../components/OurStories";
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
 const MILESTONES = [
-  { year:"2018", title:"Founded",        desc:"Started as a small plant nursery corner in Surat." },
-  { year:"2019", title:"First Studio",   desc:"Opened our first brick-and-mortar plant studio with planters & decor." },
-  { year:"2021", title:"Online Launch",  desc:"Launched our online store with same-day plant delivery in Surat." },
-  { year:"2023", title:"Pan-India",      desc:"Expanded to 12 cities across India with 2000+ happy plant parents." },
-  { year:"2025", title:"Awards",         desc:"Won 'Best Plant & Decor Brand' at India Lifestyle Awards 2025." },
+  { year:"2018", title:"Founded",        desc:"Started as a trusted computer sales and service shop in Surat." },
+  { year:"2019", title:"First Store",    desc:"Expanded our in-store support for computers, accessories, and repairs." },
+  { year:"2021", title:"Online Launch",  desc:"Launched online discovery for products, service requests, and customer support." },
+  { year:"2023", title:"Growth",         desc:"Served 2000+ customers across home, student, and office technology needs." },
+  { year:"2025", title:"Awards",         desc:"Recognised for dependable local computer sales and service." },
 ];
 
 const VALUES = [
-  { icon:"🌿", title:"Nursery Fresh",    desc:"We source directly from trusted nurseries, so every plant arrives healthy, hydrated, and ready to thrive." },
-  { icon:"🤝", title:"Handpicked",       desc:"Every plant, planter and decor piece is handpicked and quality-checked by our team before it reaches you." },
-  { icon:"🌍", title:"Eco Conscious",    desc:"We use biodegradable packaging and support local growers and artisans across India." },
-  { icon:"💛", title:"Made With Love",   desc:"From potting to delivery, every step is done with love for plants, planters and the people who grow with them." },
+  { icon:"💻", title:"Quality First",    desc:"We recommend practical computers and accessories that match real customer needs." },
+  { icon:"🤝", title:"Helpful Guidance", desc:"Every product and service request is handled with clear advice and careful checking." },
+  { icon:"🛡️", title:"Reliable Support", desc:"We focus on dependable repair guidance, setup help, and after-sales support." },
+  { icon:"⚙️", title:"Ready To Use",     desc:"From setup to service, we help customers keep their systems running smoothly." },
 ];
 
 const STATS = [
-  { n:"2,000+", l:"Happy Plant Parents" },
-  { n:"500+",   l:"Plants & Planters" },
+  { n:"2,000+", l:"Happy Customers" },
+  { n:"500+",   l:"Products & Services" },
   { n:"12",     l:"Cities Covered" },
   { n:"4.9★",   l:"Average Rating" },
 ];
@@ -59,30 +59,30 @@ export default function AboutPage() {
             </span>
             <h1 style={{ fontFamily: "Georgia, serif", color: "var(--color-beige)" }}
               className="text-5xl xl:text-6xl font-bold leading-tight mb-6">
-              Growing With<br />
-              <span style={{ color: "var(--color-sage)" }} className="italic">Passion</span><br />
+              Built On<br />
+              <span style={{ color: "var(--color-sage)" }} className="italic">Trust</span><br />
               Since 2018
             </h1>
             <p style={{ color: "var(--color-sage)" }} className="text-lg leading-relaxed mb-8 max-w-md">
-              The Floral Studio was born from a simple belief — that a touch of green can turn any house
-              into a home. For over 7 years we've been bringing plants, planters and decor to homes across India.
+              Tech Computer was built around a simple idea: dependable technology should be easy to buy,
+              maintain, and understand. For over 7 years we've helped customers with computers, accessories, and support.
             </p>
-            <a href="/shop" style={{ background: "var(--color-olive)" }}
+            <a href="/category" style={{ background: "var(--color-olive)" }}
               className="inline-flex items-center gap-2 text-white px-7 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity">
-              Shop Our Collection <ArrowRight size={16} />
+              Explore Products <ArrowRight size={16} />
             </a>
           </div>
 
           {/* Image Collage */}
           <div className="relative h-80 lg:h-[420px]">
-            <img src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=85"
-              alt="Indoor plants" className="absolute top-0 right-0 w-56 h-64 object-cover rounded-3xl"
+            <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&q=85"
+              alt="Laptop workspace" className="absolute top-0 right-0 w-56 h-64 object-cover rounded-3xl"
               style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }} />
-            <img src="https://images.unsplash.com/photo-1545241047-6083a3684587?w=400&q=85"
-              alt="Designer planters" className="absolute bottom-0 left-0 w-48 h-52 object-cover rounded-3xl"
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&q=85"
+              alt="Computer service" className="absolute bottom-0 left-0 w-48 h-52 object-cover rounded-3xl"
               style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }} />
-            <img src="https://images.unsplash.com/photo-1502672023488-70e25813eb80?w=400&q=85"
-              alt="Succulents" className="absolute bottom-10 right-32 w-36 h-40 object-cover rounded-2xl"
+            <img src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=85"
+              alt="Computer accessories" className="absolute bottom-10 right-32 w-36 h-40 object-cover rounded-2xl"
               style={{ boxShadow: "0 10px 30px rgba(0,0,0,0.3)" }} />
           </div>
         </div>
@@ -202,9 +202,9 @@ export default function AboutPage() {
           </div>
           <div className="grid sm:grid-cols-3 gap-6">
             {[
-              { icon:<Award size={28}/>, title:"Best Plant & Decor Brand", sub:"India Lifestyle Awards 2025" },
+              { icon:<Award size={28}/>, title:"Trusted Tech Service",     sub:"Local Customer Choice 2025" },
               { icon:<Star size={28}/>,  title:"4.9★ Rated",               sub:"Google Reviews — 2,000+ ratings" },
-              { icon:<Users size={28}/>, title:"Top Plant Studio",         sub:"Surat Times Choice Award 2024" },
+              { icon:<Users size={28}/>, title:"Customer Focused",         sub:"Surat Service Recognition 2024" },
             ].map(({ icon, title, sub }) => (
               <div key={title} className="flex items-center gap-4 p-6 rounded-3xl border bg-white"
                 style={{ borderColor: "var(--color-border)" }}>
@@ -225,16 +225,16 @@ export default function AboutPage() {
       {/* ── CTA ── */}
       <section style={{ background: "var(--color-charcoal)", opacity: "0.9" }} className="py-16">
         <div className="max-w-2xl mx-auto px-4 text-center">
-          <span className="text-4xl block mb-4">🌿</span>
+          <span className="text-4xl block mb-4">💻</span>
           <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-beige)" }} className="text-4xl font-bold mb-4">
-            Let's Bring Your Home To Life
+            Let's Upgrade Your Setup
           </h2>
           <p style={{ color: "var(--color-sage)" }} className="mb-8 leading-relaxed">
-            Whether it's a housewarming, a fresh corner, an office refresh, or just because —
-            we'll help you find the perfect plants and planters for your space.
+            Whether it is a home computer, student laptop, office refresh, or repair need,
+            we'll help you find the right product or service for your setup.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <a href="/shop" style={{ background: "var(--color-olive)" }}
+            <a href="/category" style={{ background: "var(--color-olive)" }}
               className="inline-flex items-center gap-2 text-white px-7 py-3 rounded-full font-semibold hover:opacity-90">
               Shop Now <ArrowRight size={16} />
             </a>

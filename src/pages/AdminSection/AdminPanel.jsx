@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Users, BarChart2, Package, Eye,
   Star, Bell, Menu, Home, LogOut, Image, Sparkles, Crown, Mail, Megaphone, Layers, Send,
 } from "lucide-react";
-import FloralLogo from "../../assets/floral-logo.png";
+import TechComputerLogo from "../../assets/tech-computer-logo.jpeg";
 import AddProductForm from "./AddProductForm";
 import Dashboard from "./AdminTabs/DashboardTab";
 import CustomersTab from "./AdminTabs/CustomersTab";
@@ -74,7 +74,7 @@ export default function AdminPanel() {
   }
 
   const headerLabel = tab === "dashboard"
-    ? `Good Morning, ${adminName.split(" ")[0]} 🌸`
+    ? `Good Morning, ${adminName.split(" ")[0]}`
     : tab === "add-product"
       ? (editingProduct ? "Edit Product" : "Add Product")
       : NAV.find(n => n.id === tab)?.label ?? "";
@@ -110,9 +110,9 @@ export default function AdminPanel() {
           transform: sidebarOpen ? "translateX(0)" : undefined,
         }}>
         <div className="flex items-center gap-2.5 px-5 py-5 border-b" style={{ borderColor:"var(--color-charcoal)" }}>
-          <img src={FloralLogo} alt="The Floral Studio" style={{ width:"3rem", borderRadius:"50%", border:"2px solid var(--color-charcoal)" }} />
+          <img src={TechComputerLogo} alt="Tech Computer" className="w-12 h-12 object-contain bg-white" style={{ border:"2px solid var(--color-charcoal)" }} />
           <div>
-            <p style={{ fontFamily:"Georgia, serif", color:"var(--color-beige)" }} className="font-bold leading-none">The Floral Studio</p>
+            <p style={{ fontFamily:"Georgia, serif", color:"var(--color-beige)" }} className="font-bold leading-none">Tech Computer</p>
             <p style={{ color:"var(--color-olive)" }} className="text-xs">Admin Panel</p>
           </div>
         </div>

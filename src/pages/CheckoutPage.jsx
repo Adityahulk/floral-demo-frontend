@@ -70,7 +70,7 @@ function OrderSummary({ items, coupon, setCoupon, couponApplied, onApplyCoupon, 
                 <Link to={`/product/${item.product}`} className="relative shrink-0">
                   {item.img
                     ? <img src={item.img} alt={item.name} className="w-16 h-16 object-cover rounded-xl" />
-                    : <div className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl" style={{ background: "var(--color-beige)" }}>🌸</div>
+                    : <div className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl" style={{ background: "var(--color-beige)" }}>⌨</div>
                   }
                 </Link>
                 <div className="flex-1 min-w-0">
@@ -179,7 +179,7 @@ function DeliveryForm({ data, onChange, touched }) {
     <div className="space-y-5">
       <div>
         <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-2xl font-bold mb-1">Delivery Details</h2>
-        <p style={{ color: "var(--color-olive)" }} className="text-sm">Where should we deliver your flowers?</p>
+        <p style={{ color: "var(--color-olive)" }} className="text-sm">Where should we deliver your order?</p>
       </div>
 
       {field("Full Name", "fullName", "text", "Priya Sharma")}
@@ -198,7 +198,7 @@ function DeliveryForm({ data, onChange, touched }) {
           Gift Note <span style={{ color: "var(--color-olive)" }} className="font-normal">(optional)</span>
         </label>
         <textarea value={data.note} onChange={e => onChange("note", e.target.value)}
-          rows={3} placeholder="Add a personal message to go with your flowers..."
+          rows={3} placeholder="Add any delivery or setup notes..."
           className="w-full px-4 py-3 rounded-xl border text-sm outline-none resize-none"
           style={{ borderColor: "var(--color-border)", color: "var(--color-charcoal)" }}
           onFocus={e => e.target.style.borderColor = "var(--color-olive)"}
@@ -239,7 +239,7 @@ function PaymentForm({ method, setMethod }) {
     //   id: "cod",
     //   icon: "🚚",
     //   label: "Cash on Delivery",
-    //   sub: "Pay when your flowers arrive",
+    //   sub: "Pay when your order arrives",
     // },
   ];
 
@@ -288,13 +288,13 @@ function Confirmation({ orderId, form }) {
         <Check size={40} style={{ color: "#16a34a" }} />
       </div>
       <h2 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="text-3xl font-bold mb-3">
-        Order Confirmed! 🌸
+        Order Confirmed!
       </h2>
       <p style={{ color: "var(--color-olive)" }} className="mb-2">
         Your order <strong style={{ color: "var(--color-olive)" }}>#{orderId}</strong> has been placed.
       </p>
       <p style={{ color: "var(--color-olive)" }} className="text-sm mb-8">
-        We'll start preparing your flowers right away!
+        We'll start preparing your order right away!
       </p>
 
       <div className="p-6 rounded-2xl mb-8 text-left" style={{ background: "var(--color-beige)", border: "1px solid var(--color-border)" }}>
@@ -441,7 +441,7 @@ export default function CheckoutPage() {
       amount:    Math.round(amount * 100),
       currency,
       order_id:  razorpayOrderId,
-      name:      "The Floral Studio",
+      name:      "Tech Computer",
       description: "Order Payment",
       theme:     { color: COLORS.olive },
       handler: async ({ razorpay_payment_id, razorpay_order_id, razorpay_signature }) => {

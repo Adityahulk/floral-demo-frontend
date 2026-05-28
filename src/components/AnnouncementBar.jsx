@@ -4,7 +4,7 @@ import { API } from "../api/endpoints";
 
 const FALLBACK = {
   messages: [
-    { text: "🌸 Free delivery on orders above ₹999", active: true },
+    { text: "Tech Computer: reliable sales, repairs, and accessories", active: true },
   ],
   bgColor: "var(--color-charcoal)",
   textColor: "var(--color-beige)",

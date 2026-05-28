@@ -11,64 +11,64 @@ import { API } from "../../api/endpoints";
 
 const CATEGORIES = [
   {
-    id:"bouquets",
-    name:"Fresh Bouquets",
-    emoji:"💐",
+    id:"laptops",
+    name:"Laptops",
+    emoji:"💻",
     count:24,
-    desc:"Handcrafted fresh flower bouquets for every occasion",
-    img:"https://images.unsplash.com/photo-1490750967868-88df5691cc3f?w=800&q=85",
+    desc:"Reliable laptops for work, study, and everyday use",
+    img:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=85",
     color:"#e8a598",
-    tags:["Birthday","Anniversary","Romance","Congratulations"],
+    tags:["Work","Study","Home","Business"],
   },
   {
-    id:"arrangements",
-    name:"Arrangements",
-    emoji:"🌺",
+    id:"accessories",
+    name:"Accessories",
+    emoji:"⌨️",
     count:18,
-    desc:"Stunning floral arrangements for home & events",
-    img:"https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=800&q=85",
+    desc:"Keyboards, mice, cables, stands, and everyday essentials",
+    img:"https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=85",
     color:"#a8c4a2",
-    tags:["Wedding","Corporate","Table","Gift"],
+    tags:["Keyboard","Mouse","Cables","Desk"],
   },
   {
-    id:"wreaths",
-    name:"Wreaths",
-    emoji:"🌿",
+    id:"repairs",
+    name:"Repairs",
+    emoji:"⚙️",
     count:12,
-    desc:"Beautiful decorative wreaths for every season",
-    img:"https://images.unsplash.com/photo-1606041011872-596597976b25?w=800&q=85",
+    desc:"Repair and troubleshooting support for computer issues",
+    img:"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=85",
     color:"#b8c9a8",
-    tags:["Seasonal","Door","Christmas","Dried"],
+    tags:["Diagnosis","Upgrade","Backup","Support"],
   },
   {
-    id:"dried",
-    name:"Dried Flowers",
-    emoji:"🌾",
+    id:"networking",
+    name:"Networking",
+    emoji:"🌐",
     count:9,
-    desc:"Everlasting dried floral art that lasts for months",
-    img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=85",
+    desc:"Routers, cables, and office network setup essentials",
+    img:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=85",
     color:"var(--color-sage)",
-    tags:["Boho","Wall Art","Gift","Long-lasting"],
+    tags:["Router","Cable","Office","WiFi"],
   },
   {
-    id:"plants",
-    name:"Plants",
-    emoji:"🪴",
+    id:"displays",
+    name:"Displays",
+    emoji:"🖥️",
     count:15,
-    desc:"Beautiful indoor plants to brighten your space",
-    img:"https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=800&q=85",
+    desc:"Monitors and display accessories for better productivity",
+    img:"https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800&q=85",
     color:"#9ab89a",
-    tags:["Indoor","Succulents","Gift","Air Purifying"],
+    tags:["Monitor","Office","Gaming","HDMI"],
   },
   {
-    id:"gift-hampers",
-    name:"Gift Hampers",
+    id:"bundles",
+    name:"Setup Bundles",
     emoji:"🎁",
     count:8,
-    desc:"Curated flower & gift hampers for special moments",
-    img:"https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&q=85",
+    desc:"Curated computer and accessory bundles for useful setups",
+    img:"https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=85",
     color:"#c9a8c4",
-    tags:["Birthday","Wedding","Corporate","Luxury"],
+    tags:["Office","Student","Home","Value"],
   },
 ];
 
@@ -106,10 +106,10 @@ export default function CategoryPage() {
             Shop By Category
           </span>
           <h1 style={{ fontFamily:"Georgia,serif", color:"var(--color-beige)" }} className="text-4xl sm:text-5xl font-bold mb-4">
-            Find Your Perfect<br/><span style={{ color:"var(--color-sage)" }} className="italic">Bloom</span>
+            Find Your Perfect<br/><span style={{ color:"var(--color-sage)" }} className="italic">Setup</span>
           </h1>
           <p style={{ color:"var(--color-sage)" }} className="max-w-xl mx-auto text-base leading-relaxed">
-            From fresh bouquets to dried flower art — explore our full collection of handcrafted floral creations.
+            From computers and accessories to repair support, explore useful products and services for your setup.
           </p>
         </div>
       </section>
@@ -169,10 +169,10 @@ export default function CategoryPage() {
         {/* Features Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 rounded-3xl" style={{ background:"var(--color-charcoal)" }}>
           {[
-            [<Truck size={20}/>,       "Free Delivery",  "Orders above ₹999"],
-            [<RefreshCw size={20}/>,   "Easy Returns",   "7-day policy"],
-            [<ShieldCheck size={20}/>, "100% Fresh",     "Guaranteed"],
-            [<TrendingUp size={20}/>,  "Best Prices",    "Price match promise"],
+            [<Truck size={20}/>,       "Quick Delivery",  "For available products"],
+            [<RefreshCw size={20}/>,   "Service Support", "Repairs and assistance"],
+            [<ShieldCheck size={20}/>, "Checked Quality", "Trusted products"],
+            [<TrendingUp size={20}/>,  "Fair Prices",     "Practical recommendations"],
           ].map(([icon, title, sub]) => (
             <div key={title} className="flex items-center gap-3" style={{ color:"var(--color-beige)" }}>
               <div className="opacity-70 shrink-0">{icon}</div>

@@ -7,7 +7,7 @@ const FALLBACK_REVIEWS = [
   {
     _id: "fallback-1",
     rating: 5,
-    comment: "The Monstera I ordered arrived in perfect condition — packaging was thoughtful and the planter is gorgeous. My living room corner has never looked better!",
+    comment: "The laptop I ordered was set up properly, packaged carefully, and ready to use. The team explained everything clearly.",
     createdAt: "2026-04-12T10:30:00Z",
     verifiedPurchase: true,
     user: { name: "Priya Sharma" },
@@ -15,7 +15,7 @@ const FALLBACK_REVIEWS = [
   {
     _id: "fallback-2",
     rating: 5,
-    comment: "Absolutely loved the designer planters set. Quality is premium, the finish feels handcrafted, and delivery was on time. Will be ordering again for my new office.",
+    comment: "Great service for our office computers. The accessories were good quality, and the delivery was right on time.",
     createdAt: "2026-03-28T14:15:00Z",
     verifiedPurchase: true,
     user: { name: "Rohan Kapoor" },
@@ -23,7 +23,7 @@ const FALLBACK_REVIEWS = [
   {
     _id: "fallback-3",
     rating: 4,
-    comment: "The succulent trio is so cute — looks exactly like the photos. Their team helped me pick the right size for my study desk. Lovely experience overall.",
+    comment: "They helped me choose the right setup for my study desk. Practical advice, fair pricing, and a smooth experience overall.",
     createdAt: "2026-03-15T09:45:00Z",
     verifiedPurchase: true,
     user: { name: "Sneha Gupta" },

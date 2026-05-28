@@ -170,7 +170,7 @@ export default function AnalyticsTab() {
                 <div className="relative shrink-0">
                   {imgSrc
                     ? <img src={imgSrc} alt={p.name} className="w-10 h-10 object-cover rounded-xl" />
-                    : <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style={{ background:"var(--color-beige)" }}>🌸</div>
+                    : <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style={{ background:"var(--color-beige)" }}>⌨</div>
                   }
                   <span className="absolute -top-1 -left-1 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold"
                     style={{ background:"var(--color-charcoal)", fontSize:"10px" }}>#{i+1}</span>

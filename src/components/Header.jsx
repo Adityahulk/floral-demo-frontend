@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ShoppingCart, Search, Menu, X, User, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import FloralLogo from "../assets/floral-logo.png";
+import TechComputerLogo from "../assets/tech-computer-logo.jpeg";
 import { isAuthenticated, isAdmin } from "../utils/auth";
 import { api } from "../api/client";
 import { API } from "../api/endpoints";
@@ -80,7 +80,7 @@ function SearchBar({ onClose }) {
           onChange={e => { setQuery(e.target.value); setFocused(true); }}
           onFocus={() => setFocused(true)}
           type="text"
-          placeholder="Search flowers, bouquets, categories..."
+          placeholder="Search laptops, accessories, repairs, services..."
           className="w-full pl-9 pr-10 py-2.5 rounded-full border text-sm outline-none"
           style={{ borderColor:"var(--color-border)", background:"white", color:"var(--color-charcoal)" }}
         />
@@ -105,7 +105,7 @@ function SearchBar({ onClose }) {
             </div>
           ) : results.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-2xl mb-2">🌸</p>
+              <p className="text-2xl mb-2">⌕</p>
               <p className="text-sm" style={{ color:"var(--color-olive)" }}>
                 No results for "<strong style={{ color:"var(--color-charcoal)" }}>{query}</strong>"
               </p>
@@ -123,7 +123,7 @@ function SearchBar({ onClose }) {
                   <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0" style={{ background:"var(--color-beige)" }}>
                     {p.images?.[0]
                       ? <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
-                      : <div className="w-full h-full flex items-center justify-center text-lg">🌸</div>
+                      : <div className="w-full h-full flex items-center justify-center text-lg">⌨</div>
                     }
                   </div>
                   <div className="flex-1 min-w-0">
@@ -175,11 +175,12 @@ export default function Header({ cartCount, onCartOpen }) {
         <div className="flex items-center justify-between h-16">
 
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-            <img src={FloralLogo} alt="The Floral Studio"
-              style={{ width:"3rem", borderRadius:"50%", border:"2px solid var(--color-charcoal)" }} />
+            <img src={TechComputerLogo} alt="Tech Computer"
+              className="w-12 h-12 object-contain bg-white"
+              style={{ border:"2px solid var(--color-charcoal)" }} />
             <div>
-              <p style={{ fontFamily:"Georgia,serif", color:"var(--color-charcoal)" }} className="font-bold text-lg leading-none">The Floral</p>
-              <p style={{ color:"var(--color-olive)" }} className="text-xs uppercase tracking-widest">Studio</p>
+              <p style={{ fontFamily:"Georgia,serif", color:"var(--color-charcoal)" }} className="font-bold text-lg leading-none">Tech</p>
+              <p style={{ color:"var(--color-olive)" }} className="text-xs uppercase tracking-widest">Computer</p>
             </div>
           </div>
 

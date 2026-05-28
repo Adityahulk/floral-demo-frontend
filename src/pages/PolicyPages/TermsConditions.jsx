@@ -135,17 +135,17 @@ function TermsOfService() {
         icon={<FileText size={32}/>}
         tag="Legal"
         title="Terms of Service"
-        subtitle="Please read these terms carefully before using our website or placing an order. By using The Floral Studio, you agree to these terms."
+        subtitle="Please read these terms carefully before using our website or placing an order. By using Tech Computer, you agree to these terms."
         updated="28 April 2025"
       />
       <div className="max-w-4xl mx-auto px-4 py-12">
 
         <Highlight type="info"
           icon={<AlertCircle size={16}/>}
-          text="These Terms of Service constitute a legally binding agreement between you and The Floral Studio (operated by The Floral Studio Plants & Decor, Surat, Gujarat, India)." />
+          text="These Terms of Service constitute a legally binding agreement between you and Tech Computer, Surat, Gujarat, India." />
 
         <Section title="Acceptance of Terms" icon={<CheckCircle size={16}/>}>
-          <p>By accessing or using the The Floral Studio website, mobile application, or any related services, you confirm that:</p>
+          <p>By accessing or using the Tech Computer website, mobile application, or any related services, you confirm that:</p>
           <BulletList items={[
             "You are at least 18 years of age or have parental/guardian consent",
             "You have read, understood, and agreed to these Terms of Service",
@@ -156,13 +156,13 @@ function TermsOfService() {
         </Section>
 
         <Section title="Products & Orders" icon={<ShoppingCart size={16}/>}>
-          <p><strong>Product Descriptions:</strong> We make every effort to display product colours, sizes, and descriptions accurately. However, the actual appearance of plants, planters and decor items may vary slightly due to natural variation in plants, seasonal availability, handcrafted finishes, and screen colour variations.</p>
+          <p><strong>Product Descriptions:</strong> We make every effort to display product colours, sizes, and descriptions accurately. However, the actual appearance of computers, accessories, and service outcomes may vary slightly due to model availability, supplier changes, and screen colour variations.</p>
           <p className="mt-3"><strong>Order Acceptance:</strong> Placing an order constitutes an offer to purchase. We reserve the right to accept or decline any order at our discretion. Your order is confirmed only upon receipt of our confirmation email.</p>
           <p className="mt-3"><strong>Pricing:</strong> All prices are displayed in Indian Rupees (INR) and include applicable taxes. We reserve the right to change prices at any time without prior notice. The price applicable to your order is the price at the time of order confirmation.</p>
           <p className="mt-3"><strong>Availability:</strong> All orders are subject to product availability. In case a product is unavailable after order placement, we will contact you to offer a suitable alternative or a full refund.</p>
           <Highlight type="warning"
             icon={<AlertCircle size={16}/>}
-            text="Plants are living products and subject to seasonal availability. Exact size, leaf shape, and flowering cycle may vary from the product images. Our team may substitute a plant of equal or greater value while keeping the overall look and category of your order intact." />
+            text="Products and parts are subject to availability. Our team may offer a suitable alternative of equal or greater value while keeping the order purpose and category intact." />
         </Section>
 
         <Section title="Delivery Policy" icon={<Truck size={16}/>}>
@@ -174,7 +174,7 @@ function TermsOfService() {
             "Express Delivery: Within 4 hours (subject to availability and additional charge)",
           ]} />
           <p className="mt-3"><strong>Delivery Responsibility:</strong> We are responsible for your order until it is handed over to the recipient or left at the specified address per your instructions. We are not liable for delays caused by incorrect address details, recipient unavailability, or force majeure events.</p>
-          <p className="mt-3"><strong>Delivery Attempts:</strong> If delivery is unsuccessful, we will make one re-attempt. A second failed delivery may result in the order being cancelled, as live plants left in transit can suffer stress or damage and may not survive a third attempt.</p>
+          <p className="mt-3"><strong>Delivery Attempts:</strong> If delivery is unsuccessful, we will make one re-attempt. A second failed delivery may result in the order being cancelled or rescheduled after customer confirmation.</p>
         </Section>
 
         <Section title="Cancellations & Refunds" icon={<RefreshCw size={16}/>}>
@@ -188,8 +188,8 @@ function TermsOfService() {
           <p className="mt-3"><strong>Refund Eligibility:</strong> Refunds are issued in cases where:</p>
           <BulletList items={[
             "The delivered product is significantly different from what was ordered",
-            "The plant arrives damaged, severely wilted, or unhealthy on delivery",
-            "A planter or decor item arrives broken or visibly defective",
+            "The product arrives damaged or visibly defective",
+            "An accessory or component arrives broken or visibly defective",
             "The order was not delivered within the agreed timeframe",
             "A duplicate charge was made on your account",
           ]} />
@@ -208,7 +208,7 @@ function TermsOfService() {
             "Wallets (Paytm, Freecharge, Mobikwik)",
             "EMI options (available on select cards for orders above ₹2,000)",
           ]} />
-          <p className="mt-3">All online payments are processed securely via Razorpay, which is PCI-DSS Level 1 compliant. The Floral Studio does not store any card or UPI credentials.</p>
+          <p className="mt-3">All online payments are processed securely via Razorpay, which is PCI-DSS Level 1 compliant. Tech Computer does not store any card or UPI credentials.</p>
           <Highlight type="warning"
             icon={<AlertCircle size={16}/>}
             text="Cash on Delivery is currently not available. All orders must be paid online at checkout." />
@@ -228,7 +228,7 @@ function TermsOfService() {
         <Section title="Reviews & User Content" icon={<Star size={16}/>}>
           <p>By submitting a review, photo, or any other content on our platform, you:</p>
           <BulletList items={[
-            "Grant The Floral Studio a non-exclusive, royalty-free licence to use, display, and share your content",
+            "Grant Tech Computer a non-exclusive, royalty-free licence to use, display, and share your content",
             "Confirm the content is your own original work and does not infringe third-party rights",
             "Agree not to submit false, misleading, defamatory, or offensive content",
             "Understand we may remove content that violates our guidelines without notice",
@@ -236,16 +236,16 @@ function TermsOfService() {
         </Section>
 
         <Section title="Intellectual Property" icon={<Lock size={16}/>}>
-          <p>All content on the The Floral Studio website — including text, images, logos, product photographs, design elements, and software — is owned by or licensed to The Floral Studio and is protected by Indian and international copyright, trademark, and intellectual property laws.</p>
+          <p>All content on the Tech Computer website — including text, images, logos, product photographs, design elements, and software — is owned by or licensed to Tech Computer and is protected by Indian and international copyright, trademark, and intellectual property laws.</p>
           <p className="mt-3">You may not reproduce, distribute, modify, or create derivative works from any of our content without express written permission.</p>
         </Section>
 
         <Section title="Limitation of Liability" icon={<AlertCircle size={16}/>}>
-          <p>To the maximum extent permitted by applicable law, The Floral Studio shall not be liable for:</p>
+          <p>To the maximum extent permitted by applicable law, Tech Computer shall not be liable for:</p>
           <BulletList items={[
             "Indirect, incidental, or consequential damages arising from use of our services",
             "Loss of profits, revenue, or business opportunities",
-            "Damage or decline of plants caused by improper care, lighting, watering or environment after delivery",
+            "Damage caused by misuse, unauthorised repair, improper installation, or unsuitable operating environments after delivery",
             "Delays or failures in delivery caused by circumstances beyond our reasonable control",
             "Any errors or omissions in product descriptions or pricing",
           ]} />

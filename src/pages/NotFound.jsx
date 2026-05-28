@@ -20,7 +20,7 @@ export default function NotFound() {
       <Link to="/"
         className="flex items-center gap-2 px-6 py-3 rounded-full text-white text-sm font-semibold hover:opacity-90 transition-opacity"
         style={{ background:"var(--color-olive)" }}>
-        🌸 Back to Home
+        Back to Home
       </Link>
     </div>
   );

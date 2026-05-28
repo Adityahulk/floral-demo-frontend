@@ -177,7 +177,7 @@ export default function ProductsTab({ onEdit }) {
       )}
       {!loading && !error && filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <span className="text-5xl mb-3">🌸</span>
+          <span className="text-5xl mb-3">⌕</span>
           <p style={{ color:"var(--color-charcoal)" }} className="font-semibold">No products found</p>
           <p style={{ color:"var(--color-olive)" }} className="text-sm mt-1">Try a different filter or add a new product</p>
         </div>
@@ -195,7 +195,7 @@ export default function ProductsTab({ onEdit }) {
                 <div className="relative h-44 bg-gray-100 overflow-hidden shrink-0">
                   {img
                     ? <img src={img} alt={p.name} className="w-full h-full object-cover"/>
-                    : <div className="w-full h-full flex items-center justify-center text-4xl">🌸</div>
+                    : <div className="w-full h-full flex items-center justify-center text-4xl">⌨</div>
                   }
                   <span className="absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-full"
                     style={{ background: p.active ? "#dcfce7" : "#fee2e2", color: p.active ? "#16a34a" : "#dc2626" }}>
@@ -277,7 +277,7 @@ export default function ProductsTab({ onEdit }) {
                   <div className="flex items-center gap-3 min-w-0">
                     {img
                       ? <img src={img} alt={p.name} className="w-10 h-10 object-cover rounded-xl shrink-0"/>
-                      : <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg" style={{ background:"var(--color-beige)" }}>🌸</div>
+                      : <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg" style={{ background:"var(--color-beige)" }}>⌨</div>
                     }
                     <div className="min-w-0">
                       <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold truncate">{p.name}</p>

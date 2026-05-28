@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { fmt } from "../constants/StaticVariables";
 import { useNavigate } from "react-router-dom";
+import TechComputerLogo from "../assets/tech-computer-logo.jpeg";
 
 export default function Hero({ todaysPick = null }) {
   const navigate = useNavigate();
@@ -13,24 +14,24 @@ export default function Hero({ todaysPick = null }) {
               style={{ background: "var(--color-beige)", color: "var(--color-olive)" }}
               className="inline-block text-xs uppercase tracking-widest font-semibold px-3 py-1 rounded-full mb-5"
             >
-              🌿 New Green Collection 2026
+              Tech Computer 2026
             </span>
             <h1
               style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }}
               className="text-5xl xl:text-6xl font-bold leading-tight mb-5"
             >
-              A Greener Way<br />
-              <span style={{ color: "var(--color-olive)" }} className="italic">to Style</span><br />
-              Your Space
+              Smarter Tech<br />
+              <span style={{ color: "var(--color-olive)" }} className="italic">for Work</span><br />
+              and Home
             </h1>
             <p style={{ color: "var(--color-olive)" }} className="text-lg leading-relaxed mb-8 max-w-md">
-              Elegant greenery and timeless planters crafted to elevate modern living spaces.
+              Reliable computers, accessories, repairs, and support to keep your day running smoothly.
             </p>
             <div className="flex flex-wrap gap-4 mb-10">
               <button
                 onClick={() => todaysPick?.category
                   ? navigate(`/category/${todaysPick.category}/${todaysPick._id}`)
-                  : navigate("/products")
+                  : navigate("/category")
                 }
                 style={{ background: "var(--color-olive)" }}
                 className="inline-flex items-center gap-2 text-white px-7 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity"
@@ -46,7 +47,7 @@ export default function Hero({ todaysPick = null }) {
               </a>
             </div>
             <div className="flex gap-8 pt-8 border-t" style={{ borderColor: "var(--color-border)" }}>
-              {[["2K+", "Happy Customers"], ["500+", "Plants & Planters"], ["4.9★", "Avg Rating"]].map(([n, l]) => (
+              {[["2K+", "Happy Customers"], ["500+", "Products & Services"], ["4.9★", "Avg Rating"]].map(([n, l]) => (
                 <div key={l}>
                   <p style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }} className="text-2xl font-bold">{n}</p>
                   <p style={{ color: "var(--color-olive)" }} className="text-xs mt-0.5">{l}</p>
@@ -56,21 +57,21 @@ export default function Hero({ todaysPick = null }) {
           </div>
 
           <div className="order-1 lg:order-2 relative flex justify-center">
-            <div className="relative w-72 h-80 sm:w-96 sm:h-[28rem]">
-              <div style={{ background: "var(--color-beige)" }} className="absolute inset-6 rounded-full" />
+            <div className="relative w-72 sm:w-96 max-w-full">
+              <div className="rounded-3xl bg-white shadow-2xl border p-8 sm:p-10" style={{ borderColor: "var(--color-border)" }}>
               <img
-                src={todaysPick?.images?.[0] ?? "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=85"}
-                alt={todaysPick?.name ?? "Indoor plant"}
-                className="relative z-10 w-full h-full object-cover"
-                style={{ borderRadius: "40% 60% 60% 40% / 50% 40% 60% 50%" }}
+                src={TechComputerLogo}
+                alt="Tech Computer"
+                className="relative z-10 w-full aspect-square object-contain"
               />
+              </div>
               <div className="absolute top-4 -right-2 z-20 bg-white rounded-2xl shadow-xl p-3 w-36">
-                <p style={{ color: "var(--color-olive)" }} className="text-xs">Today's Pick</p>
+                <p style={{ color: "var(--color-olive)" }} className="text-xs">Featured</p>
                 <p
                   style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }}
                   className="font-bold text-sm truncate"
                 >
-                  {todaysPick ? todaysPick.name : "—"}
+                  {todaysPick ? todaysPick.name : "Tech Computer"}
                 </p>
                 <p style={{ color: "var(--color-olive)" }} className="font-semibold text-sm">
                   {todaysPick ? fmt(todaysPick.price) : ""}
@@ -81,11 +82,11 @@ export default function Hero({ todaysPick = null }) {
                   style={{ background: "var(--color-beige)" }}
                   className="w-9 h-9 rounded-full flex items-center justify-center text-lg shrink-0"
                 >
-                  🚚
+                  ⚙
                 </div>
                 <div>
-                  <p style={{ color: "var(--color-olive)" }} className="text-xs">Same Day</p>
-                  <p style={{ color: "var(--color-charcoal)" }} className="text-xs font-bold">Free Delivery</p>
+                  <p style={{ color: "var(--color-olive)" }} className="text-xs">Fast Help</p>
+                  <p style={{ color: "var(--color-charcoal)" }} className="text-xs font-bold">Sales & Repairs</p>
                 </div>
               </div>
             </div>

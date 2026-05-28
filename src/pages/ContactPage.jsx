@@ -12,13 +12,13 @@ import { Instagram, Facebook, Twitter, Youtube,} from "react-feather";
 const FAQS = [
   { q:"What are your delivery hours?",          a:"We deliver 7 days a week from 8AM to 9PM. Same-day delivery is available for orders placed before 2PM." },
   { q:"Do you deliver outside Surat?",          a:"Yes! We currently deliver to 12 cities including Delhi, Mumbai, Bengaluru, Hyderabad, Pune, and more." },
-  { q:"Can I get help choosing a plant?",       a:"Absolutely! Call or WhatsApp us with your space and lighting details. Our plant stylists will recommend something that thrives in your home." },
-  { q:"How are plants packed for delivery?",    a:"All plants are packed in eco-friendly, breathable packaging with the soil secured to keep your plant safe and healthy in transit." },
+  { q:"Can I get help choosing a computer?",    a:"Absolutely! Call or WhatsApp us with your requirements and budget. Our team will recommend a practical setup for your work or home." },
+  { q:"How are products packed for delivery?",  a:"Products are packed carefully with protective materials so they arrive safely." },
   { q:"What is your cancellation policy?",      a:"Orders can be cancelled up to 4 hours before the scheduled delivery time for a full refund." },
   { q:"Do you do bulk/event orders?",           a:"Yes, we take bulk orders for offices, housewarmings, weddings and events. Please contact us at least 7 days in advance for large orders." },
 ];
 
-const TOPICS = ["General Inquiry", "Order Issue", "Plant Care Help", "Custom Planter", "Bulk / Events", "Feedback"];
+const TOPICS = ["General Inquiry", "Order Issue", "Repair Help", "Computer Setup", "Bulk / Office", "Feedback"];
 
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 
@@ -65,7 +65,7 @@ export default function ContactPage() {
             We'd Love To<br /><span style={{ color:"var(--color-sage)" }} className="italic">Hear From You</span>
           </h1>
           <p style={{ color:"var(--color-sage)" }} className="text-lg leading-relaxed max-w-xl mx-auto">
-            Have a plant care question, a custom planter request, or just want to say hello?
+            Have a product question, repair request, setup need, or just want to say hello?
             Our team is here for you — always.
           </p>
         </div>
@@ -79,7 +79,7 @@ export default function ContactPage() {
               { icon:<Phone size={22}/>,          title:"Call Us",        value:"+91 98255 53565",         sub:"Mon–Sun, 8AM–9PM",           href:"tel:+919825553565",           color:"var(--color-olive)" },
               { icon:<MessageCircle size={22}/>,   title:"WhatsApp",      value:"+91 98255 53565",         sub:"Quick replies in minutes",    href:"https://wa.me/919825553565", color:"#22c55e" },
               { icon:<Mail size={22}/>,            title:"Email Us",      value:"thefloralstudiosurat@gmail.com",   sub:"Reply within 24 hours",       href:"mailto:thefloralstudiosurat@gmail.com",color:"#3b82f6" },
-              { icon:<MapPin size={22}/>,          title:"Visit Studio",  value:"Prime Shoppers, Vesu, Surat", sub:"Open daily 9AM–7PM",        href:"#map",                        color:"#f59e0b" },
+              { icon:<MapPin size={22}/>,          title:"Visit Store",   value:"Prime Shoppers, Vesu, Surat", sub:"Open daily 9AM–7PM",        href:"#map",                        color:"#f59e0b" },
             ].map(({ icon, title, value, sub, href, color }) => (
               <a key={title} href={href}
                 className="bg-white rounded-3xl p-6 border text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block"
@@ -110,7 +110,7 @@ export default function ContactPage() {
                   <Check size={40} style={{ color:"#16a34a" }} />
                 </div>
                 <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-3xl font-bold mb-3">
-                  Message Sent! 🌸
+                  Message Sent!
                 </h2>
                 <p style={{ color:"var(--color-olive)" }} className="mb-6">
                   Thank you, <strong>{form.name}</strong>! We'll get back to you at<br />
@@ -125,7 +125,7 @@ export default function ContactPage() {
               <>
                 <div className="mb-8">
                   <h2 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="text-2xl font-bold mb-1">Send Us a Message</h2>
-                  <p style={{ color:"var(--color-olive)" }} className="text-sm">Plant queries, order help, or styling advice — we'll respond within 24 hours.</p>
+                  <p style={{ color:"var(--color-olive)" }} className="text-sm">Product queries, repair help, or setup advice — we'll respond within 24 hours.</p>
                 </div>
 
                 <div className="space-y-5">
@@ -178,7 +178,7 @@ export default function ContactPage() {
                   <div>
                     <label style={{ color:"var(--color-charcoal)" }} className="block text-sm font-semibold mb-1.5">Your Message *</label>
                     <textarea value={form.message} onChange={e => onChange("message", e.target.value)}
-                      rows={5} placeholder="Tell us about your space, the plant you're after, or how we can help..."
+                      rows={5} placeholder="Tell us about the product, repair, setup, or support you need..."
                       className={inputCls + " resize-none"} style={inputStyle}
                       onFocus={e => e.target.style.borderColor="var(--color-olive)"}
                       onBlur={e  => e.target.style.borderColor="var(--color-border)"} />
@@ -233,10 +233,10 @@ export default function ContactPage() {
               <h3 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg mb-4">Follow Us</h3>
               <div className="space-y-3">
                 {[
-                  { icon:<Instagram size={18}/>, label:"@thefloralstudio_surat", handle:"Instagram", color:"#e1306c", href:"https://www.instagram.com/thefloralstudio_surat/" },
-                  { icon:<Facebook  size={18}/>, label:"The Floral Studio",      handle:"Facebook",  color:"#1877f2", href:"https://www.facebook.com/61564869235012/photos/" },
-                  { icon:<Twitter   size={18}/>, label:"@thefloralstudio",       handle:"Twitter",   color:"#1da1f2", href:"#" },
-                  { icon:<Youtube   size={18}/>, label:"The Floral Studio",      handle:"YouTube",   color:"#ff0000", href:"#" },
+                  { icon:<Instagram size={18}/>, label:"Tech Computer", handle:"Instagram", color:"#e1306c", href:"https://www.instagram.com/thefloralstudio_surat/" },
+                  { icon:<Facebook  size={18}/>, label:"Tech Computer",          handle:"Facebook",  color:"#1877f2", href:"https://www.facebook.com/61564869235012/photos/" },
+                  { icon:<Twitter   size={18}/>, label:"@techcomputer",          handle:"Twitter",   color:"#1da1f2", href:"#" },
+                  { icon:<Youtube   size={18}/>, label:"Tech Computer",          handle:"YouTube",   color:"#ff0000", href:"#" },
                 ].map(({ icon, label, handle, color, href }) => (
                   <a key={handle} href={href}
                     className="flex items-center gap-3 p-3 rounded-2xl hover:opacity-80 transition-opacity"
@@ -282,7 +282,7 @@ export default function ContactPage() {
                 <div style={{ background:"var(--color-beige)" }} className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <MapPin size={28} style={{ color:"var(--color-olive)" }} />
                 </div>
-                <h3 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg mb-1">The Floral Studio</h3>
+                <h3 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg mb-1">Tech Computer</h3>
                 <p style={{ color:"var(--color-olive)" }} className="text-sm mb-4">105-106 Prime Shoppers, Vesu,<br />Surat, Gujarat 395007</p>
                 <a href="https://share.google/utsewEmGKYtdoPiAy" target="_blank" rel="noreferrer"
                   style={{ background:"var(--color-olive)" }} className="text-white text-sm font-semibold px-5 py-2 rounded-full hover:opacity-90 inline-block">

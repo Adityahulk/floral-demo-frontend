@@ -232,7 +232,7 @@ export default function AdminOrdersTab() {
                                   {img
                                     ? <img src={img} alt={name} className="w-12 h-12 object-cover rounded-lg shrink-0"/>
                                     : <div className="w-12 h-12 rounded-lg shrink-0 flex items-center justify-center text-xl"
-                                        style={{ background:"var(--color-beige)" }}>🌸</div>
+                                        style={{ background:"var(--color-beige)" }}>⌨</div>
                                   }
                                   <div className="flex-1 min-w-0">
                                     <p style={{ color:"var(--color-charcoal)" }} className="text-sm font-semibold truncate">{name}</p>

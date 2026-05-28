@@ -90,7 +90,7 @@ function OrderCard({ order, onCancel }) {
               <div key={i} className="flex items-center gap-4">
                 {img
                   ? <img src={img} alt={name} className="w-16 h-16 object-cover rounded-2xl shrink-0" />
-                  : <div className="w-16 h-16 rounded-2xl shrink-0 flex items-center justify-center text-2xl" style={{ background:"var(--color-beige)" }}>🌸</div>
+                  : <div className="w-16 h-16 rounded-2xl shrink-0 flex items-center justify-center text-2xl" style={{ background:"var(--color-beige)" }}>⌨</div>
                 }
                 <div className="flex-1 min-w-0">
                   <p style={{ color:"var(--color-charcoal)" }} className="font-semibold text-sm truncate">{name}</p>
@@ -255,7 +255,7 @@ export default function OrdersPage() {
             </p>
             <a href="/" style={{ background:"var(--color-olive)" }}
               className="inline-flex items-center gap-2 text-white px-6 py-3 rounded-full font-semibold hover:opacity-90">
-              Start Shopping 🌸
+              Start Shopping
             </a>
           </div>
         ) : (

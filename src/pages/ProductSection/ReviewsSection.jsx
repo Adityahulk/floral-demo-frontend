@@ -349,7 +349,7 @@ export default function ReviewsSection({ productId }) {
       {/* Empty state */}
       {!loading && reviews.length === 0 && (
         <div className="text-center py-14 rounded-3xl border" style={{ borderColor:"var(--color-border)", background:"white" }}>
-          <p className="text-4xl mb-3">🌸</p>
+          <p className="text-4xl mb-3">⌕</p>
           <p style={{ color:"var(--color-charcoal)" }} className="font-semibold">No reviews yet</p>
           <p style={{ color:"var(--color-olive)" }} className="text-sm mt-1">Be the first to share your experience!</p>
         </div>

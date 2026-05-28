@@ -61,9 +61,9 @@ export default function ProductDetail() {
   }
 
   const faqs = [
-    { q:"How long do the flowers last?",      a:"With proper care (fresh water daily, away from direct sunlight), our bouquets last 7–10 days." },
+    { q:"How do I choose the right product?", a:"Share your budget and usage needs with us. We can help recommend a practical option for work, study, or home." },
     { q:"Can I schedule a specific delivery time?", a:"Yes! You can choose a preferred delivery window at checkout — morning, afternoon, or evening." },
-    { q:"Is gift wrapping included?",          a:"All bouquets come beautifully wrapped. You can also add a premium gift box at checkout." },
+    { q:"Is setup support included?",          a:"Setup support depends on the product or service. Contact us before checkout if you need help configuring your system." },
   ];
 
   const getProductData = () => {
@@ -230,9 +230,9 @@ export default function ProductDetail() {
             {/* Trust Badges */}
             <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl" style={{ background: "var(--color-beige)" }}>
               {[
-                [<Truck size={18}/>, "Free Delivery", "Above ₹999"],
-                [<RefreshCw size={18}/>, "Easy Returns", "7-day policy"],
-                [<ShieldCheck size={18}/>, "100% Fresh", "Guaranteed"],
+                [<Truck size={18}/>, "Quick Delivery", "Available products"],
+                [<RefreshCw size={18}/>, "Service Support", "Repairs and help"],
+                [<ShieldCheck size={18}/>, "Checked Quality", "Trusted products"],
               ].map(([icon, title, sub]) => (
                 <div key={title} className="flex flex-col items-center text-center gap-1">
                   <div style={{ color: "var(--color-olive)" }}>{icon}</div>
@@ -264,7 +264,7 @@ export default function ProductDetail() {
             <ul className="space-y-3 text-sm" style={{ color: "var(--color-charcoal)" }}>
               {product?.care_instructions?.map(tip => (
                 <li key={tip} className="flex items-start gap-3">
-                  <span style={{ color: "var(--color-olive)" }}>🌸</span> {tip}
+                  <span style={{ color: "var(--color-olive)" }}>•</span> {tip}
                 </li>
               ))}
             </ul>

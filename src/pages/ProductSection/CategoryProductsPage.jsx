@@ -315,7 +315,7 @@ export default function CategoryProductsPage() {
         {/* Products */}
         {filtered.length === 0 ? (
           <div className="text-center py-20">
-            <span className="text-5xl block mb-4">🌸</span>
+            <span className="text-5xl block mb-4">⌕</span>
             <h3 style={{ fontFamily:"Georgia,serif", color:"var(--color-charcoal)" }} className="text-xl font-bold mb-2">No products found</h3>
             <p style={{ color:"var(--color-olive)" }} className="mb-6">Try adjusting your filters or search term</p>
             <button onClick={() => { setSearch(""); setPriceRange(null); setBadgeFilter([]); setRatingFilter(null); setTagFilter(null); }}

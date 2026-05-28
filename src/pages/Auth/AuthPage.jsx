@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
 import { setAuth } from "../../utils/auth";
 import { BASE } from "../../api/client";
-import FloralLogo from "../../assets/floral-logo.png";
+import TechComputerLogo from "../../assets/tech-computer-logo.jpeg";
 
 const API = `${BASE}/api/auth`;
 
@@ -302,22 +302,22 @@ export default function AuthPage() {
 
         <div className="relative z-10 text-center">
           <div className="flex justify-center mb-6">
-            <img src={FloralLogo} alt="The Floral Studio"
-              className="w-24 h-24 rounded-full border-4"
+            <img src={TechComputerLogo} alt="Tech Computer"
+              className="w-28 h-28 object-contain bg-white border-4"
               style={{ borderColor: "rgba(95,111,82,0.5)" }} />
           </div>
           <h1 style={{ fontFamily: "Georgia, serif", color: "var(--color-beige)" }}
-            className="text-4xl font-bold mb-3">The Floral Studio</h1>
+            className="text-4xl font-bold mb-3">Tech Computer</h1>
           <p style={{ color: "var(--color-sage)" }} className="text-lg mb-8">
-            Where every corner finds its green
+            Computers, accessories, repairs, and support
           </p>
 
           <div className="space-y-4">
             {[
-              "🌿 Healthy nursery-fresh plants",
-              "🚚 Same-day delivery available",
-              "🪴 Handpicked planters & decor",
-              "🎁 Perfect for every space",
+              "💻 Quality computers and accessories",
+              "⚙️ Reliable repair support",
+              "🛡️ Practical service guidance",
+              "🎁 Solutions for work and home",
             ].map(t => (
               <div key={t} className="flex items-center gap-3 text-left">
                 <span className="text-lg">{t.slice(0, 2)}</span>
@@ -334,9 +334,9 @@ export default function AuthPage() {
 
           {/* Mobile logo */}
           <div className="flex items-center gap-3 mb-8 lg:hidden">
-            <img src={FloralLogo} alt="" className="w-10 h-10 rounded-full" />
+            <img src={TechComputerLogo} alt="" className="w-12 h-12 object-contain bg-white" />
             <span style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="font-bold text-xl">
-              The Floral Studio
+              Tech Computer
             </span>
           </div>
 

@@ -11,10 +11,10 @@ import { API } from "../api/endpoints";
 
 function FeaturesBar() {
   const items = [
-    { icon: <Truck size={20} />, title: "Free Delivery", sub: "On orders above ₹999" },
-    { icon: <RefreshCw size={20} />, title: "Easy Returns", sub: "7-day return policy" },
-    { icon: <ShieldCheck size={20} />, title: "Healthy & Fresh", sub: "Nursery-grown plants" },
-    { icon: <Gift size={20} />, title: "Gift Wrapping", sub: "Complimentary service" },
+    { icon: <Truck size={20} />, title: "Quick Delivery", sub: "For available products" },
+    { icon: <RefreshCw size={20} />, title: "Service Support", sub: "Repairs and assistance" },
+    { icon: <ShieldCheck size={20} />, title: "Trusted Quality", sub: "Checked products" },
+    { icon: <Gift size={20} />, title: "Accessories", sub: "Essentials for every setup" },
   ];
   return (
     <section style={{ background: "var(--color-charcoal)" }} className="py-5">
@@ -39,11 +39,11 @@ function Newsletter() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [config, setConfig] = useState({
-    emoji:       "🌿",
-    heading:     "Stay Rooted With Us",
-    subheading:  "Subscribe for seasonal offers, plant care tips & green-living inspiration. Get 10% off your first order.",
+    emoji:       "💻",
+    heading:     "Stay Updated With Us",
+    subheading:  "Subscribe for product updates, service tips, and practical tech offers. Get notified about new arrivals.",
     buttonText:  "Subscribe Now",
-    successText: "🌱 Thank you! Check your inbox for a special welcome gift.",
+    successText: "Thank you! Check your inbox for the latest Tech Computer updates.",
     enabled:     true,
   });
 

@@ -8,8 +8,8 @@ export default function Categories({ categories = [], loading = false }) {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-10">
             <p style={{ color: "var(--color-olive)" }} className="text-xs uppercase tracking-widest font-semibold mb-2">Shop By Category</p>
-            <h2 style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }} className="text-3xl sm:text-4xl font-bold mb-3">Bring Nature Home</h2>
-            <p style={{ color: "var(--color-olive)" }} className="text-sm max-w-xl mx-auto">Discover indoor plants, designer planters, and green decor curated to refresh your home and workspace.</p>
+            <h2 style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }} className="text-3xl sm:text-4xl font-bold mb-3">Find the Right Tech</h2>
+            <p style={{ color: "var(--color-olive)" }} className="text-sm max-w-xl mx-auto">Browse computers, accessories, services, and setup essentials for your home or workspace.</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {Array(5).fill(null).map((_, i) => (
@@ -28,8 +28,8 @@ export default function Categories({ categories = [], loading = false }) {
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-10">
           <p style={{ color: "var(--color-olive)" }} className="text-xs uppercase tracking-widest font-semibold mb-2">Shop By Category</p>
-          <h2 style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }} className="text-3xl sm:text-4xl font-bold mb-3">Bring Nature Home</h2>
-          <p style={{ color: "var(--color-olive)" }} className="text-sm max-w-xl mx-auto">Discover indoor plants, designer planters, and green decor curated to refresh your home and workspace.</p>
+          <h2 style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }} className="text-3xl sm:text-4xl font-bold mb-3">Find the Right Tech</h2>
+          <p style={{ color: "var(--color-olive)" }} className="text-sm max-w-xl mx-auto">Browse computers, accessories, services, and setup essentials for your home or workspace.</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {categories.map(({ _id, name, img }) => (

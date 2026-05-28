@@ -135,14 +135,14 @@ function PrivacyPolicyComponent() {
         icon={<Shield size={32}/>}
         tag="Legal"
         title="Privacy Policy"
-        subtitle="We care deeply about your privacy. This policy explains how The Floral Studio collects, uses, and protects your personal information."
+        subtitle="We care deeply about your privacy. This policy explains how Tech Computer collects, uses, and protects your personal information."
         updated="28 April 2025"
       />
       <div className="max-w-4xl mx-auto px-4 py-12">
 
         <Highlight type="success"
           icon={<CheckCircle size={16}/>}
-          text="The Floral Studio does not sell your personal data to third parties. Your information is used solely to improve your shopping experience with us." />
+          text="Tech Computer does not sell your personal data to third parties. Your information is used solely to improve your shopping experience with us." />
 
         <Section title="Information We Collect" icon={<Database size={16}/>}>
           <p>We collect information you provide directly to us when you create an account, place an order, or contact our support team. This includes:</p>
@@ -235,7 +235,7 @@ function PrivacyPolicyComponent() {
         </Section>
 
         <Section title="Children's Privacy" icon={<Shield size={16}/>}>
-          <p>The Floral Studio is not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, please contact us immediately and we will delete it promptly.</p>
+          <p>Tech Computer is not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, please contact us immediately and we will delete it promptly.</p>
         </Section>
 
         <Section title="Changes to This Policy" icon={<RefreshCw size={16}/>}>

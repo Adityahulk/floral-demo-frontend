@@ -1,28 +1,28 @@
 export const PRODUCTS = [
-  { id:1,  name:"Rose Bliss Bouquet",        price:1299, original:1599, rating:4.8, reviews:124, badge:"Sale",    img:"https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=600&q=80", category:"Bouquets" },
-  { id:2,  name:"Pastel Dream Arrangement",  price:1899, original:null, rating:4.9, reviews:87,  badge:"New",     img:"https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=600&q=80", category:"Arrangements" },
-  { id:3,  name:"Wildflower Wreath",         price:999,  original:1299, rating:4.7, reviews:56,  badge:"Sale",    img:"https://images.unsplash.com/photo-1491013516836-7db643ee125a?w=600&q=80", category:"Wreaths" },
-  { id:4,  name:"Sunflower Garden Bundle",   price:1499, original:null, rating:4.6, reviews:203, badge:"Popular", img:"https://images.unsplash.com/photo-1543218024-57a70143c369?w=600&q=80", category:"Bouquets" },
-  { id:5,  name:"Lavender & Eucalyptus",     price:849,  original:999,  rating:4.9, reviews:91,  badge:"New",     img:"https://images.unsplash.com/photo-1471086569966-db3eebc25a59?w=600&q=80", category:"Dried" },
-  { id:6,  name:"Orchid Elegance Set",       price:2199, original:null, rating:5.0, reviews:44,  badge:"Premium", img:"https://images.unsplash.com/photo-1566873535350-96e04c74fb1a?w=600&q=80", category:"Arrangements" },
-  { id:7,  name:"Dahlia Delight Box",        price:1699, original:1999, rating:4.8, reviews:78,  badge:"Sale",    img:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80", category:"Bouquets" },
-  { id:8,  name:"Mixed Tulip Bunch",         price:749,  original:null, rating:4.5, reviews:162, badge:"Popular", img:"https://images.unsplash.com/photo-1520763185298-1b434c919102?w=600&q=80", category:"Bouquets" },
+  { id:1,  name:"Business Laptop Setup",     price:42999, original:45999, rating:4.8, reviews:124, badge:"Sale",    img:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&q=80", category:"Laptops" },
+  { id:2,  name:"Desktop Service Package",   price:1899,  original:null,  rating:4.9, reviews:87,  badge:"New",     img:"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&q=80", category:"Services" },
+  { id:3,  name:"Keyboard & Mouse Combo",    price:999,   original:1299,  rating:4.7, reviews:56,  badge:"Sale",    img:"https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80", category:"Accessories" },
+  { id:4,  name:"Office Networking Kit",     price:1499,  original:null,  rating:4.6, reviews:203, badge:"Popular", img:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&q=80", category:"Networking" },
+  { id:5,  name:"Laptop Cooling Stand",      price:849,   original:999,   rating:4.9, reviews:91,  badge:"New",     img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80", category:"Accessories" },
+  { id:6,  name:"Premium Monitor Setup",     price:21999, original:null,  rating:5.0, reviews:44,  badge:"Premium", img:"https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=600&q=80", category:"Displays" },
+  { id:7,  name:"Data Backup Support",       price:1699,  original:1999,  rating:4.8, reviews:78,  badge:"Sale",    img:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&q=80", category:"Services" },
+  { id:8,  name:"USB-C Essentials Pack",     price:749,   original:null,  rating:4.5, reviews:162, badge:"Popular", img:"https://images.unsplash.com/photo-1625842268584-8f3296236761?w=600&q=80", category:"Accessories" },
 ];
 
 export const CATEGORIES = [
-  { name:"Fresh Bouquets", img:"https://images.unsplash.com/photo-1490750967868-88df5691cc3f?w=500&q=80", count:24 },
-  { name:"Wreaths",        img:"https://images.unsplash.com/photo-1606041011872-596597976b25?w=500&q=80", count:12 },
-  { name:"Arrangements",  img:"https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=500&q=80", count:18 },
-  { name:"Dried Flowers", img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80", count:9  },
-  { name:"Plants",        img:"https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=500&q=80", count:15 },
+  { name:"Laptops",     img:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&q=80", count:24 },
+  { name:"Accessories", img:"https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&q=80", count:12 },
+  { name:"Services",    img:"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&q=80", count:18 },
+  { name:"Networking",  img:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500&q=80", count:9  },
+  { name:"Displays",    img:"https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&q=80", count:15 },
 ];
 
 export const TESTIMONIALS = [
-  { name:"Priya Sharma", rating:5, text:"Absolutely stunning arrangement! The flowers were fresh and lasted over two weeks. Will definitely order again.", avatar:"PS" },
-  { name:"Rahul Verma",  rating:5, text:"Ordered a bouquet for my wife's birthday. She was thrilled! Beautiful packaging and on-time delivery.", avatar:"RV" },
-  { name:"Ananya Singh", rating:5, text:"The dried flower wreath I got is breathtaking. It's been months and it still looks perfect. Such great quality!", avatar:"AS" },
+  { name:"Priya Sharma", rating:5, text:"Helpful guidance, quick setup, and dependable computer service. Will definitely order again.", avatar:"PS" },
+  { name:"Rahul Verma",  rating:5, text:"Ordered accessories for my home office. Great packaging and on-time delivery.", avatar:"RV" },
+  { name:"Ananya Singh", rating:5, text:"The repair support was clear, fast, and fairly priced. Such great service!", avatar:"AS" },
 ];
 
 export const BADGE_STYLES = { Sale:"bg-rose-500 text-white", New:"bg-emerald-500 text-white", Popular:"bg-violet-500 text-white", Premium:"bg-amber-500 text-white" };
-export const TABS = ["All","Bouquets","Arrangements","Wreaths","Dried"];
+export const TABS = ["All","Laptops","Accessories","Services","Networking"];
 export const fmt = n => "₹" + n.toLocaleString("en-IN");

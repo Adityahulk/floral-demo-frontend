@@ -1,7 +1,7 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Instagram, Facebook, Twitter, Youtube } from "react-feather";
 import { Link } from "react-router-dom";
-import FloralLogo from "../assets/floral-logo.png";
+import TechComputerLogo from "../assets/tech-computer-logo.jpeg";
 
 const QUICK_LINKS = [
   { label: "Home",        to: "/" },
@@ -31,11 +31,11 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link to="/" className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity">
-              <img src={FloralLogo} alt="The Floral Studio" style={{ width: "2rem", borderRadius: "50%" }} />
-              <span style={{ fontFamily: "Georgia,serif" }} className="font-bold text-lg">The Floral Studio</span>
+              <img src={TechComputerLogo} alt="Tech Computer" className="w-12 h-12 object-contain bg-white" />
+              <span style={{ fontFamily: "Georgia,serif" }} className="font-bold text-lg">Tech Computer</span>
             </Link>
             <p style={{ color: "var(--color-sage)" }} className="text-sm leading-relaxed mb-5">
-              Bringing nature home, one plant at a time.
+              Computer sales, repairs, accessories, and support for homes and businesses.
             </p>
             <div className="flex gap-3">
               {SOCIAL.map(({ Icon, href }) => (
@@ -102,7 +102,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t pt-6 flex flex-col sm:flex-row justify-between gap-3 text-xs"
           style={{ borderColor: "var(--color-charcoal)", color: "var(--color-olive)" }}>
-          <p>© 2019 The Floral Studio. All rights reserved.</p>
+          <p>© 2019 Tech Computer. All rights reserved.</p>
           <div className="flex gap-4">
             <Link to="/privacy-policy" className="hover:opacity-70 transition-opacity">Privacy Policy</Link>
             <Link to="/terms-conditions" className="hover:opacity-70 transition-opacity">Terms of Service</Link>
