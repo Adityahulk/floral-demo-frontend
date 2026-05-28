@@ -1,15 +1,23 @@
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import vid1 from "../assets/videos/Video-618.mp4";
-import vid2 from "../assets/videos/Video-843.mp4";
-import vid3 from "../assets/videos/Video-97.mp4";
-import vid4 from "../assets/videos/Video-787.mp4";
-import vid5 from "../assets/videos/Video-599.mp4";
-import vid6 from "../assets/videos/Video-452.mp4";
-import vid7 from "../assets/videos/Video-795.mp4";
+import storyLogo from "../assets/stories/tech-story-01-logo.gif";
+import storyLaptop from "../assets/stories/tech-story-02-laptop.gif";
+import storyRepair from "../assets/stories/tech-story-03-repair.gif";
+import storyAccessories from "../assets/stories/tech-story-04-accessories.gif";
+import storyNetwork from "../assets/stories/tech-story-05-network.gif";
+import storyCare from "../assets/stories/tech-story-06-security.gif";
+import storyVisit from "../assets/stories/tech-story-07-visit.gif";
 
-const STORIES = [vid1, vid2, vid3, vid4, vid5, vid6, vid7];
+const STORIES = [
+  { src: storyLogo, alt: "Tech Computer sales, repairs, and accessories story" },
+  { src: storyLaptop, alt: "Laptop setup service story" },
+  { src: storyRepair, alt: "Computer repair support story" },
+  { src: storyAccessories, alt: "Computer accessories story" },
+  { src: storyNetwork, alt: "Networking setup story" },
+  { src: storyCare, alt: "Data care and backup support story" },
+  { src: storyVisit, alt: "Visit Tech Computer store story" },
+];
 
 export default function OurStories() {
   const scrollRef = useRef(null);
@@ -27,10 +35,10 @@ export default function OurStories() {
       <div className="w-full px-4">
         <div className="text-center mb-10">
           <p style={{ color: "var(--color-olive)" }} className="text-xs uppercase tracking-widest font-semibold mb-2">
-            From Our Instagram
+            Tech Computer Updates
           </p>
           <h2 style={{ fontFamily: "Georgia,serif", color: "var(--color-charcoal)" }} className="text-3xl sm:text-4xl font-bold">
-            Our Stories
+            Service Stories
           </h2>
         </div>
 
@@ -48,26 +56,18 @@ export default function OurStories() {
             ref={scrollRef}
             className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 pb-2 no-scrollbar"
           >
-            {STORIES.map((src, i) => (
+            {STORIES.map(({ src, alt }, i) => (
               <div
                 key={i}
                 data-story-card
                 className="snap-start shrink-0 relative overflow-hidden rounded-2xl border bg-black"
                 style={{ width: "260px", height: "462px", borderColor: "var(--color-border)" }}
               >
-                <video
+                <img
                   src={src}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  onClick={(e) => {
-                    const v = e.currentTarget;
-                    if (v.paused) v.play();
-                    else v.pause();
-                  }}
-                  className="w-full h-full object-cover cursor-pointer"
+                  alt={alt}
+                  loading="lazy"
+                  className="w-full h-full object-cover"
                 />
               </div>
             ))}
