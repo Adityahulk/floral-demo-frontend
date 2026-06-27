@@ -79,8 +79,8 @@ export default function ContactPage() {
             {[
               { icon:<Phone size={22}/>,          title:"Call Us",        value:BUSINESS_INFO.phoneDisplay, sub:"Mon-Sun, 8AM-9PM",           href:BUSINESS_INFO.phoneHref,      color:"var(--color-olive)" },
               { icon:<MessageCircle size={22}/>,   title:"WhatsApp",      value:BUSINESS_INFO.phoneDisplay, sub:"Quick replies in minutes",    href:BUSINESS_INFO.whatsappHref,   color:"#22c55e" },
-              { icon:<Mail size={22}/>,            title:"Email Us",      value:"thefloralstudiosurat@gmail.com",   sub:"Reply within 24 hours",       href:"mailto:thefloralstudiosurat@gmail.com",color:"#3b82f6" },
-              { icon:<MapPin size={22}/>,          title:"Visit Store",   value:BUSINESS_INFO.addressShort, sub:"Open daily 9AM-7PM",          href:BUSINESS_INFO.mapsHref,       color:"#f59e0b" },
+              { icon:<Mail size={22}/>,            title:"Email Us",      value:BUSINESS_INFO.email,   sub:"Reply within 24 hours",       href:BUSINESS_INFO.emailHref, color:"#3b82f6" },
+              { icon:<MapPin size={22}/>,          title:"Visit Store",   value:BUSINESS_INFO.address, sub:"Open daily 9AM-7PM",          href:BUSINESS_INFO.mapsHref, color:"#f59e0b" },
             ].map(({ icon, title, value, sub, href, color }) => (
               <a key={title} href={href}
                 className="bg-white rounded-3xl p-6 border text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block"
@@ -234,8 +234,8 @@ export default function ContactPage() {
               <h3 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg mb-4">Follow Us</h3>
               <div className="space-y-3">
                 {[
-                  { icon:<Instagram size={18}/>, label:"Tech Computer", handle:"Instagram", color:"#e1306c", href:"https://www.instagram.com/thefloralstudio_surat/" },
-                  { icon:<Facebook  size={18}/>, label:"Tech Computer",          handle:"Facebook",  color:"#1877f2", href:"https://www.facebook.com/61564869235012/photos/" },
+                  { icon:<Instagram size={18}/>, label:"Tech Computer", handle:"Instagram", color:"#e1306c", href:BUSINESS_INFO.instagramHref },
+                  { icon:<Facebook  size={18}/>, label:"Tech Computer",          handle:"Facebook",  color:"#1877f2", href:BUSINESS_INFO.facebookHref },
                   { icon:<Twitter   size={18}/>, label:"@techcomputer",          handle:"Twitter",   color:"#1da1f2", href:"#" },
                   { icon:<Youtube   size={18}/>, label:"Tech Computer",          handle:"YouTube",   color:"#ff0000", href:"#" },
                 ].map(({ icon, label, handle, color, href }) => (

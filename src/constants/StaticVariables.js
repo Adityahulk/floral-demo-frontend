@@ -31,6 +31,10 @@ export const BUSINESS_INFO = {
   address: "Shop NoG, 40, Microtechnique IT, Star world complex, Green City Rd, Pal Gam, Surat, Gujarat 394510",
   addressShort: "Star world complex, Pal Gam, Surat",
   mapsHref: "https://maps.app.goo.gl/4oUpLrayBKzFnySM7?g_st=ac",
+  email: "info@microtehcniqueit.com",
+  emailHref: "mailto:info@microtehcniqueit.com",
+  instagramHref: "https://www.instagram.com/techcomputer_india/",
+  facebookHref: "https://www.facebook.com/",
 };
 
 export const BADGE_STYLES = { Sale:"bg-rose-500 text-white", New:"bg-emerald-500 text-white", Popular:"bg-violet-500 text-white", Premium:"bg-amber-500 text-white" };

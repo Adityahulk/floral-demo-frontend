@@ -17,8 +17,8 @@ const SUPPORT_LINKS = [
 ];
 
 const SOCIAL = [
-  { Icon: Instagram, href: "https://www.instagram.com/thefloralstudio_surat/" },
-  { Icon: Facebook,  href: "https://www.facebook.com/61564869235012/photos/"  },
+  { Icon: Instagram, href: BUSINESS_INFO.instagramHref },
+  { Icon: Facebook,  href: BUSINESS_INFO.facebookHref  },
   { Icon: Twitter,   href: "https://twitter.com"   },
   { Icon: Youtube,   href: "https://youtube.com"   },
 ];
@@ -95,7 +95,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={14} style={{ color: "var(--color-olive)" }} />
-                <a href="mailto:thefloralstudiosurat@gmail.com" className="hover:opacity-70 transition-opacity">thefloralstudiosurat@gmail.com</a>
+                <a href={BUSINESS_INFO.emailHref} className="hover:opacity-70 transition-opacity">{BUSINESS_INFO.email}</a>
               </li>
             </ul>
           </div>

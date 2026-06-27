@@ -102,13 +102,13 @@ function ContactCard() {
         Our team is happy to help clarify anything in this policy.
       </p>
       <div className="grid sm:grid-cols-2 gap-4">
-        <a href="mailto:thefloralstudiosurat@gmail.com"
+        <a href={BUSINESS_INFO.emailHref}
           className="flex items-center gap-3 p-4 rounded-2xl hover:opacity-90 transition-opacity"
           style={{ background:"rgba(215,25,32,0.12)" }}>
           <Mail size={18} style={{ color:"var(--color-sage)" }} />
           <div>
             <p style={{ color:"var(--color-beige)" }} className="text-sm font-semibold">Email Us</p>
-            <p style={{ color:"var(--color-olive)" }} className="text-xs">thefloralstudiosurat@gmail.com</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-xs">{BUSINESS_INFO.email}</p>
           </div>
         </a>
         <a href={BUSINESS_INFO.phoneHref}
@@ -217,7 +217,7 @@ function PrivacyPolicyComponent() {
             "Objection: Object to processing of your data for marketing purposes",
             "Restriction: Ask us to limit how we use your data in certain circumstances",
           ]} />
-          <p className="mt-3">To exercise any of these rights, please contact us at <strong style={{ color:"var(--color-olive)" }}>thefloralstudiosurat@gmail.com</strong>. We will respond within 30 days.</p>
+          <p className="mt-3">To exercise any of these rights, please contact us at <strong style={{ color:"var(--color-olive)" }}>{BUSINESS_INFO.email}</strong>. We will respond within 30 days.</p>
         </Section>
 
         <Section title="Data Retention" icon={<Trash2 size={16}/>}>
