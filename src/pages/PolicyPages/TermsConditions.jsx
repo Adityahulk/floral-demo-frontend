@@ -18,10 +18,10 @@ function PageHero({ icon, tag, title, subtitle, updated }) {
       <div className="absolute -bottom-8 -left-8 w-48 h-48 rounded-full opacity-10"  style={{ background:"var(--color-beige)" }} />
       <div className="relative max-w-4xl mx-auto px-4 text-center">
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
-          style={{ background:"rgba(215,25,32,0.12)" }}>
+          style={{ background:"rgba(217,119,6,0.12)" }}>
           <span style={{ color:"var(--color-sage)" }}>{icon}</span>
         </div>
-        <span style={{ background:"rgba(215,25,32,0.12)", color:"var(--color-sage)" }}
+        <span style={{ background:"rgba(217,119,6,0.12)", color:"var(--color-sage)" }}
           className="inline-block text-xs uppercase tracking-widest font-semibold px-3 py-1 rounded-full mb-4">
           {tag}
         </span>
@@ -104,7 +104,7 @@ function ContactCard() {
       <div className="grid sm:grid-cols-2 gap-4">
         <a href={BUSINESS_INFO.emailHref}
           className="flex items-center gap-3 p-4 rounded-2xl hover:opacity-90 transition-opacity"
-          style={{ background:"rgba(215,25,32,0.12)" }}>
+          style={{ background:"rgba(217,119,6,0.12)" }}>
           <Mail size={18} style={{ color:"var(--color-sage)" }} />
           <div>
             <p style={{ color:"var(--color-beige)" }} className="text-sm font-semibold">Email Us</p>
@@ -113,7 +113,7 @@ function ContactCard() {
         </a>
         <a href={BUSINESS_INFO.phoneHref}
           className="flex items-center gap-3 p-4 rounded-2xl hover:opacity-90 transition-opacity"
-          style={{ background:"rgba(215,25,32,0.12)" }}>
+          style={{ background:"rgba(217,119,6,0.12)" }}>
           <Phone size={18} style={{ color:"var(--color-sage)" }} />
           <div>
             <p style={{ color:"var(--color-beige)" }} className="text-sm font-semibold">Call Us</p>

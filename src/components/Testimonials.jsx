@@ -125,7 +125,7 @@ export default function Testimonials() {
               : "";
 
             return (
-              <div key={review._id || i} style={{ background:"rgba(215,25,32,0.12)" }} className="rounded-2xl p-6 flex flex-col gap-4">
+              <div key={review._id || i} style={{ background:"rgba(217,119,6,0.12)" }} className="rounded-2xl p-6 flex flex-col gap-4">
 
                 <Stars n={review.rating} size={16}/>
 

@@ -439,7 +439,7 @@ function ImageUploader({ images, setImages }) {
                   {!img.primary && !img.uploadError && (
                     <button type="button" onClick={() => setPrimary(img.id)}
                       className="text-white text-xs font-semibold px-2 py-1 rounded-full"
-                      style={{ background:"rgba(215,25,32,0.9)", fontSize:"9px" }}>
+                      style={{ background:"rgba(217,119,6,0.9)", fontSize:"9px" }}>
                       Set Main
                     </button>
                   )}

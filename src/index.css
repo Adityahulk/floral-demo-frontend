@@ -4,10 +4,10 @@
 
 :root {
   --color-sage:     #F59E0B;
-  --color-beige:    #FFF7ED;
-  --color-olive:    #D71920;
-  --color-charcoal: #1F1F1F;
-  --color-border:   #FED7AA;
+  --color-beige:    #FFFBF5;
+  --color-olive:    #D97706;
+  --color-charcoal: #111111;
+  --color-border:   #F3E5D2;
 }
 
 @keyframes wa-bounce {

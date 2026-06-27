@@ -58,7 +58,7 @@ export default function ContactPage() {
         <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full opacity-10" style={{ background:"var(--color-olive)" }} />
         <div className="absolute -bottom-8 -left-8 w-48 h-48 rounded-full opacity-10"  style={{ background:"var(--color-beige)" }} />
         <div className="relative max-w-3xl mx-auto px-4 text-center">
-          <span style={{ background:"rgba(215,25,32,0.12)", color:"var(--color-sage)" }}
+          <span style={{ background:"rgba(217,119,6,0.12)", color:"var(--color-sage)" }}
             className="inline-block text-xs uppercase tracking-widest font-semibold px-3 py-1 rounded-full mb-5">
             Get In Touch
           </span>

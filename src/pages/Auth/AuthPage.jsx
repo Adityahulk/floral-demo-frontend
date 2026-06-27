@@ -305,7 +305,7 @@ export default function AuthPage() {
           <div className="flex justify-center mb-6">
             <img src={TechComputerLogo} alt="Tech Computer"
               className="w-28 h-28 object-contain bg-white border-4"
-              style={{ borderColor: "rgba(215,25,32,0.45)" }} />
+              style={{ borderColor: "rgba(217,119,6,0.35)" }} />
           </div>
           <h1 style={{ fontFamily: "Georgia, serif", color: "var(--color-beige)" }}
             className="text-4xl font-bold mb-3">Tech Computer</h1>
