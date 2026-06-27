@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --color-sage:     #A3B18A;
-  --color-beige:    #F5F1E8;
-  --color-olive:    #5F6F52;
-  --color-charcoal: #2E2E2E;
-  --color-border:   #E5E0D5;
+  --color-sage:     #F59E0B;
+  --color-beige:    #FFF7ED;
+  --color-olive:    #D71920;
+  --color-charcoal: #1F1F1F;
+  --color-border:   #FED7AA;
 }
 
 @keyframes wa-bounce {

@@ -101,7 +101,7 @@ export default function CategoryPage() {
         <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full opacity-10" style={{ background:"var(--color-olive)" }}/>
         <div className="absolute -bottom-8 -left-8 w-48 h-48 rounded-full opacity-10" style={{ background:"var(--color-beige)" }}/>
         <div className="relative max-w-7xl mx-auto px-4 text-center">
-          <span style={{ background:"rgba(95,111,82,0.2)", color:"var(--color-sage)" }}
+          <span style={{ background:"rgba(215,25,32,0.12)", color:"var(--color-sage)" }}
             className="inline-block text-xs uppercase tracking-widest font-semibold px-3 py-1 rounded-full mb-4">
             Shop By Category
           </span>
@@ -127,7 +127,7 @@ export default function CategoryPage() {
               className="group relative rounded-2xl overflow-hidden cursor-pointer border transition-all duration-300"
               style={{
                 borderColor: hovered === cat._id ? "var(--color-olive)" : "var(--color-border)",
-                boxShadow: hovered === cat._id ? "0 12px 32px rgba(95,111,82,0.2)" : "none",
+                boxShadow: hovered === cat._id ? "0 12px 32px rgba(215,25,32,0.12)" : "none",
                 transform: hovered === cat._id ? "translateY(-4px)" : "none",
               }}>
               <div className="aspect-[4/5] overflow-hidden">

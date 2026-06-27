@@ -1,7 +1,7 @@
 export const COLORS = {
-  sage:     "#A3B18A",
-  beige:    "#F5F1E8",
-  olive:    "#5F6F52",
-  charcoal: "#2E2E2E",
-  border:   "#E5E0D5",
+  sage:     "#F59E0B",
+  beige:    "#FFF7ED",
+  olive:    "#D71920",
+  charcoal: "#1F1F1F",
+  border:   "#FED7AA",
 };

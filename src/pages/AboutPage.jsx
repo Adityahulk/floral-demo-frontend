@@ -53,7 +53,7 @@ export default function AboutPage() {
 
         <div className="relative max-w-6xl mx-auto px-4 py-20 grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <span style={{ background: "rgba(95,111,82,0.2)", color: "var(--color-sage)" }}
+            <span style={{ background: "rgba(215,25,32,0.12)", color: "var(--color-sage)" }}
               className="inline-block text-xs uppercase tracking-widest font-semibold px-3 py-1 rounded-full mb-5">
               Our Story
             </span>
@@ -165,7 +165,7 @@ export default function AboutPage() {
                         style={{
                           borderColor: isActive ? "var(--color-olive)" : "var(--color-border)",
                           background: isActive ? "var(--color-beige)" : "white",
-                          boxShadow: isActive ? "0 8px 24px rgba(95,111,82,0.15)" : "none"
+                          boxShadow: isActive ? "0 8px 24px rgba(215,25,32,0.16)" : "none"
                         }}>
                         <p style={{ color: "var(--color-olive)" }} className="text-xs font-bold uppercase tracking-widest mb-1">{year}</p>
                         <h3 style={{ fontFamily: "Georgia, serif", color: "var(--color-charcoal)" }} className="font-bold text-lg mb-1">{title}</h3>

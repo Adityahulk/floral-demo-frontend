@@ -123,7 +123,7 @@ export default function AdminPanel() {
               className="w-full flex items-center gap-3 px-5 py-3 text-sm font-medium transition-all text-left"
               style={{
                 color:      activeNav === id ? "var(--color-beige)" : "var(--color-olive)",
-                background: activeNav === id ? "rgba(95,111,82,0.2)" : "transparent",
+                background: activeNav === id ? "rgba(215,25,32,0.12)" : "transparent",
                 borderLeft: activeNav === id ? "3px solid var(--color-olive)" : "3px solid transparent",
               }}>
               <span style={{ color: activeNav === id ? "var(--color-olive)" : "var(--color-olive)" }}>{icon}</span>
