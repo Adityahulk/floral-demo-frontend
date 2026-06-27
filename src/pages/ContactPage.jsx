@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import Breadcrumb from "../components/Breadcrumb";
 import { Instagram, Facebook, Twitter, Youtube,} from "react-feather";
+import { BUSINESS_INFO } from "../constants/StaticVariables";
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
 const FAQS = [
@@ -76,10 +77,10 @@ export default function ContactPage() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 -mt-12">
             {[
-              { icon:<Phone size={22}/>,          title:"Call Us",        value:"+91 98255 53565",         sub:"Mon–Sun, 8AM–9PM",           href:"tel:+919825553565",           color:"var(--color-olive)" },
-              { icon:<MessageCircle size={22}/>,   title:"WhatsApp",      value:"+91 98255 53565",         sub:"Quick replies in minutes",    href:"https://wa.me/919825553565", color:"#22c55e" },
+              { icon:<Phone size={22}/>,          title:"Call Us",        value:BUSINESS_INFO.phoneDisplay, sub:"Mon-Sun, 8AM-9PM",           href:BUSINESS_INFO.phoneHref,      color:"var(--color-olive)" },
+              { icon:<MessageCircle size={22}/>,   title:"WhatsApp",      value:BUSINESS_INFO.phoneDisplay, sub:"Quick replies in minutes",    href:BUSINESS_INFO.whatsappHref,   color:"#22c55e" },
               { icon:<Mail size={22}/>,            title:"Email Us",      value:"thefloralstudiosurat@gmail.com",   sub:"Reply within 24 hours",       href:"mailto:thefloralstudiosurat@gmail.com",color:"#3b82f6" },
-              { icon:<MapPin size={22}/>,          title:"Visit Store",   value:"Prime Shoppers, Vesu, Surat", sub:"Open daily 9AM–7PM",        href:"#map",                        color:"#f59e0b" },
+              { icon:<MapPin size={22}/>,          title:"Visit Store",   value:BUSINESS_INFO.addressShort, sub:"Open daily 9AM-7PM",          href:BUSINESS_INFO.mapsHref,       color:"#f59e0b" },
             ].map(({ icon, title, value, sub, href, color }) => (
               <a key={title} href={href}
                 className="bg-white rounded-3xl p-6 border text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block"
@@ -153,7 +154,7 @@ export default function ContactPage() {
                       Phone Number <span style={{ color:"var(--color-olive)" }} className="font-normal">(optional)</span>
                     </label>
                     <input type="tel" value={form.phone} onChange={e => onChange("phone", e.target.value)}
-                      placeholder="+91 98255 53565" className={inputCls} style={inputStyle}
+                      placeholder={BUSINESS_INFO.phoneDisplay} className={inputCls} style={inputStyle}
                       onFocus={e => e.target.style.borderColor="var(--color-olive)"}
                       onBlur={e  => e.target.style.borderColor="var(--color-border)"} />
                   </div>
@@ -255,7 +256,7 @@ export default function ContactPage() {
             </div>
 
             {/* WhatsApp CTA */}
-            <a href="https://wa.me/919825553565"
+            <a href={BUSINESS_INFO.whatsappHref}
               className="flex items-center gap-4 p-5 rounded-3xl text-white hover:opacity-90 transition-opacity"
               style={{ background:"#25d366" }}>
               <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center shrink-0">
@@ -283,8 +284,8 @@ export default function ContactPage() {
                   <MapPin size={28} style={{ color:"var(--color-olive)" }} />
                 </div>
                 <h3 style={{ fontFamily:"Georgia, serif", color:"var(--color-charcoal)" }} className="font-bold text-lg mb-1">Tech Computer</h3>
-                <p style={{ color:"var(--color-olive)" }} className="text-sm mb-4">105-106 Prime Shoppers, Vesu,<br />Surat, Gujarat 395007</p>
-                <a href="https://share.google/utsewEmGKYtdoPiAy" target="_blank" rel="noreferrer"
+                <p style={{ color:"var(--color-olive)" }} className="text-sm mb-4">{BUSINESS_INFO.address}</p>
+                <a href={BUSINESS_INFO.mapsHref} target="_blank" rel="noreferrer"
                   style={{ background:"var(--color-olive)" }} className="text-white text-sm font-semibold px-5 py-2 rounded-full hover:opacity-90 inline-block">
                   Get Directions
                 </a>

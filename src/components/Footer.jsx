@@ -2,6 +2,7 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import { Instagram, Facebook, Twitter, Youtube } from "react-feather";
 import { Link } from "react-router-dom";
 import TechComputerLogo from "../assets/tech-computer-logo.jpeg";
+import { BUSINESS_INFO } from "../constants/StaticVariables";
 
 const QUICK_LINKS = [
   { label: "Home",        to: "/" },
@@ -84,11 +85,13 @@ export default function Footer() {
             <ul className="space-y-3 text-sm" style={{ color: "var(--color-sage)" }}>
               <li className="flex items-start gap-2">
                 <MapPin size={14} className="mt-0.5 shrink-0" style={{ color: "var(--color-olive)" }} />
-                105-106 Prime Shoppers, Vesu, Surat, Gujarat 395007
+                <a href={BUSINESS_INFO.mapsHref} target="_blank" rel="noreferrer" className="hover:opacity-70 transition-opacity">
+                  {BUSINESS_INFO.address}
+                </a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone size={14} style={{ color: "var(--color-olive)" }} />
-                <a href="tel:+919825553565" className="hover:opacity-70 transition-opacity">+91 98255 53565</a>
+                <a href={BUSINESS_INFO.phoneHref} className="hover:opacity-70 transition-opacity">{BUSINESS_INFO.phoneDisplay}</a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={14} style={{ color: "var(--color-olive)" }} />

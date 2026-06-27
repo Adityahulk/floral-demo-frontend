@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import PrivacyPolicy from "./PrivacyPolicy";
 import CookiePolicy from "./CookiePolicy";
+import { BUSINESS_INFO } from "../../constants/StaticVariables";
 // ─── SHARED COMPONENTS ────────────────────────────────────────────────────────
 
 function PageHero({ icon, tag, title, subtitle, updated }) {
@@ -110,13 +111,13 @@ function ContactCard() {
             <p style={{ color:"var(--color-olive)" }} className="text-xs">thefloralstudiosurat@gmail.com</p>
           </div>
         </a>
-        <a href="tel:+919825553565"
+        <a href={BUSINESS_INFO.phoneHref}
           className="flex items-center gap-3 p-4 rounded-2xl hover:opacity-90 transition-opacity"
           style={{ background:"rgba(95,111,82,0.2)" }}>
           <Phone size={18} style={{ color:"var(--color-sage)" }} />
           <div>
             <p style={{ color:"var(--color-beige)" }} className="text-sm font-semibold">Call Us</p>
-            <p style={{ color:"var(--color-olive)" }} className="text-xs">+91 98255 53565</p>
+            <p style={{ color:"var(--color-olive)" }} className="text-xs">{BUSINESS_INFO.phoneDisplay}</p>
           </div>
         </a>
       </div>

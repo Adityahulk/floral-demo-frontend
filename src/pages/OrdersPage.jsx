@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { api } from "../api/client";
 import { API } from "../api/endpoints";
+import { BUSINESS_INFO } from "../constants/StaticVariables";
 
 const STATUS_CONFIG = {
   pending:    { bg:"#dbeafe", color:"#2563eb", icon:<Clock size={13}/>, label:"Pending"    },
@@ -118,7 +119,7 @@ function OrderCard({ order, onCancel }) {
             </button>
           )}
 
-          <a href="https://wa.me/919825553565"
+          <a href={BUSINESS_INFO.whatsappHref}
             className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border transition-all hover:opacity-80 ml-auto"
             style={{ borderColor:"var(--color-border)", color:"var(--color-charcoal)" }}>
             <MessageCircle size={13} /> Help
@@ -274,11 +275,11 @@ export default function OrdersPage() {
             <p style={{ color:"var(--color-olive)" }} className="text-sm mt-1">Our team is available 7 days a week, 8AM–9PM</p>
           </div>
           <div className="flex gap-3">
-            <a href="tel:+919825553565" style={{ background:"var(--color-charcoal)" }}
+            <a href={BUSINESS_INFO.phoneHref} style={{ background:"var(--color-charcoal)" }}
               className="text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 whitespace-nowrap">
               Call Us
             </a>
-            <a href="https://wa.me/919825553565" style={{ background:"#25d366" }}
+            <a href={BUSINESS_INFO.whatsappHref} style={{ background:"#25d366" }}
               className="text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 whitespace-nowrap">
               WhatsApp
             </a>

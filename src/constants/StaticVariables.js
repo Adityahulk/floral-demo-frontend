@@ -23,6 +23,16 @@ export const TESTIMONIALS = [
   { name:"Ananya Singh", rating:5, text:"The repair support was clear, fast, and fairly priced. Such great service!", avatar:"AS" },
 ];
 
+export const BUSINESS_INFO = {
+  phone: "9327655513",
+  phoneDisplay: "+91 93276 55513",
+  phoneHref: "tel:+919327655513",
+  whatsappHref: "https://wa.me/919327655513",
+  address: "Shop NoG, 40, Microtechnique IT, Star world complex, Green City Rd, Pal Gam, Surat, Gujarat 394510",
+  addressShort: "Star world complex, Pal Gam, Surat",
+  mapsHref: "https://maps.app.goo.gl/4oUpLrayBKzFnySM7?g_st=ac",
+};
+
 export const BADGE_STYLES = { Sale:"bg-rose-500 text-white", New:"bg-emerald-500 text-white", Popular:"bg-violet-500 text-white", Premium:"bg-amber-500 text-white" };
 export const TABS = ["All","Laptops","Accessories","Services","Networking"];
 export const fmt = n => "₹" + n.toLocaleString("en-IN");

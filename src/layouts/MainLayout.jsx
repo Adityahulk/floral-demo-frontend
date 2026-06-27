@@ -5,8 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CartDrawer from "../components/CartDrawer";
 import { useCart } from "../context/CartContext";
-
-const WHATSAPP_NUMBER = "919825553565"; // update with actual number (country code + number, no +)
+import { BUSINESS_INFO } from "../constants/StaticVariables";
 
 export default function MainLayout() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -22,7 +21,7 @@ export default function MainLayout() {
 
       {/* WhatsApp floating button */}
       <a
-        href={`https://wa.me/${WHATSAPP_NUMBER}`}
+        href={BUSINESS_INFO.whatsappHref}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"

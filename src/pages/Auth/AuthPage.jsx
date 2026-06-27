@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
+import { BUSINESS_INFO } from "../../constants/StaticVariables";
 import { setAuth } from "../../utils/auth";
 import { BASE } from "../../api/client";
 import TechComputerLogo from "../../assets/tech-computer-logo.jpeg";
@@ -719,7 +720,7 @@ export default function AuthPage() {
                       }
                     />
 
-                    <Field label="Contact Number" placeholder="+91 98255 53565"
+                    <Field label="Contact Number" placeholder={BUSINESS_INFO.phoneDisplay}
                       value={form.contactNumber} onChange={v => set("contactNumber", v)}
                       error={errors.contactNumber} icon={Phone} />
                   </>

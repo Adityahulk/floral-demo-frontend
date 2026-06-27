@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { api } from "../api/client";
 import { API } from "../api/endpoints";
+import { BUSINESS_INFO } from "../constants/StaticVariables";
 
 const fmt  = n => "₹" + n.toLocaleString("en-IN");
 
@@ -155,7 +156,7 @@ export default function OrderDetail() {
                 <X size={14}/> {cancelling ? "Cancelling..." : "Cancel Order"}
               </button>
             )}
-            <a href="https://wa.me/919825553565"
+            <a href={BUSINESS_INFO.whatsappHref}
               style={{ background:"#25d366" }}
               className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white hover:opacity-90">
               Help
@@ -290,11 +291,11 @@ export default function OrderDetail() {
               <p style={{ fontFamily:"Georgia, serif", color:"var(--color-beige)" }} className="font-bold mb-1">Need Help?</p>
               <p style={{ color:"var(--color-sage)" }} className="text-xs mb-4">Our team is available 7 days a week</p>
               <div className="flex gap-2">
-                <a href="tel:+919825553565" style={{ background:"var(--color-olive)" }}
+                <a href={BUSINESS_INFO.phoneHref} style={{ background:"var(--color-olive)" }}
                   className="flex-1 py-2 rounded-full text-white text-xs font-bold text-center hover:opacity-90">
                   📞 Call
                 </a>
-                <a href="https://wa.me/919825553565" style={{ background:"#25d366" }}
+                <a href={BUSINESS_INFO.whatsappHref} style={{ background:"#25d366" }}
                   className="flex-1 py-2 rounded-full text-white text-xs font-bold text-center hover:opacity-90">
                   💬 WhatsApp
                 </a>

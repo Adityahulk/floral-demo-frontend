@@ -8,6 +8,7 @@ import { useCart } from "../context/CartContext";
 import { isAuthenticated } from "../utils/auth";
 import { api } from "../api/client";
 import { API } from "../api/endpoints";
+import { BUSINESS_INFO } from "../constants/StaticVariables";
 import { COLORS } from "../theme/colors";
 
 const fmt = n => "₹" + n.toLocaleString("en-IN");
@@ -183,7 +184,7 @@ function DeliveryForm({ data, onChange, touched }) {
       </div>
 
       {field("Full Name", "fullName", "text", "Priya Sharma")}
-      {field("Phone Number", "phone", "tel", "+91 98255 53565")}
+      {field("Phone Number", "phone", "tel", BUSINESS_INFO.phoneDisplay)}
       {field("Address Line 1", "address1", "text", "123 MG Road")}
       {field("Address Line 2 (Optional)", "address2", "text", "Apartment, suite, etc.")}
 
